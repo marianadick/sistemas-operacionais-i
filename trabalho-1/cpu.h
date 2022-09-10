@@ -19,15 +19,7 @@ class CPU
             Context() { _stack = 0; }
 
             template<typename ... Tn>
-            Context(void (* func)(Tn ...), Tn ... an) {
-                getcontext(&_context);
-                _stack = new char [STACK_SIZE];
-                _context.uc_stack.ss_sp = _stack;
-                _context.uc_stack.ss_size =  STACK_SIZE;
-                _context.uc_stack.ss_flags = 0;
-                _context.uc_link = NULL;
-                makecontext(&_context, (void (*)()) func, (int)sizeof...(an), an...);
-            };
+            Context(void (* func)(Tn ...), Tn ... an);
 
             ~Context();
 
@@ -44,6 +36,19 @@ class CPU
 
         static void switch_context(Context *from, Context *to);
 
+};
+
+template<typename ... Tn> CPU::Context::Context(void (* func)(Tn ...), Tn ... an) {
+    getcontext(&_context);
+    // Aloca a pilha
+    _stack = new char [STACK_SIZE];
+    _context.uc_stack.ss_sp = _stack;
+    _context.uc_stack.ss_size =  STACK_SIZE;
+    _context.uc_stack.ss_flags = 0;
+    _context.uc_link = 0;
+    // (int)sizeof...(an) = número de argumentos passados
+    // an... = argumentos
+    makecontext(&_context, (void (*)()) func, (int)sizeof...(an), an...);
 };
 
 __END_API

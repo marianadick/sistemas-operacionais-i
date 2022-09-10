@@ -3,7 +3,7 @@ CPP = g++
 CPPFLAGS = -Wall
 
 # Executable name (ADD HERE THE NAME OF THE EXECUTABLE GENERATED)
-EXE = main.exe
+EXE = main
 
 # List of source codes (ADD HERE C++ SOURCE FILE NAMES)
 SRCS = main.cc cpu.cc main_class.cc

@@ -1,7 +1,7 @@
 #ifndef traits_h
 #define traits_h
 
-//Não alterar as 3 declarações abaixo
+// Não alterar as 3 declarações abaixo
 
 #define __BEGIN_API             namespace SOLUTION {
 #define __END_API               }
@@ -9,17 +9,17 @@
 
 __BEGIN_API
 
-class CPU; //declaração das classes criadas nos trabalhos devem ser colocadas aqui
+class CPU; // Declaração das classes criadas nos trabalhos devem ser colocadas aqui
 
-//declaração da classe Traits
+// Declaração da classe Traits
 template<typename T>
 struct Traits {
 };
 
 template<> struct Traits<CPU>
 {
-    //declaração do tamanho da Pilha
-    static const unsigned int STACK_SIZE = 32000;
+    // Declaração do tamanho da Pilha (32 kB)
+    static const unsigned int STACK_SIZE = 1024 * 32;
  
 };
 
