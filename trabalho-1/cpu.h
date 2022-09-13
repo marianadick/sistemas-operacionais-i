@@ -48,7 +48,7 @@ template<typename ... Tn> CPU::Context::Context(void (* func)(Tn ...), Tn ... an
         _context.uc_stack.ss_flags = 0;
         _context.uc_link = 0;
     } else {
-        printf("Não foi possível criar a pilha");
+        std::cout << "Não foi possível criar a pilha\n";
         exit(-1);
     }
     // (int)sizeof...(an) = número de argumentos passados
