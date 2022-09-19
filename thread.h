@@ -65,13 +65,20 @@ private:
      * Qualquer outro atributo que você achar necessário para a solução.
      */
 
-    // Atributo de classe para contagem do número de threads (inicializado como '0' em thread.cc)
+    /*
+     * Atributo de classe para contagem do número de threads (inicializado como '0' em thread.cc) 
+     */
     static unsigned int _thread_counter;
+
+    /*
+     * Exit code da thread
+     */
+    int _exit_code;
 };
 
 template<typename ... Tn> Thread::Thread(void (* entry)(Tn ...), Tn ... an)
 {
-   // IMPLEMENTAR
+    db<Thread>(TRC) << ">> Thread [" << _thread_counter << "] was created\n";
     _context = new CPU::Context(entry, an ...);
     _id = Thread::_thread_counter++;
 };

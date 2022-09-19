@@ -1,4 +1,5 @@
 #include "thread.h"
+#include <iostream>
 
 __BEGIN_API
 
@@ -8,6 +9,8 @@ unsigned int Thread::_thread_counter = 0;
 
 int Thread::switch_context(Thread * prev, Thread * next) 
 {   
+    db<Thread>(TRC) << ">> Switching context from Thread [" <<  prev->id() << "] " <<
+                        "to Thread [" << next->id() <<"]\n";
     // Verifica os id's das 2 para ver se não são a mesma thread
     if (prev->id() != next->id()) {
         Thread::_running = next;
@@ -20,7 +23,9 @@ void Thread::thread_exit (int exit_code)
 {
     // IGNORAR exit_code POR ENQUANTO (nesse trabalho 2)
 
-    // ????????? N entendi o q implementar aqui ainda
+    // IMPLEMENTAR (Não entendi o que seria "limpar" a memoria associada a ela)
+    db<Thread>(TRC) << ">> Thread exit code: " << exit_code << "\n";
+    Thread::_exit_code = exit_code;
 };
 
 int Thread::id() 

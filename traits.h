@@ -10,24 +10,15 @@
 __BEGIN_API
 
 class CPU; // Declaração das classes criadas nos trabalhos devem ser colocadas aqui
-class Debug;
 class System;
+class Debug;
 class Thread;
 
 // Declaração da classe Traits
-template<typename T>
-struct Traits {
+template<typename T> struct Traits {
 };
 
-template<> struct Traits<CPU>
-{
-    // Declaração do tamanho da Pilha (32 kB)
-    static const unsigned int STACK_SIZE = 1024 * 32;
-    static const bool debugged = false;
-};
-
-template<>
-struct Traits<Debug>: public Traits<void>
+template<> struct Traits<Debug>: public Traits<void>
 {
     static const bool error = false;
     static const bool warning = false;
@@ -35,14 +26,19 @@ struct Traits<Debug>: public Traits<void>
     static const bool trace = false;
 };
 
-template<>
-struct Traits<System> : public Traits<void>
+template<> struct Traits<CPU> : public Traits<void>
+{
+    // Declaração do tamanho da Pilha (32 kB)
+    static const unsigned int STACK_SIZE = 1024 * 32;
+    static const bool debugged = true;
+};
+
+template<> struct Traits<System> : public Traits<void>
 {
     static const bool debugged = true;
 };
 
-template<>
-struct Traits<Thread> : public Traits<void>
+template<> struct Traits<Thread> : public Traits<void>
 {
     static const bool debugged = true;
 };
