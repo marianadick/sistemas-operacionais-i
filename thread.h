@@ -65,7 +65,6 @@ private:
     int _id;
     Context * volatile _context;
     static Thread * _running;
-    static Thread * _main_thread;
 
     /*
      * Qualquer outro atributo que você achar necessário para a solução.
@@ -86,9 +85,6 @@ template<typename ... Tn> Thread::Thread(void (* entry)(Tn ...), Tn ... an)
 {
     db<Thread>(TRC) << ">> Thread [" << _thread_counter << "] was created\n";
     _context = new CPU::Context(entry, an ...);
-    if (!_main_thread) {
-        _main_thread = this;
-    }
     _id = Thread::_thread_counter++;
 };
 
