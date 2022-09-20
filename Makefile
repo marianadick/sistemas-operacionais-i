@@ -23,3 +23,6 @@ $(EXE): $(OBJS) $(HDRS) Makefile
 
 # Dependencies
 $(OBJS): $(HDRS) Makefile
+
+clean:
+	rm -f main *.o

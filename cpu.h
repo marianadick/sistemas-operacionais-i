@@ -4,6 +4,7 @@
 #include <ucontext.h>
 #include <iostream>
 #include "traits.h"
+#include "debug.h"
 
 __BEGIN_API
 
@@ -41,11 +42,16 @@ class CPU
 template<typename ... Tn> CPU::Context::Context(void (* func)(Tn ...), Tn ... an) {
     getcontext(&_context);
     // Aloca a pilha
-    _stack = new char [STACK_SIZE];
-    _context.uc_stack.ss_sp = _stack;
-    _context.uc_stack.ss_size =  STACK_SIZE;
-    _context.uc_stack.ss_flags = 0;
-    _context.uc_link = 0;
+    _stack = new char[STACK_SIZE];
+    if (_stack) {
+        _context.uc_stack.ss_sp = (void *) _stack;
+        _context.uc_stack.ss_size =  STACK_SIZE;
+        _context.uc_stack.ss_flags = 0;
+        _context.uc_link = 0;
+    } else {
+        db<CPU>(ERR) << ">> Stack creation failed\n";
+        exit(-1);
+    }
     // (int)sizeof...(an) = número de argumentos passados
     // an... = argumentos
     makecontext(&_context, (void (*)()) func, (int)sizeof...(an), an...);
