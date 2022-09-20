@@ -45,7 +45,7 @@ template<typename ... Tn> CPU::Context::Context(void (* func)(Tn ...), Tn ... an
     _stack = new char[STACK_SIZE];
     if (_stack) {
         _context.uc_stack.ss_sp = (void *) _stack;
-        _context.uc_stack.ss_size =  STACK_SIZE;
+        _context.uc_stack.ss_size = STACK_SIZE;
         _context.uc_stack.ss_flags = 0;
         _context.uc_link = 0;
     } else {

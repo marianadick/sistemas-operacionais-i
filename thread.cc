@@ -23,8 +23,8 @@ void Thread::thread_exit (int exit_code)
 {
     // IGNORAR exit_code POR ENQUANTO (nesse trabalho 2)
 
-    db<Thread>(TRC) << ">> Thread exit code: " << exit_code << "\n";
-    Thread::_exit_code = exit_code;
+    db<Thread>(TRC) << ">> Thread [" << id() << "] exit code: " << exit_code << "\n";
+    _exit_code = exit_code;
     _thread_counter--;
 };
 
@@ -39,7 +39,7 @@ CPU::Context * Thread::context()
 };
 
 Thread::~Thread() {
-    db<Thread>(TRC) << ">> Thread " << Thread::_running->id() << " has ended.\n";
+    db<Thread>(TRC) << ">> Thread [" << id() << "] has ended.\n";
     if (_context) {
         delete _context;
     }
