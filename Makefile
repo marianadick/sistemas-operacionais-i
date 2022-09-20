@@ -24,5 +24,6 @@ $(EXE): $(OBJS) $(HDRS) Makefile
 # Dependencies
 $(OBJS): $(HDRS) Makefile
 
+# Clean object files
 clean:
-	rm -f main *.o
+	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
