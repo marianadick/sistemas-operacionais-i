@@ -23,7 +23,7 @@ public:
 
         CPU::switch_context(mainContext, ThreadMain->context());
 
-        //delete mainContext;
+        delete mainContext;
     }
 
     static void run(char * arg) {

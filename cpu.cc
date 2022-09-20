@@ -21,8 +21,6 @@ CPU::Context::~Context()
     // Verifica se existe uma STACK antes de tentar deletá-la
     if (_stack) {
         delete(_stack);
-    } else {
-        db<CPU>(ERR) << ">> Stack deletion failed\n";
     }
 }
 
