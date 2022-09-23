@@ -14,7 +14,7 @@ int Thread::switch_context(Thread * prev, Thread * next)
     // Verifica os id's das 2 para ver se não são a mesma thread
     if (prev->id() != next->id()) {
         Thread::_running = next;
-        return CPU::switch_context(prev->context(), next->context());
+        return CPU::switch_context(prev->_context, next->_context);
     }
     return 0;
 };
@@ -36,26 +36,28 @@ int Thread::id()
 void Thread::dispatcher()
 {
     db<Thread>(TRC) << ">> Scheduling next thread.";
-    while (!Thread::_ready.empty()) {
+    while (Thread::_thread_counter > 2) {
         // Escolhe primeira thread da fila para ser executada
         // TO-FIX Mariana: Não tem uma maneira melhor de pegar isso?
         Thread * next = Thread::_ready.remove()->object();
+
         // Adiciona dispatcher na fila novamente
         Thread::_dispatcher._state = READY;
-        Thread::_ready.insert_tail(&Thread::_dispatcher._link);
-        // Atualiza ponteiro _running
+        Thread::_ready.insert(&Thread::_dispatcher._link);
+
+        // Atualiza o ponteiro _running para apontar para a próxima
         Thread::_running = next;
-        // Atualiza o state da próxima thread
-        next->_state = RUNNING;
+        // Atualiza estado
+        Thread::_running->_state = RUNNING;
+
         // Troca o contexto
         Thread::switch_context(&Thread::_dispatcher, Thread::_running);
         if (Thread::_running->_state == FINISHING) {
-            Thread::_ready.remove_head();
-            Thread::_thread_counter--;
+            Thread::_ready.remove(Thread::_running);
         }
     }
     Thread::_dispatcher._state = FINISHING;
-    Thread::_ready.remove_tail();
+    Thread::_ready.remove(&Thread::_dispatcher._link);
     Thread::switch_context(&Thread::_dispatcher, &Thread::_main);
 };
 
