@@ -14,7 +14,7 @@ int Thread::switch_context(Thread * prev, Thread * next)
     // Verifica os id's das 2 para ver se não são a mesma thread
     if (prev->id() != next->id()) {
         Thread::_running = next;
-        return CPU::switch_context(prev->_context, next->_context);
+        return CPU::switch_context(prev->context(), next->context());
     }
     return 0;
 };
