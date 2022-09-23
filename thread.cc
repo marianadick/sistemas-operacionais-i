@@ -14,7 +14,7 @@ int Thread::switch_context(Thread * prev, Thread * next)
     // Verifica os id's das 2 para ver se não são a mesma thread
     if (prev->id() != next->id()) {
         Thread::_running = next;
-        return CPU::switch_context(prev->Context(), next->Context());
+        return CPU::switch_context(prev->_context, next->_context);
     }
     return 0;
 };
@@ -59,7 +59,7 @@ void Thread::dispatcher()
     Thread::switch_context(&Thread::_dispatcher, &Thread::_main);
 };
 
-void Thread::init(void (*main)(void *))
+ void Thread::init(void (*main)(void *))
 {
     db<Thread>(TRC) << ">> Threads main and dispatcher are being initialized.\n";
 };
