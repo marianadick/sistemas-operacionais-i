@@ -123,7 +123,7 @@ private:
 };
 
 template<typename ... Tn>
-inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) : /* inicialização de _link */
+inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) /* inicialização de _link */
 {
     db<Thread>(TRC) << ">> Thread [" << _thread_counter << "] was created\n";
     _context = new CPU::Context(entry, an ...);
