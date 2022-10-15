@@ -24,13 +24,13 @@ template<> struct Traits<Debug>: public Traits<void>
     static const bool error = false;
     static const bool warning = false;
     static const bool info = false;
-    static const bool trace = false;
+    static const bool trace = true;
 };
 
 template<> struct Traits<CPU> : public Traits<void>
 {
-    // Declaração do tamanho da Pilha (32 kB)
-    static const unsigned int STACK_SIZE = 1024 * 32;
+    // Declaração do tamanho da Pilha (64 kB)
+    static const unsigned int STACK_SIZE = 1024 * 64;
     static const bool debugged = true;
 };
 
@@ -46,7 +46,7 @@ template<> struct Traits<Thread> : public Traits<void>
 
 template<> struct Traits<Lists> : public Traits<void>
 {
-    static const bool debugged = true;
+    static const bool debugged = false;
 };
 
 __END_API

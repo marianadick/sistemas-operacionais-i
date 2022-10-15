@@ -75,7 +75,7 @@ public:
     /*
      * NOVO MÉTODO DESTE TRABALHO.
      * Realiza a inicialização da class Thread.
-     * Cria as Threads main e dispatcher.
+     * Cria as Threads main e dispatcher. Troca contexto para Thread Main.
      */ 
     static void init(void (*main)(void *));
 
@@ -94,6 +94,8 @@ public:
     /*
      * Qualquer outro método que você achar necessário para a solução.
      */ 
+
+    Context * context();
 
 private:
     int _id;
@@ -116,18 +118,23 @@ private:
      */
     static unsigned int _thread_counter;
 
-    /*
-     * Exit code da thread
-     */
     int _exit_code;
 };
 
 template<typename ... Tn>
-inline Thread::Thread(void (* entry)(Tn ...), Tn ... an) /* inicialização de _link */
+inline Thread::Thread(void (* entry)(Tn ...), Tn ... an)
+: _link(this, (std::chrono::duration_cast<std::chrono::microseconds>
+    (std::chrono::high_resolution_clock::now().time_since_epoch()).count()))
 {
     db<Thread>(TRC) << ">> Thread [" << _thread_counter << "] was created\n";
+
     _context = new CPU::Context(entry, an ...);
-    _id = Thread::_thread_counter++;
+    _id = Thread::_thread_counter++;    
+
+    // Insere na lista e altera seu estado para READY
+    if (_id > 0)
+        _ready.insert_tail(&_link);
+    _state = READY;
 }
 
 __END_API

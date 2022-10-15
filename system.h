@@ -18,8 +18,10 @@ public:
      */ 
     static void init();
 
-    void init(void (*main)(void *));
-
+    /*
+     * Cria a Thread Main
+     */
+    static void init(void (*main)(void *));
 };
 
 __END_API
