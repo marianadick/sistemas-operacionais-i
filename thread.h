@@ -114,16 +114,18 @@ private:
      */ 
 
      /*
-     * Atributo de classe para contagem do número de threads (inicializado como '0' em thread.cc) 
-     */
+      * Atributo de classe para contagem do número de threads (inicializado como '0' em thread.cc) 
+      */
     static unsigned int _thread_counter;
 
     int _exit_code;
 };
 
+/*
+ * Construtor da Thread. Além disso, antes de instanciar um objeto, inicializa o atributo _link do mesmo
+ */
 template<typename ... Tn>
-inline Thread::Thread(void (* entry)(Tn ...), Tn ... an)
-: _link(this, (std::chrono::duration_cast<std::chrono::microseconds>
+Thread::Thread(void (* entry)(Tn ...), Tn ... an) : _link(this, (std::chrono::duration_cast<std::chrono::microseconds>
     (std::chrono::high_resolution_clock::now().time_since_epoch()).count()))
 {
     db<Thread>(TRC) << ">> Thread [" << _thread_counter << "] was created\n";
