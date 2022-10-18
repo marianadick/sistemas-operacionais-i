@@ -69,7 +69,6 @@ void Thread::dispatcher()
         Thread::switch_context(&Thread::_dispatcher, next);
         if (next->_state == FINISHING) {
             Thread::_ready.remove(next);
-            Thread::_thread_counter--;
         }
     }
     Thread::_dispatcher._state = FINISHING;
@@ -145,8 +144,10 @@ void Thread::thread_exit (int exit_code)
     // IGNORAR exit_code POR ENQUANTO
 
     db<Thread>(TRC) << ">> Thread [" << id() << "] exit code: " << exit_code << ".\n";
+    Thread::_thread_counter--;
     _exit_code = exit_code;
     _state = FINISHING;
+    yield();
 };
 
 /* /---------------------------------------------------------/ */
