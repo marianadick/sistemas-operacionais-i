@@ -52,7 +52,6 @@ void Thread::dispatcher()
     db<Thread>(TRC) << ">> Dispatcher is scheduling next thread.\n";
     while (Thread::_thread_counter > 2) {
         // Escolhe primeira thread da fila para ser executada
-        // TO-FIX Mariana: Não tem uma maneira melhor de pegar isso?
         Thread * next = Thread::_ready.remove()->object();
 
         // Adiciona dispatcher no final da fila novamente
