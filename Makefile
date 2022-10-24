@@ -9,7 +9,7 @@ EXE = main
 SRCS = main.cc cpu.cc main_class.cc thread.cc system.cc debug.cc
 
 # List of header files (ADD HERE C++ HEADER FILE NAMES)
-HDRS = cpu.h main_class.h traits.h thread.h system.h debug.h
+HDRS = cpu.h main_class.h traits.h thread.h system.h debug.h list.h
 
 # Generate object files (.o) from source files
 OBJS = $(SRCS:.c=.o)
