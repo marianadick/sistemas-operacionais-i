@@ -56,7 +56,7 @@ void Thread::dispatcher()
 
         // Adiciona dispatcher no final da fila novamente
         Thread::_dispatcher._state = READY;
-        Thread::_ready.insert_tail(&Thread::_dispatcher._link);
+        Thread::_ready.insert(&Thread::_dispatcher._link);
 
         // Atualiza o ponteiro _running para apontar para a próxima
         Thread::_running = next;
@@ -95,7 +95,7 @@ void Thread::yield()
 
         // Reinsere
         prev->_state = READY;
-        Thread::_ready.insert_tail(&prev->_link);
+        Thread::_ready.insert(&prev->_link);
     }
 
     // Atualiza running e troca o contexto

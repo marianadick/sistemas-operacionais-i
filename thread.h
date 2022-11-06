@@ -135,7 +135,7 @@ Thread::Thread(void (* entry)(Tn ...), Tn ... an) : _link(this, (std::chrono::du
 
     // Insere na lista e altera seu estado para READY
     if (_id > 0)
-        _ready.insert_tail(&_link);
+        _ready.insert(&_link);
     _state = READY;
 }
 
