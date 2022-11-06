@@ -13,8 +13,9 @@ Thread Thread::_main;
 Thread Thread::_dispatcher;
 CPU::Context Thread::_main_context;
 
-// Fila de threads prontas
+// Filas de threads prontas e suspensas
 Thread::Ready_Queue Thread::_ready;
+Thread::Ready_Queue Thread::_suspended;
 
 /* /---------------------------------------------------------/ */
 
@@ -26,8 +27,9 @@ Thread::Ready_Queue Thread::_ready;
 {
     db<Thread>(TRC) << ">> Threads main and dispatcher are being initialized.\n";
 
-    // Instancia a fila de threads prontas
+    // Instancia as filas de threads prontas e suspensas
     new (&_ready) Thread::Ready_Queue();
+    new (&_suspended) Thread::Ready_Queue();
 
     // Instancia a thread Main
     new (&_main) Thread(main, (void *) "Main");
@@ -51,25 +53,25 @@ void Thread::dispatcher()
 {
     db<Thread>(TRC) << ">> Dispatcher is scheduling next thread.\n";
     while (Thread::_thread_counter > 2) {
-        // Escolhe primeira thread da fila para ser executada
+        // Escolhe uma thread da fila para ser executada
         Thread * next = Thread::_ready.remove()->object();
 
-        // Adiciona dispatcher no final da fila novamente
+        // Adiciona dispatcher na fila novamente
         Thread::_dispatcher._state = READY;
         Thread::_ready.insert(&Thread::_dispatcher._link);
 
         // Atualiza o ponteiro _running para apontar para a próxima
         Thread::_running = next;
-        
-        // Atualiza estado
         next->_state = RUNNING;
 
-        // Troca o contexto
+        // Troca o contexto entre a dispatcher e a próxima
         Thread::switch_context(&Thread::_dispatcher, next);
         if (next->_state == FINISHING) {
             Thread::_ready.remove(next);
         }
     }
+
+    // Finaliza a dispatcher e retorna o controle para a main
     Thread::_dispatcher._state = FINISHING;
     Thread::_ready.remove(&Thread::_dispatcher);
     Thread::switch_context(&Thread::_dispatcher, &Thread::_main);
@@ -82,12 +84,19 @@ void Thread::yield()
     // Mantém a referência da thread a ser substituída
     Thread * prev = Thread::_running;
 
+    // Se a thread atual estiver finalizando e tiver feito uma requisição de join, ela deve chamar resume()
+    // para que a thread que chamou join() [que está suspensa], seja reinserida na fila de prontos
+    if (prev->_state == FINISHING && prev->_called_join == true) 
+    {
+        prev->resume();
+    }
+
     // Remove da fila e retorna o ponteiro para a thread em questão
     Thread * next = Thread::_ready.remove()->object();
 
     // Atualiza a prioridade da tarefa que estava sendo executada [Thread::running]
-    // Isso ocorre apenas de ela não estiver finalizando e não for a main
-    if (prev->_state != FINISHING && prev != &Thread::_main) 
+    // Isso ocorre apenas de ela não estiver finalizando, suspensa e não for a main
+    if (prev->_state != FINISHING && prev->_state != SUSPENDED && prev != &Thread::_main) 
     {
         // Atualiza a posição na lista
         prev->_link.rank(std::chrono::duration_cast<std::chrono::microseconds>
@@ -104,9 +113,50 @@ void Thread::yield()
     Thread::switch_context(prev, next);
 }
 
+int Thread::join()
+{
+    // OPERAÇÕES (- Revisar):
+    // Criar alguma forma de armazenar se uma thread fez a requisição de join ou não 
+    //          * (Um booleano talvez? Ou uma variável estática com o ID da thread que fez a requisição?)
+    // Armazenar thread atual (_running) em uma variável
+    // Tracer das infos.
+    // Suspender a thread q foi armazenada na variável
+    // _running passa a ser 'this'
+    // Trocar estado da thread em execução
+
+    _called_join = true;
+    Thread * prev = _running; // Na primeira vez que chama join (_running = Main)
+    // COLOCAR TRACER
+    prev->suspend();
+    // Nova thread assume
+    Thread::_running = this;
+    _state = RUNNING;
+
+    return _exit_code;
+}
+
+void Thread::suspend()
+{
+    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is supending.\n";
+    _state = SUSPENDED;
+    Thread::_suspended.insert(&this->_link);
+    yield();
+}
+
+void Thread::resume()
+{
+    // Remove da fila de suspensas a thread que efetuou o join
+    Thread * thread_suspended = Thread::_suspended.remove()->object();
+    db<Thread>(TRC) << ">> Thread [" << thread_suspended->id() << "] is resuming.\n";
+    thread_suspended->_state = READY;
+    // Adiciona na fila de prontos
+    Thread::_ready.insert(&thread_suspended->_link);
+}
+
+
 int Thread::switch_context(Thread * prev, Thread * next) 
 {   
-    db<Thread>(TRC) << ">> Switching context from Thread [" <<  prev->id() << "] " <<
+    db<Thread>(TRC) << ">> Switching context from Thread [" << prev->id() << "] " <<
                         "to Thread [" << next->id() <<"].\n";
 
     // Verifica os id's das 2 para ver se não são a mesma thread
@@ -130,8 +180,7 @@ int Thread::id()
 Thread::~Thread() 
 {
     db<Thread>(TRC) << ">> Thread [" << id() << "] has ended.\n";
-
-    // Varre a lista e, caso encontre, remove a thread em questão dela
+    // Remove a thread em questão da fila de prontos
     Thread::_ready.remove(this);        
     if (_context) {
         delete _context;
@@ -140,11 +189,9 @@ Thread::~Thread()
 
 void Thread::thread_exit (int exit_code) 
 {
-    // IGNORAR exit_code POR ENQUANTO
-
     db<Thread>(TRC) << ">> Thread [" << id() << "] exit code: " << exit_code << ".\n";
     Thread::_thread_counter--;
-    _exit_code = exit_code;
+    Thread::_exit_code = exit_code;
     _state = FINISHING;
     yield();
 };
