@@ -115,15 +115,8 @@ void Thread::yield()
 
 int Thread::join()
 {
-    // OPERAÇÕES (- Revisar):
-    // Criar alguma forma de armazenar se uma thread fez a requisição de join ou não 
-    //          * (Um booleano talvez? Ou uma variável estática com o ID da thread que fez a requisição?)
-    // Armazenar thread atual (_running) em uma variável
-    // Tracer das infos.
-    // Suspender a thread q foi armazenada na variável
-    // _running passa a ser 'this'
-    // Trocar estado da thread em execução
-
+    db<Thread>(TRC) << ">> Thread [" << this->id() << "] wants to join.\n";
+    
     _called_join = true;
     Thread * prev = _running; // Na primeira vez que chama join (_running = Main)
     // COLOCAR TRACER
