@@ -5,17 +5,28 @@
 #include "thread.h"
 #include "traits.h"
 #include "debug.h"
+#include "list.h"
 
 __BEGIN_API
 
 class Semaphore
 {
 public:
-    Semaphore(int v = 1);
-    ~Semaphore();
+
+    typedef Ordered_List<Thread> Waiting_Queue;
+
+    Semaphore(int v = 1) {
+        value = v;
+        new (&_waiting) Waiting_Queue();
+    };
+
+    ~Semaphore() {
+        wakeup_all();
+    };
 
     void p();
     void v();
+
 private:
     // Atomic operations
     int finc(volatile int & number);
@@ -28,9 +39,10 @@ private:
 
 private:
     //DECLARAÇÃO DOS ATRIBUTOS DO SEMÁFORO
+    int value;
+    Waiting_Queue _waiting;
 };
 
 __END_API
 
 #endif
-
