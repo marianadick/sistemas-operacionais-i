@@ -23,7 +23,8 @@ public:
         RUNNING,
         READY,
         FINISHING,
-        SUSPENDED
+        SUSPENDED,
+        WAITING,
     };
 
     /*
@@ -97,6 +98,16 @@ public:
     void resume();
 
     /*
+    * Coloca a thread para dormir
+    */
+    void sleep();
+
+    /*
+    * Acorda a thread
+    */
+    void wakeup();
+
+    /*
      * Destrutor de uma thread. Realiza todo os procedimentos para manter a consistência da classe.
      */ 
     ~Thread();
@@ -106,6 +117,7 @@ public:
      */ 
 
     Context * context();
+    Ready_Queue::Element * link();
 
 private:
     int _id;

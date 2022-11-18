@@ -95,8 +95,8 @@ void Thread::yield()
     Thread * next = Thread::_ready.remove()->object();
 
     // Atualiza a prioridade da tarefa que estava sendo executada [Thread::running]
-    // Isso ocorre apenas de ela não estiver finalizando, suspensa e não for a main
-    if (prev->_state != FINISHING && prev->_state != SUSPENDED && prev != &Thread::_main) 
+    // Isso ocorre apenas de ela não estiver finalizando, suspensa, esperando e não for a main
+    if (prev->_state != FINISHING && prev->_state != SUSPENDED && prev->_state != WAITING && prev != &Thread::_main) 
     {
         // Atualiza a posição na lista
         prev->_link.rank(std::chrono::duration_cast<std::chrono::microseconds>
@@ -146,6 +146,19 @@ void Thread::resume()
     Thread::_ready.insert(&thread_suspended->_link);
 }
 
+void Thread::sleep() {
+    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is sleeping.\n";
+    _state = WAITING;
+    yield();
+}
+    
+void Thread::wakeup() {
+    db<Thread>(TRC) << "Thread [" << this->id() << "] is waking up.\n";
+    // Insere a thread acordada na fila de prontos
+    _state = READY;
+    Thread::_ready.insert(&this->_link);
+    yield();
+}
 
 int Thread::switch_context(Thread * prev, Thread * next) 
 {   
@@ -163,6 +176,10 @@ int Thread::switch_context(Thread * prev, Thread * next)
 CPU::Context * Thread::context()
 {
     return _context;
+};
+
+Thread::Ready_Queue::Element * Thread::link() {
+    return &_link;
 };
 
 int Thread::id() 
