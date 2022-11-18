@@ -6,10 +6,10 @@ CPPFLAGS = -Wall
 EXE = main
 
 # List of source codes (ADD HERE C++ SOURCE FILE NAMES)
-SRCS = main.cc cpu.cc main_class.cc thread.cc system.cc debug.cc
+SRCS = main.cc cpu.cc main_class.cc thread.cc system.cc debug.cc semaphore.cc
 
 # List of header files (ADD HERE C++ HEADER FILE NAMES)
-HDRS = cpu.h main_class.h traits.h thread.h system.h debug.h list.h
+HDRS = cpu.h main_class.h traits.h thread.h system.h debug.h list.h semaphore.h
 
 # Generate object files (.o) from source files
 OBJS = $(SRCS:.c=.o)
