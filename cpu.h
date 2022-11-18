@@ -36,6 +36,8 @@ class CPU
     public:
         // Alterado para retornar 'int' (retornar status)
         static int switch_context(Context *from, Context *to);
+        static int finc(volatile int & number);
+        static int fdec(volatile int & number);
 
 };
 
