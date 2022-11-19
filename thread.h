@@ -143,9 +143,9 @@ private:
     int _exit_code;
 
     /*
-     * Informa se a thread em questão fez uma requisição de join
-     */ 
-    bool _called_join;
+     * Ponteiro para a thread que deu join na atual
+     */
+    Thread * _joining = NULL;
 };
 
 /*
