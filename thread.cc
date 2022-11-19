@@ -86,7 +86,7 @@ void Thread::yield()
 
     // Se a thread atual estiver finalizando e tiver feito uma requisição de join, ela deve chamar resume()
     // para que a thread que chamou join() [que está suspensa], seja reinserida na fila de prontos
-    if (prev->_state == FINISHING && prev->_called_join == true) 
+    if (prev->_state == FINISHING && prev->_joining != nullptr) 
     {
         prev->resume();
     }
@@ -116,21 +116,18 @@ void Thread::yield()
 int Thread::join()
 {
     db<Thread>(TRC) << ">> Thread [" << this->id() << "] wants to join.\n";
-    
-    _called_join = true;
-    Thread * prev = _running; // Na primeira vez que chama join (_running = Main)
-    // COLOCAR TRACER
-    prev->suspend();
-    // Nova thread assume
-    Thread::_running = this;
-    _state = RUNNING;
-
+    // Na primeira vez que chama join (_running = Main)    
+    _joining = _running;
+    _joining->suspend();
     return _exit_code;
 }
 
 void Thread::suspend()
 {
-    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is supending.\n";
+    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is suspending.\n";
+    // Remove da fila de prontos
+    Thread::_ready.remove(this);
+    // Troca o estado e a adiciona na fila de suspensas
     _state = SUSPENDED;
     Thread::_suspended.insert(&this->_link);
     yield();
@@ -138,12 +135,12 @@ void Thread::suspend()
 
 void Thread::resume()
 {
+    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is resuming.\n";
     // Remove da fila de suspensas a thread que efetuou o join
-    Thread * thread_suspended = Thread::_suspended.remove()->object();
-    db<Thread>(TRC) << ">> Thread [" << thread_suspended->id() << "] is resuming.\n";
-    thread_suspended->_state = READY;
+    Thread::_suspended.remove(_joining);
     // Adiciona na fila de prontos
-    Thread::_ready.insert(&thread_suspended->_link);
+    _joining->_state = READY;
+    Thread::_ready.insert(&_joining->_link);
 }
 
 

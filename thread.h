@@ -120,9 +120,9 @@ private:
     Ready_Queue::Element _link;
     volatile State _state;
 
-     /*
-      * Atributo de classe para contagem do número de threads (inicializado em thread.cc) 
-      */
+    /*
+     * Atributo de classe para contagem do número de threads (inicializado em thread.cc) 
+     */
     static unsigned int _thread_counter;
 
     /*
@@ -131,9 +131,9 @@ private:
     int _exit_code;
 
     /*
-     * Informa se a thread em questão fez uma requisição de join
-     */ 
-    bool _called_join;
+     * Ponteiro para a thread que deu join na atual
+     */
+    Thread * _joining = NULL;
 };
 
 /*
