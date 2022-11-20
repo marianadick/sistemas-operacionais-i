@@ -35,12 +35,7 @@ int CPU::finc(volatile int & number){
     int val = 1;
     int r;
 
-    asm(
-       "lock\n\t"
-       "xadd %1, %0":
-       "+m"( number), "=r"(r):
-       "1"( val ):
-       "memory", "cc");
+    asm("lock xadd %1, %0": "+m"(number), "=r"(r): "1"(val): "memory");
 
     return number;
 }
@@ -49,12 +44,12 @@ int CPU::fdec(volatile int & number){
     int val = -1;
     int r;
 
-    asm(
-       "lock\n\t"
-       "xadd %1, %0":
-       "+m"( number), "=r"(r):
-       "1"( val ):
-       "memory", "cc");
+    // ESTRUTURA DE UM ASM:
+    // asm( Assembler Template : Output Operands : Input Operands : Clobbers : Go to Labels)
+
+    // -> The "memory" clobber tells the compiler that the assembly code performs memory reads or writes to items other than those listed in the input and output operands.
+    //    To ensure memory contains correct values, GCC may need to flush specific register values to memory before executing the asm. [Usado por conta do parêmetro 'number']
+    asm("lock xadd %1, %0": "+m"(number), "=r"(r): "1"(val): "memory");
 
     return number;
 }

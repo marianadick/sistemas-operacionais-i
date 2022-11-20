@@ -38,8 +38,16 @@ private:
     void wakeup_all();
 
 private:
-    //DECLARAÇÃO DOS ATRIBUTOS DO SEMÁFORO
+    /* ATRIBUTOS DO SEMÁFORO */
+
+    /*
+     * Indica a capacidade do semáforo
+     */ 
     int value;
+
+    /*
+     * Fila de threads esperando o semáforo ser liberado
+     */ 
     Waiting_Queue _waiting;
 };
 

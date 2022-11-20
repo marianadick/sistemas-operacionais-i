@@ -23,7 +23,6 @@ int Semaphore::fdec(volatile int & number) {
     return CPU::fdec(number);
 }
 
-// Coloca a thread para dormir
 void Semaphore::sleep() {
     Thread * asleep_thread = Thread::running();
     // Coloca a thread atual na fila de espera e deixa ela dormindo

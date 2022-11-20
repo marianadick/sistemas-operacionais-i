@@ -124,7 +124,7 @@ int Thread::join()
 
 void Thread::suspend()
 {
-    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is suspending.\n";
+    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is being suspended.\n";
     // Remove da fila de prontos
     Thread::_ready.remove(this);
     // Troca o estado e a adiciona na fila de suspensas
@@ -135,7 +135,7 @@ void Thread::suspend()
 
 void Thread::resume()
 {
-    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is resuming.\n";
+    db<Thread>(TRC) << ">> Thread [" << _joining->id() << "] is resuming.\n";
     // Remove da fila de suspensas a thread que efetuou o join
     Thread::_suspended.remove(_joining);
     // Adiciona na fila de prontos
@@ -151,8 +151,10 @@ void Thread::sleep() {
 }
     
 void Thread::wakeup() {
-    db<Thread>(TRC) << "Thread [" << this->id() << "] is waking up.\n";
-    // Insere a thread acordada na fila de prontos
+    db<Thread>(TRC) << ">> Thread [" << this->id() << "] is waking up.\n";
+    // Insere a thread acordada na fila de prontos 
+    // (Essa Thread precisa ser reinserida, pois o yield chamado no 'Thread::sleep' havia removido ela e não a colocou de volta,
+    //  uma vez que estava com o estado WAITING)
     _state = READY;
     Thread::_ready.insert(&this->_link);
     yield();
