@@ -141,6 +141,7 @@ void Thread::resume()
     // Adiciona na fila de prontos
     _joining->_state = READY;
     Thread::_ready.insert(&_joining->_link);
+    _joining = nullptr;
 }
 
 void Thread::sleep() {
