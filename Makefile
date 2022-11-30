@@ -1,29 +1,52 @@
-# Defining compiler and compiler flags
-CPP = g++
-CPPFLAGS = -Wall
 
-# Executable name (ADD HERE THE NAME OF THE EXECUTABLE GENERATED)
-EXE = main
+# Cody Barnson
+# Thur Mar 31, 2016
+# Makefile for allegro game project
 
-# List of source codes (ADD HERE C++ SOURCE FILE NAMES)
-SRCS = main.cc cpu.cc main_class.cc thread.cc system.cc debug.cc semaphore.cc
+# declaration of variables
+CC = g++
+CCFLAGS = -Wall -g -std=c++11 -I/usr/include/allegro5
 
-# List of header files (ADD HERE C++ HEADER FILE NAMES)
-HDRS = cpu.h main_class.h traits.h thread.h system.h debug.h list.h semaphore.h
+# file names
+NONTEST = main.cc main.o
 
-# Generate object files (.o) from source files
-OBJS = $(SRCS:.c=.o)
+SOURCES = $(filter-out $(NONMAIN), $(wildcard *.cc))
+OBJECTS = $(SOURCES:.cc=.o)
 
-# Compilling files ($@ refers to the Target being generated, in this case where are refering to (EXE) targe which is defined as 'prog')
-$(EXE): $(OBJS) $(HDRS) Makefile
-	@ echo "-> COMPILLING FILES"
-	$(CPP) $(CPPFLAGS) -o $@ $(OBJS)
-	@ echo "-> DONE!"
-	@ echo "-> Run './$(EXE)' to execute the code"
+LIBDIR = -L/usr/lib/x86_64-linux-gnu
 
-# Dependencies
-$(OBJS): $(HDRS) Makefile
+LNFLAGS = -lallegro -lallegro_primitives -lallegro_image -lallegro_font \
+-lallegro_ttf
+LNFLAGST= -lallegro -lallegro_primitives -lallegro_image -lallegro_font \
+-lallegro_ttf -ldl -lcppunit
 
-# Clean object files
-clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~
+
+# main target
+all: main
+
+main: $(OBJECTS)
+	$(CC) $(LIBDIR) -o $@ $^ $(LNFLAGS)
+
+# pull in dependency info for existing .o files
+-include $(OBJECTS:.o=.d) $(OBJECTST:.o=.d)
+
+# compile and generate dependency info
+%.o: %.cc
+	$(CC) -c $(CCFLAGS) $< -o $@
+	$(CC) -M $(CCFLAGS) $*.cc > $*.d
+
+# automatic variables
+# $< contains the first dependency file name
+# $@ contains the target file name
+
+# phony targets --> avoid conflict with file of the same name, and
+#                   improve performance
+.PHONY: clean
+
+# clean out the directory but keep executables with command "clean"
+clean : 
+	rm -f *~ *.o *.d *.gch main
+
+
+
+
