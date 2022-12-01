@@ -11,17 +11,13 @@ class System
 public:
     /*
      * Este método irá realizar a inicialização de todas as variáveis internas do SO.
-     * Por enquanto deve apenas desativar o buffer de saída padrão usado pelo cout.
-     * setvbuf (stdout, 0, _IONBF, 0) ;
-     * Isso evita condições de corrida que podem ocorrer no buffer quando threads são usadas.
-     * Deve ser chamado no início da função main.
      */ 
     static void init();
 
     /*
      * Cria a Thread Main
      */
-    static void init(void (*main)(void *));
+    static void init(void (*mainFunction)(void *));
 };
 
 __END_API

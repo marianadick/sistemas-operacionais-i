@@ -2,7 +2,8 @@
 
 __BEGIN_API
 
-Thread *Main::ping_pong_threads[5];
-Semaphore *Main::sem;
+void MainClass::runGame(void * name) {
+    std::cout << "Thread main is executing this function!" << std::endl;
+}
 
 __END_API

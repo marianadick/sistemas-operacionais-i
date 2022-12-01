@@ -17,7 +17,6 @@ Engine::Engine(int w, int h, int fps) : _displayWidth(w), _displayHeight(h),
 					_eventQueue(NULL),
                _finish(false)
 {
-   
 }
 
 Engine::~Engine() {
@@ -40,7 +39,7 @@ void Engine::init() {
    if ((_display = al_create_display(_displayWidth, _displayHeight)) == NULL) {
       std::cout << "Cannot initialize the display\n";
       exit(1); 
-   }   
+   }
    // initialize addons
    al_init_primitives_addon();
    al_init_font_addon();
@@ -71,7 +70,7 @@ void Engine::init() {
 }
 
 
-// repeatedly call the state manager function until the _state is EXIT
+// repeatedly call the state manager function until _finish is TRUE
 void Engine::run() {
    float prevTime = 0;
    // main engine loop
@@ -87,9 +86,13 @@ void Engine::gameLoop(float& prevTime) {
    float crtTime;
    
    // input
+   // irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
    al_get_keyboard_state(&kb);      
-   input(kb); //irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
-   
+   if(input(kb) == act::action::QUIT_GAME) {
+      _finish = true;
+      return;
+   }
+
    // get event
    al_wait_for_event(_eventQueue, &event);
    
