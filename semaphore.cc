@@ -34,7 +34,8 @@ void Semaphore::wakeup() {
     // Pega a próxima thread da fila de espera e a acorda
     if (_waiting.size()) {
         Thread * awaken_thread = _waiting.remove()->object();
-        awaken_thread->wakeup(); // Thread::wakeup
+        if (awaken_thread != nullptr)
+            awaken_thread->wakeup(); // Thread::wakeup
     }
 }
 
