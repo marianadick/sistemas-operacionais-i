@@ -7,6 +7,8 @@
 #include "thread.h"
 #include "semaphore.h"
 
+#include "Engine.h"
+
 __BEGIN_API
 
 class MainClass

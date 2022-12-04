@@ -11,12 +11,17 @@
 
 #include "Timer.h"
 
+Ship * Engine::_ship;
+Input * Engine::_input;
+
 Engine::Engine(int w, int h, int fps) : _displayWidth(w), _displayHeight(h), 
 					_fps(fps),
 					_timer(NULL),
 					_eventQueue(NULL),
                _finish(false)
 {
+   _input = new Input();
+   _ship = new Ship();
 }
 
 Engine::~Engine() {
@@ -26,7 +31,6 @@ Engine::~Engine() {
 
    bg.reset();
    spaceShip.reset();
-
 }
 
 
@@ -87,7 +91,10 @@ void Engine::gameLoop(float& prevTime) {
    
    // input
    // irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
-   al_get_keyboard_state(&kb);      
+   al_get_keyboard_state(&kb);
+
+   //_input->_inputThread->join();
+   
    if(input(kb) == act::action::QUIT_GAME) {
       _finish = true;
       return;
@@ -123,6 +130,9 @@ void Engine::update(double dt) {
    //Spaceship
    centre = centre + speed * dt;
    selectShipAnimation(); // must happen before we reset our speed
+
+   //_ship->_shipThread->join();
+
    speed = Vector(0, 0); // reset our speed
    checkBoundary();
 
@@ -230,5 +240,3 @@ void Engine::loadSprites()
    al_destroy_path(path);
 
 }
-
-   

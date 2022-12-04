@@ -16,6 +16,14 @@
 #include "Vector.h"
 #include "Action.h"
 
+#include "thread.h"
+#include "cpu.h"
+#include "traits.h"
+#include "ship.h"
+#include "input.h"
+
+__USING_API
+
 // forward declarations
 class Menu;
 class Root;
@@ -72,17 +80,17 @@ class Engine {
    int _displayWidth;
    int _displayHeight;
    int _fps;
+
    // allegro objects
    ALLEGRO_TIMER *_timer;
    ALLEGRO_EVENT_QUEUE *_eventQueue;
    ALLEGRO_DISPLAY *_display;
 
    bool _finish;
-   
+
+   static Ship * _ship;
+   static Input * _input;
 };
-
-
-
 
 
 #endif

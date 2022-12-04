@@ -19,12 +19,8 @@
 __USING_API
 
 int main() {
-   srand(time(0));
-   Engine shooty(800, 600, 60);
-   shooty.init();
-   shooty.run();
 
-   //System::init(&MainClass::runGame);
+   System::init(&MainClass::runGame);
 
    return 0;
 

@@ -2,12 +2,19 @@
 
 __BEGIN_API
 
+Thread * Window::_windowThread;
+
 Window::Window()
+{
+    _windowThread = new Thread(Window::drawWindow);
+}
+
+Window::~Window()
 {
     // TODO
 }
 
-Window::~Window()
+void Window::drawWindow()
 {
     // TODO
 }
