@@ -16,14 +16,10 @@ class Window
         /* Methods */
         Window();
         ~Window();
-        static void drawWindow();
         void join();
+        static void drawWindow();
 
-        /* Attributes */
         static Thread * _windowThread;
-        static int * _row;
-        static int * _col;
-        static Point * _centre;
     protected:
     private:
 };

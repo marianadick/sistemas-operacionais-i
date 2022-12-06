@@ -83,12 +83,6 @@ bool Engine::gameLoop(float& prevTime) {
    ALLEGRO_KEYBOARD_STATE kb;
    bool redraw = true;
    float crtTime;
-   
-   Window::_row = getRow();
-   Window::_col = getCol();
-   Window::_centre = getCentre();
-    std::cout << " row = "   << *Window::_row 
-              << " | col = " << *Window::_col << std::endl;
 
    // input
    // irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
@@ -116,10 +110,10 @@ bool Engine::gameLoop(float& prevTime) {
    // render
    if (redraw && al_is_event_queue_empty(_eventQueue)) {
       redraw = false;      
-      draw(); 
+      draw();
+      //Window::join(); 
       al_flip_display();
    }
-
    return true; // continue the game
 }
 
@@ -143,6 +137,7 @@ void Engine::update(double dt) {
 void Engine::draw() {   
    drawBackground();
    drawShip(spaceShip, 0);
+   drawLives();
 }
 
 
@@ -195,7 +190,12 @@ void Engine::drawBackground() {
    bg->draw_parallax_background(bgMid.x, 0);
 }
 
-
+void Engine::drawLives() {
+   Point centre(_displayWidth-70, _displayWidth-50);
+   al_draw_rectangle(_displayWidth-50, 40, _displayWidth-50, 70, al_map_rgb(0, 255, 0), 5);
+   al_draw_rectangle(_displayWidth-90, 40, _displayWidth-90, 70, al_map_rgb(0, 255, 0), 5); 
+   al_draw_rectangle(_displayWidth-130, 40, _displayWidth-130, 70, al_map_rgb(0, 255, 0), 5);
+}
 
 
 void Engine::selectShipAnimation() {

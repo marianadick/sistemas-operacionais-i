@@ -10,7 +10,7 @@ Game::Game() {
     
     _gameThread = new Thread(Game::run);
     _engine = new Engine(800, 600, 60);
-    _window = new Window();
+    //_window = new Window();
 
     _gameThread->join();
     //_window->join();
@@ -18,7 +18,7 @@ Game::Game() {
 
 Game::~Game() {
     delete _engine;
-    delete _window;
+    //delete _window;
 }
 
 void Game::run() {

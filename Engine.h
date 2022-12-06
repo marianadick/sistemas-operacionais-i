@@ -44,6 +44,7 @@ class Engine {
    act::action input(ALLEGRO_KEYBOARD_STATE&);
    void drawShip(std::shared_ptr<Sprite> sprite, int flags);
    void drawBackground();
+   void drawLives();
 
    inline int getWidth() const {
       return _displayWidth;
@@ -66,9 +67,9 @@ class Engine {
 
   private:
    void loadSprites();
-   //Checks data of the spaceship
-   void checkBoundary();
+   void checkBoundary(); // Checks data of the spaceship
    void selectShipAnimation();
+
    std::shared_ptr<Sprite> spaceShip;
    Point centre;        /**< ship position */
    ALLEGRO_COLOR color; /**< ship color */   
