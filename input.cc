@@ -6,6 +6,7 @@ Thread * Input::_inputThread;
 
 Input::Input()
 {
+    db<System>(TRC) << ">> Thread Input is initializing...\n";
     _inputThread = new Thread(Input::getKey);
 }
 
@@ -17,10 +18,13 @@ void Input::join()
 {
     if (_inputThread)
         _inputThread->join();
+    else
+        db<CPU>(ERR) << ">> Unnable to join Thread Input.\n";
 }
 
 void Input::getKey()
 {
+    //al_get_keyboard_state(&kb);
     std::cout << "GETTING KEY" << std::endl;
 }
 

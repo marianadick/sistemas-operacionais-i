@@ -5,12 +5,15 @@
 #include "thread.h"
 #include "cpu.h"
 
+#include <allegro5/allegro.h>
+
 __BEGIN_API
 
 class Input
 {
     public:
         Input();
+
         ~Input();
         static void join();
         static void getKey();

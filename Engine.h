@@ -21,6 +21,7 @@
 #include "traits.h"
 #include "ship.h"
 #include "input.h"
+#include "window.h"
 
 __USING_API
 
@@ -35,11 +36,10 @@ class Engine {
    ~Engine();
    
    void init();
-   void run();
    void draw();
    void update(double dt);
 
-   void gameLoop(float& prevTime);
+   bool gameLoop(float& prevTime);
 
    act::action input(ALLEGRO_KEYBOARD_STATE&);
    void drawShip(std::shared_ptr<Sprite> sprite, int flags);
@@ -53,6 +53,15 @@ class Engine {
    }
    inline int getFps() const {
       return _fps;
+   }
+   inline int* getRow() {
+      return &row;
+   }
+   inline int* getCol() {
+      return &col;
+   }
+   inline Point* getCentre() {
+      return &centre;
    }
 
   private:
@@ -85,8 +94,6 @@ class Engine {
    ALLEGRO_TIMER *_timer;
    ALLEGRO_EVENT_QUEUE *_eventQueue;
    ALLEGRO_DISPLAY *_display;
-
-   bool _finish;
 
    static Ship * _ship;
    static Input * _input;

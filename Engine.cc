@@ -17,11 +17,10 @@ Input * Engine::_input;
 Engine::Engine(int w, int h, int fps) : _displayWidth(w), _displayHeight(h), 
 					_fps(fps),
 					_timer(NULL),
-					_eventQueue(NULL),
-               _finish(false)
+					_eventQueue(NULL)
 {
-   _input = new Input();
-   _ship = new Ship();
+   //_ship = new Ship();
+   //_input = new Input();
 }
 
 Engine::~Engine() {
@@ -39,16 +38,19 @@ Engine::~Engine() {
 void Engine::init() {
    // initialize allegro
    al_init();
+
    // create the display
    if ((_display = al_create_display(_displayWidth, _displayHeight)) == NULL) {
       std::cout << "Cannot initialize the display\n";
       exit(1); 
    }
+
    // initialize addons
    al_init_primitives_addon();
    al_init_font_addon();
    al_init_ttf_addon();
    al_init_image_addon();
+
    // initialize our timers
    if ((_timer = al_create_timer(1.0 / _fps)) == NULL) {
       std::cout << "error, could not create timer\n";
@@ -58,10 +60,12 @@ void Engine::init() {
       std::cout << "error, could not create event queue\n";
       exit(1);
    }
+
    // register our allegro _eventQueue
    al_register_event_source(_eventQueue, al_get_display_event_source(_display)); 
    al_register_event_source(_eventQueue, al_get_timer_event_source(_timer));
    al_start_timer(_timer);
+
    // install keyboard
    if (!al_install_keyboard()) {
       std::cerr << "Could not install keyboard\n";
@@ -74,40 +78,32 @@ void Engine::init() {
 }
 
 
-// repeatedly call the state manager function until _finish is TRUE
-void Engine::run() {
-   float prevTime = 0;
-   // main engine loop
-   while (!_finish) {
-      gameLoop(prevTime);
-   }
-}
-
-void Engine::gameLoop(float& prevTime) {
+bool Engine::gameLoop(float& prevTime) {
    ALLEGRO_EVENT event;
    ALLEGRO_KEYBOARD_STATE kb;
    bool redraw = true;
    float crtTime;
    
+   Window::_row = getRow();
+   Window::_col = getCol();
+   Window::_centre = getCentre();
+    std::cout << " row = "   << *Window::_row 
+              << " | col = " << *Window::_col << std::endl;
+
    // input
    // irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
    al_get_keyboard_state(&kb);
 
-   //_input->_inputThread->join();
-   
-   if(input(kb) == act::action::QUIT_GAME) {
-      _finish = true;
-      return;
-   }
+   // check if ESC was pressed
+   if(input(kb) == act::action::QUIT_GAME)
+      return false; // end the game
 
    // get event
    al_wait_for_event(_eventQueue, &event);
    
    // _display closes
-   if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-      _finish = true;
-      return;
-   }
+   if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+      return false; // end the game
    
    // timer
    if (event.type == ALLEGRO_EVENT_TIMER) {
@@ -123,6 +119,8 @@ void Engine::gameLoop(float& prevTime) {
       draw(); 
       al_flip_display();
    }
+
+   return true; // continue the game
 }
 
 // update the game mode
@@ -130,8 +128,6 @@ void Engine::update(double dt) {
    //Spaceship
    centre = centre + speed * dt;
    selectShipAnimation(); // must happen before we reset our speed
-
-   //_ship->_shipThread->join();
 
    speed = Vector(0, 0); // reset our speed
    checkBoundary();
