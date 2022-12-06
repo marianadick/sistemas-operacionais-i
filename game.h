@@ -19,10 +19,12 @@ public:
     
     ~Game();
 
-    void run();
+    static void run();
 
     static Window * _window;
     static Engine * _engine;
+
+    static Thread * _gameThread;
 };
 
 __END_API
