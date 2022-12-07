@@ -7,7 +7,7 @@ Thread * Window::_windowThread;
 Window::Window()
 {
     db<System>(TRC) << ">> Thread Window is initializing...\n";
-    _windowThread = new Thread(drawWindow);
+    _windowThread = new Thread();
 }
 
 Window::~Window()

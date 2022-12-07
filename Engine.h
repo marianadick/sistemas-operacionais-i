@@ -96,8 +96,10 @@ class Engine {
    ALLEGRO_EVENT_QUEUE *_eventQueue;
    ALLEGRO_DISPLAY *_display;
 
-   static Ship * _ship;
-   static Input * _input;
+   ALLEGRO_KEYBOARD_STATE kb; // keyboard
+   
+   Ship * _ship;
+   Input * _input;
 };
 
 

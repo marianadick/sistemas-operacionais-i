@@ -11,9 +11,6 @@
 
 #include "Timer.h"
 
-Ship * Engine::_ship;
-Input * Engine::_input;
-
 Engine::Engine(int w, int h, int fps) : _displayWidth(w), _displayHeight(h), 
 					_fps(fps),
 					_timer(NULL),
@@ -228,11 +225,12 @@ void Engine::loadSprites()
    // Go to resources directory
    ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
    al_append_path_component(path, "resources");
-   al_change_directory(al_path_cstr(path, '/'));   
+   al_change_directory(al_path_cstr(path, '/')); 
+
    // sprites
    spaceShip = std::make_shared<Sprite> ("Sprite2.png"); //espaçonave do usuário
    bg = std::make_shared<Sprite> ("BGstars.png"); //fundo da tela - background
+   
    // delete path 
    al_destroy_path(path);
-
 }
