@@ -51,7 +51,7 @@ public:
       return _fps;
     }
 
-    //ALLEGRO_KEYBOARD_STATE kb;
+    ALLEGRO_KEYBOARD_STATE _kb;
 
 private:
     void selectShipAnimation();

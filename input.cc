@@ -4,12 +4,14 @@ __BEGIN_API
 
 Thread * Input::_inputThread;
 
-Input::Input(act::action * actionPlayer)
+Input::Input(act::action * actionPlayer, bool * finish, ALLEGRO_KEYBOARD_STATE *kb, Vector *speed)
 {
     db<System>(TRC) << ">> Thread Input is initializing...\n";
     Input * _input = this;
-    //_actionPlayer = actionPlayer;
-    //std::cout << actionPlayer << std::endl;
+    _actionPlayer = actionPlayer;
+    _finish = finish;
+    _kb = kb; 
+    _speed = speed; 
     _inputThread = new Thread(Input::inputHandler, _input);
 }
 
@@ -27,38 +29,35 @@ void Input::join()
 }
 
 void Input::inputHandler(Input * _input) {
-    /*
-    if (al_key_down(&kb, ALLEGRO_KEY_UP)) {
-        speed.y -= 250;
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_UP)) {
+        _input->_speed->y -= 250;
     }
-    if (al_key_down(&kb, ALLEGRO_KEY_RIGHT)) {
-        speed.x += 250;
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_RIGHT)) {
+        _input->_speed->x += 250;
     }
-    if (al_key_down(&kb, ALLEGRO_KEY_DOWN)) {
-        speed.y += 250;
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_DOWN)) {
+        _input->_speed->y += 250;
     }
-    if (al_key_down(&kb, ALLEGRO_KEY_LEFT)) {
-        speed.x -= 250;
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_LEFT)) {
+        _input->_speed->x -= 250;
     }
-    if (al_key_down(&kb, ALLEGRO_KEY_1)) {
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_1)) {
         std::cout << "missel\n";
-        *input->_actionPlayer = act::action::FIRE_PRIMARY;
-        return 
+        *_input->_actionPlayer = act::action::FIRE_PRIMARY;
+        return;
     }
-    if (al_key_down(&kb, ALLEGRO_KEY_SPACE)) {
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_SPACE)) {
         std::cout << "tiro normal\n";
-        *input->_actionPlayer = act::action::FIRE_SECONDARY;
+        *_input->_actionPlayer = act::action::FIRE_SECONDARY;
         return;
     }
-    if (al_key_down(&kb, ALLEGRO_KEY_ESCAPE)) {
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_ESCAPE)) {
         std::cout << "sair\n";
-        _actionPlayer = act::action::QUIT_GAME;
+        *_input->_actionPlayer = act::action::QUIT_GAME;
         return;
     }
-    _actionPlayer = act::action::NO_ACTION;
+    *_input->_actionPlayer = act::action::NO_ACTION;
     return;
-    */
-   std::cout << "INPUUUUUUUUUT" << std::endl;
 }
 
 __END_API

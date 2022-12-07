@@ -49,8 +49,7 @@ Game::Game(int w, int h, int fps) : _displayWidth(w), _displayHeight(h),
 
     Game * _game = this;
     _gameThread = new Thread(Game::run, _game);
-    //_inputHandler = new Input(&_actionPlayer, _game);
-    _inputHandler = new Input(&_actionPlayer);
+    _inputHandler = new Input(&_actionPlayer, &_finish, &_kb, &speed);
     _gameThread->join();
 }
 
@@ -77,29 +76,27 @@ void Game::gameLoop() {
     ALLEGRO_EVENT event;
     bool redraw = true;
 
-    ALLEGRO_KEYBOARD_STATE kb;
+    //ALLEGRO_KEYBOARD_STATE kb; // Transformed into class attribute
     
     // input
     // irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
-    al_get_keyboard_state(&kb);
-
-    if(input(kb) == act::action::QUIT_GAME) {
+    al_get_keyboard_state(&_kb);
+    if(input(_kb) == act::action::QUIT_GAME) {
         _finish = true;
         return; // end the game
     }
 
-    // check if ESC was pressed
-    //_inputHandler->join();
-
     /*
-    if (_actionPlayer == act::action::QUIT_GAME)
-         _finish = true;
+    _inputHandler->join();
+    // check if ESC was pressed
+    if (_actionPlayer == act::action::QUIT_GAME) {
+        _finish = true;
         return;
+    }
     */
 
     // get event
     al_wait_for_event(_eventQueue, &event);
-    
     // _display closes
     if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
         _finish = true;
