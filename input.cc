@@ -31,6 +31,7 @@ void Input::join()
 }
 
 void Input::inputHandler(Input * _input) {
+    *_input->_actionPlayer = act::action::NO_ACTION;
     if (al_key_down(_input->_kb, ALLEGRO_KEY_UP)) {
         _input->_speed->y -= 250;
     }
@@ -55,7 +56,6 @@ void Input::inputHandler(Input * _input) {
         std::cout << "sair\n";
         *_input->_actionPlayer = act::action::QUIT_GAME;
     }
-    *_input->_actionPlayer = act::action::NO_ACTION;
     _input->_inputThread->thread_exit(3);
     //delete _input->_inputThread;
 }

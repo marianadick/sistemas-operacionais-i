@@ -89,7 +89,6 @@ void Game::gameLoop() {
     }
     */
 
-
     // get event
     al_wait_for_event(_eventQueue, &event);
     // _display closes
