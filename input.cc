@@ -7,12 +7,12 @@ Thread * Input::_inputThread;
 Input::Input(act::action * actionPlayer, bool * finish, ALLEGRO_KEYBOARD_STATE *kb, Vector *speed)
 {
     db<System>(TRC) << ">> Thread Input is initializing...\n";
-    Input * _input = this;
+    _pointer = this;
     _actionPlayer = actionPlayer;
     _finish = finish;
     _kb = kb; 
     _speed = speed; 
-    _inputThread = new Thread(Input::inputHandler, _input);
+    //_inputThread = new Thread(Input::inputHandler, _pointer);
 }
 
 Input::~Input()
@@ -22,8 +22,10 @@ Input::~Input()
 
 void Input::join()
 {
-    if (_inputThread)
+    _inputThread = new Thread(Input::inputHandler, _pointer);
+    if (_inputThread) {
         _inputThread->join();
+    }
     else
         db<CPU>(ERR) << ">> Unnable to join Thread Input.\n";
 }
@@ -44,20 +46,18 @@ void Input::inputHandler(Input * _input) {
     if (al_key_down(_input->_kb, ALLEGRO_KEY_1)) {
         std::cout << "missel\n";
         *_input->_actionPlayer = act::action::FIRE_PRIMARY;
-        return;
     }
     if (al_key_down(_input->_kb, ALLEGRO_KEY_SPACE)) {
         std::cout << "tiro normal\n";
         *_input->_actionPlayer = act::action::FIRE_SECONDARY;
-        return;
     }
     if (al_key_down(_input->_kb, ALLEGRO_KEY_ESCAPE)) {
         std::cout << "sair\n";
         *_input->_actionPlayer = act::action::QUIT_GAME;
-        return;
     }
     *_input->_actionPlayer = act::action::NO_ACTION;
-    return;
+    _input->_inputThread->thread_exit(3);
+    //delete _input->_inputThread;
 }
 
 __END_API

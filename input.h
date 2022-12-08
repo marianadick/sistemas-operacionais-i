@@ -26,6 +26,7 @@ class Input
         Vector *_speed;
         bool * _finish;
         static Thread * _inputThread;
+        Input * _pointer;
     protected:
     private:
 };

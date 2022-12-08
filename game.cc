@@ -81,19 +81,14 @@ void Game::gameLoop() {
     // input
     // irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
     al_get_keyboard_state(&_kb);
+
+    /*
     if(input(_kb) == act::action::QUIT_GAME) {
         _finish = true;
         return; // end the game
     }
-
-    /*
-    _inputHandler->join();
-    // check if ESC was pressed
-    if (_actionPlayer == act::action::QUIT_GAME) {
-        _finish = true;
-        return;
-    }
     */
+
 
     // get event
     al_wait_for_event(_eventQueue, &event);
@@ -116,6 +111,13 @@ void Game::gameLoop() {
         redraw = false;      
         draw();
         al_flip_display();
+    }
+
+    _inputHandler->join();
+    // check if ESC was pressed
+    if (_actionPlayer == act::action::QUIT_GAME) {
+        _finish = true;
+        return;
     }
 }
 
