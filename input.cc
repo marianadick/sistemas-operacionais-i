@@ -32,18 +32,14 @@ void Input::join()
 
 void Input::inputHandler(Input * _input) {
     *_input->_actionPlayer = act::action::NO_ACTION;
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_UP)) {
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_UP))
         _input->_speed->y -= 250;
-    }
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_RIGHT)) {
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_RIGHT))
         _input->_speed->x += 250;
-    }
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_DOWN)) {
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_DOWN))
         _input->_speed->y += 250;
-    }
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_LEFT)) {
+    if (al_key_down(_input->_kb, ALLEGRO_KEY_LEFT))
         _input->_speed->x -= 250;
-    }
     if (al_key_down(_input->_kb, ALLEGRO_KEY_1)) {
         std::cout << "missel\n";
         *_input->_actionPlayer = act::action::FIRE_PRIMARY;
@@ -57,7 +53,6 @@ void Input::inputHandler(Input * _input) {
         *_input->_actionPlayer = act::action::QUIT_GAME;
     }
     _input->_inputThread->thread_exit(3);
-    //delete _input->_inputThread;
 }
 
 __END_API

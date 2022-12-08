@@ -75,19 +75,10 @@ void Game::run(Game * _game) {
 void Game::gameLoop() {
     ALLEGRO_EVENT event;
     bool redraw = true;
-
-    //ALLEGRO_KEYBOARD_STATE kb; // Transformed into class attribute
     
     // input
     // irá retornar uma tecla de ação. TODO: necessário transformar em Thread e fazer a ação
     al_get_keyboard_state(&_kb);
-
-    /*
-    if(input(_kb) == act::action::QUIT_GAME) {
-        _finish = true;
-        return; // end the game
-    }
-    */
 
     // get event
     al_wait_for_event(_eventQueue, &event);
@@ -118,34 +109,6 @@ void Game::gameLoop() {
         _finish = true;
         return;
     }
-}
-
-act::action Game::input(ALLEGRO_KEYBOARD_STATE& kb) {
-    if (al_key_down(&kb, ALLEGRO_KEY_UP)) {
-        speed.y -= 250;
-    }
-    if (al_key_down(&kb, ALLEGRO_KEY_RIGHT)) {
-        speed.x += 250;
-    }
-    if (al_key_down(&kb, ALLEGRO_KEY_DOWN)) {
-        speed.y += 250;
-    }
-    if (al_key_down(&kb, ALLEGRO_KEY_LEFT)) {
-        speed.x -= 250;
-    }
-    if (al_key_down(&kb, ALLEGRO_KEY_1)) {
-        std::cout << "missel\n";
-        return act::action::FIRE_PRIMARY;
-    }
-    if (al_key_down(&kb, ALLEGRO_KEY_SPACE)) {
-        std::cout << "tiro normal\n";
-        return act::action::FIRE_SECONDARY;
-    }
-    if (al_key_down(&kb, ALLEGRO_KEY_ESCAPE)) {
-        std::cout << "sair\n";
-        return act::action::QUIT_GAME;
-    }
-    return act::action::NO_ACTION;
 }
 
 // update the game mode
