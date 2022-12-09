@@ -1,8 +1,4 @@
-#include "system.h"
-#include "header-files/debug.h"
-#include "header-files/thread.h"
-#include "header-files/traits.h"
-#include <iostream>
+#include "header-files/system.h"
 
 __BEGIN_API
 

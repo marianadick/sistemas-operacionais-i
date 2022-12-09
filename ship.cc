@@ -7,7 +7,7 @@ int Ship::SHIP_SIZE = 16;
 ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(150, 0, 0);
 
 Ship::Ship(Input * kb) :
-            _kb(kb),
+            _kb(kb)
 {
    loadSprites();
 }
