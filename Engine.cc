@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "header-files/Engine.h"
 
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
@@ -9,7 +9,7 @@
 #include <stdexcept>
 #include <iostream>
 
-#include "Timer.h"
+#include "header-files/Timer.h"
 
 Engine::Engine(int w, int h, int fps) : _displayWidth(w), _displayHeight(h), 
 					_fps(fps),

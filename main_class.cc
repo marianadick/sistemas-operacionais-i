@@ -1,4 +1,4 @@
-#include "main_class.h"
+#include "header-files/main_class.h"
 
 __BEGIN_API
 
