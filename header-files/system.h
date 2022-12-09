@@ -2,9 +2,7 @@
 #define system_h
 
 #include <stdio.h>
-#include "thread.h"
 #include "traits.h"
-#include "debug.h"
 
 __BEGIN_API
 
@@ -13,12 +11,10 @@ class System
 public:
     /*
      * Este método irá realizar a inicialização de todas as variáveis internas do SO.
-     */ 
-    // ESTÁ RECLAMANDO DE OVERLOADING
-    //static void init();
-
-    /*
-     * Cria a Thread Main
+     * Por enquanto deve apenas desativar o buffer de saída padrão usado pelo cout.
+     * setvbuf (stdout, 0, _IONBF, 0) ;
+     * Isso evita condições de corrida que podem ocorrer no buffer quando threads são usadas.
+     * Deve ser chamado no início da função main.
      */
     static void init(void (*mainFunction)(void *));
 };

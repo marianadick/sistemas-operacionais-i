@@ -2,57 +2,57 @@
 
 __BEGIN_API
 
-Thread * Input::_inputThread;
-
-Input::Input(act::action * actionPlayer, bool * finish, ALLEGRO_KEYBOARD_STATE *kb, Vector *speed)
+Input::Input()
 {
-    db<System>(TRC) << ">> Thread Input is initializing...\n";
-    _pointer = this;
-    _actionPlayer = actionPlayer;
-    _finish = finish;
-    _kb = kb; 
-    _speed = speed; 
-    //_inputThread = new Thread(Input::inputHandler, _pointer);
+    // install keyboard
+    if (!al_install_keyboard())
+    {
+        std::cerr << "Could not install keyboard\n";
+        exit(1);
+    }
+
+    if ((_eventQueue = al_create_event_queue()) == NULL) {
+        std::cout << "error, could not create Input event queue\n";
+        exit(1);
+    }
+    al_register_event_source(_eventQueue, al_get_keyboard_event_source());
 }
 
 Input::~Input()
 {
-    delete _inputThread;
 }
 
-void Input::join()
+void Input::runInput()
 {
-    _inputThread = new Thread(Input::inputHandler, _pointer);
-    if (_inputThread) {
-        _inputThread->join();
+    while (Configs::_isGameRunning) {
+        al_get_keyboard_state(&_kb); // getting kb state
+        Thread::yield();
     }
-    else
-        db<CPU>(ERR) << ">> Unnable to join Thread Input.\n";
 }
 
-void Input::inputHandler(Input * _input) {
-    *_input->_actionPlayer = act::action::NO_ACTION;
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_UP))
-        _input->_speed->y -= 250;
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_RIGHT))
-        _input->_speed->x += 250;
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_DOWN))
-        _input->_speed->y += 250;
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_LEFT))
-        _input->_speed->x -= 250;
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_1)) {
-        std::cout << "missel\n";
-        *_input->_actionPlayer = act::action::FIRE_PRIMARY;
-    }
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_SPACE)) {
-        std::cout << "tiro normal\n";
-        *_input->_actionPlayer = act::action::FIRE_SECONDARY;
-    }
-    if (al_key_down(_input->_kb, ALLEGRO_KEY_ESCAPE)) {
-        std::cout << "sair\n";
-        *_input->_actionPlayer = act::action::QUIT_GAME;
-    }
-    _input->_inputThread->thread_exit(3);
+bool Input::checkPressedKey(act::action key)
+{
+    // Quita game key
+    if (key == act::action::QUIT_GAME)
+        return al_key_down(&_kb, ALLEGRO_KEY_ESCAPE);
+
+    // Fire keys
+    else if (key == act::action::FIRE_SECONDARY)
+        return al_key_down(&_kb, ALLEGRO_KEY_1);
+    else if (key == act::action::FIRE_PRIMARY)
+        return al_key_down(&_kb, ALLEGRO_KEY_SPACE);
+
+    // Movement keys
+    else if (key == act::action::MOVE_UP)
+        return al_key_down(&_kb, ALLEGRO_KEY_UP);
+    else if (key == act::action::MOVE_DOWN)
+        return al_key_down(&_kb, ALLEGRO_KEY_DOWN);
+    else if (key == act::action::MOVE_LEFT)
+        return al_key_down(&_kb, ALLEGRO_KEY_LEFT);
+    else if (key == act::action::MOVE_RIGHT)
+        return al_key_down(&_kb, ALLEGRO_KEY_RIGHT);
+
+    return false;
 }
 
 __END_API

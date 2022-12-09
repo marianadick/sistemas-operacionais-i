@@ -13,6 +13,7 @@
 #include "traits.h"
 #include "thread.h"
 
+#include "config.h"
 #include "ship.h"
 #include "input.h"
 
@@ -21,12 +22,13 @@
 #include "Point.h"
 
 __BEGIN_API
+class Ship;
 
 class Window
 {
     public:
         /* Methods */
-        Window(int w, int h, int fps, bool * gameRunning);
+        Window(int w, int h, int fps);
         ~Window();
 
         void runWindow();
@@ -62,7 +64,6 @@ class Window
         float _prevTime;
 
         /* Reference to game state and obj*/
-        bool * _gameRunning;
         Ship * _ship;
         Input * _kb;
 };

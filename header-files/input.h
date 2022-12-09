@@ -7,28 +7,27 @@
 #include <iostream>
 
 #include <allegro5/allegro.h>
+#include "config.h"
 #include "Action.h"
 #include "Vector.h"
+#include "Sprite.h"
+#include "ship.h"
 
 __BEGIN_API
 
 class Input
 {
     public:
-        Input(act::action * actionPlayer, bool * finish, ALLEGRO_KEYBOARD_STATE *kb, Vector *speed);
+        Input();
         ~Input();
 
-        void join();
-        static void inputHandler(Input * _input);
+        void runInput();
+        bool checkPressedKey(act::action key);
 
-        ALLEGRO_KEYBOARD_STATE *_kb;
-        act::action * _actionPlayer;
-        Vector *_speed;
-        bool * _finish;
-        static Thread * _inputThread;
-        Input * _pointer;
     protected:
-    private:
+    private:    
+        ALLEGRO_KEYBOARD_STATE _kb;
+        ALLEGRO_EVENT_QUEUE *_eventQueue; // store inputs
 };
 
 __END_API

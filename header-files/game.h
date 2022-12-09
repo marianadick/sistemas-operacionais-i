@@ -8,9 +8,10 @@
 
 #include <stdexcept>
 
+#include "config.h"
 #include "window.h"
-#include "ship.h"
 #include "input.h"
+#include "ship.h"
 
 __BEGIN_API
 
@@ -20,29 +21,60 @@ public:
     Game() {};
     ~Game() {};
 
-    static void gameRun();
+    static void gameRun() {
+        db<System>(TRC) << ">> Game is starting...\n";
+
+        _windowThread = new Thread(windowRun);
+        _kbThread = new Thread(kbRun);
+        _shipThread = new Thread(shipRun);
+        
+        _shipThread->join();
+        _windowThread->join();
+        _kbThread->join();
+
+        delete _shipThread;
+        delete _windowThread;
+        delete _kbThread;
+
+        db<System>(TRC) << ">> Game is ending...\n";
+    };
     
     /* Window display parameters*/
     static int _w;
     static int _h;
     static int _fps;
-    static bool _isRunning; // if true, the game is running
+
+    /* Game state */
+    static bool _isRunning;
 
 private:
-    /* SHIP */
-    static void shipRun();
-    static Thread * _shipThread;
-    static Ship * _ship;
-
-    /* WINDOW */
-    static void windowRun(int w, int h, int fps,  bool * _gameRunning);
     static Thread * _windowThread;
     static Window * _window;
-
-    /* INPUT */
-    static void kbRun();
+    static Thread * _shipThread;
+    static Ship * _ship;
     static Thread * _kbThread;
     static Input * _kb;
+
+    /* WINDOW */
+    static void windowRun() {
+        _window = new Window(Configs::_widthDisplay, Configs::_heightDisplay, Configs::_fps);
+        _window->runWindow();
+        delete _window;
+    };
+
+    /* SHIP */
+    static void shipRun() {
+        _ship = new Ship(_kb);
+        _window->attachShip(_ship); _ship->attachWindow(_window);
+        _ship->runShip();
+        //DELETE SHIP (????)
+    };
+
+    /* INPUT */
+    static void kbRun() {
+        _kb = new Input();
+        //DELETE SHIP (????)
+    };
 };
 
 __END_API

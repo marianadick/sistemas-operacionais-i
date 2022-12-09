@@ -10,10 +10,12 @@
 #include "Action.h"
 #include <memory>
 
+#include "configs.h"
 #include "input.h"
 #include "window.h"
 
 __BEGIN_API
+class Window;
 
 class Ship
 {
@@ -22,26 +24,31 @@ class Ship
         ~Ship();
 
         void runShip();
-        void update(double dt);
         void getInputKb();
 
-        //void draw(std::shared_ptr<Sprite> sprite, int flags);
+        void draw();
+        void update(double dt);
 
         void attachWindow(Window * window);
         
     protected:
     private:
+        void selectShipAnimation();
+        void checkBoundary();
         void loadSprites();
         
 	    static int SHIP_SPEED;
+        static int SHIP_SIZE;
     	static ALLEGRO_COLOR SHIP_COLOR;
 
-        Point * _position;
-        Vector * _speed;
+        /* Ship position */
+	    int _row;			/**<row of animation to be played */
+	    int _col;			/**< column of animation to be played */
+        Point _position;
+        Vector _speed;
         std::shared_ptr<Sprite> _sprite;
 
         /* Reference to game state and obj*/
-        bool * _gameRunning;
         Input * _kb;
         Window * _window;
 

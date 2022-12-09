@@ -2,11 +2,10 @@
 
 __BEGIN_API
 
-Window::Window(int w, int h, int fps, bool * gameRunning) :
+Window::Window(int w, int h, int fps) :
     _widthDisplay(w),
     _heightDisplay(h),
     _fps(fps),
-    _gameRunning(gameRunning)
 {
     db<System>(TRC) << ">> Thread Window is initializing...\n";
     al_init();
@@ -28,7 +27,7 @@ Window::Window(int w, int h, int fps, bool * gameRunning) :
         exit(1);
     }
     if ((_eventQueue = al_create_event_queue()) == NULL) {
-        std::cout << "error, could not create event queue\n";
+        std::cout << "error, could not create Window event queue\n";
         exit(1);
     }
 
@@ -51,11 +50,13 @@ Window::~Window()
     if (_timer != NULL) al_destroy_timer(_timer);
     if (_eventQueue != NULL) al_destroy_event_queue(_eventQueue);
     if (_display != NULL) al_destroy_display(_display);
+
+    _bgSprite.reset();
 }
 
 void Window::runWindow()
 {
-    while(*_gameRunning) {
+    while(Configs::_isGameRunning) {
         checkEvent();
         Thread::yield;
     }

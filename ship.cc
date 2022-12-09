@@ -3,9 +3,11 @@
 __BEGIN_API
 
 int Ship::SHIP_SPEED = 250;
+int Ship::SHIP_SIZE = 16;
 ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(150, 0, 0);
 
-Ship::Ship(Input * kb) : _kb(kb)
+Ship::Ship(Input * kb) :
+            _kb(kb),
 {
    loadSprites();
 }
@@ -16,7 +18,7 @@ Ship::~Ship()
 
 void Ship::runShip()
 {
-   while (*_gameRunning) {
+   while (Configs::_isGameRunning) {
 		if (_window == nullptr)
 			Thread::yield();
 
@@ -26,20 +28,20 @@ void Ship::runShip()
 }
 
 void Ship::getInputKb() {
-   /* TO DO
-	if (_kb == nullptr)
-		return;
-	if (_kb->getKbKeyIsPressed(KbKey::MOVE_UP))
-		speed.y -= PlayerShip::PLAYER_TRAVEL_SPEED;
-	if (_kb->getKbKeyIsPressed(KbKey::MOVE_DOWN))
-		speed.y += PlayerShip::PLAYER_TRAVEL_SPEED;
-	if (_kb->getKbKeyIsPressed(KbKey::MOVE_LEFT))
-		speed.x -= PlayerShip::PLAYER_TRAVEL_SPEED;
-	if (_kb->getKbKeyIsPressed(KbKey::MOVE_RIGHT))
-		speed.x += PlayerShip::PLAYER_TRAVEL_SPEED;
-	if (_kb->getKbKeyIsPressed(KbKey::NUM_1))
-	if (_kb->getKbKeyIsPressed(KbKey::SPACE))
-   */
+	if (_kb != nullptr) {
+      if (_kb->checkPressedKey(act::action::MOVE_UP))
+         _speed.y -= Ship::SHIP_SPEED;
+      if (_kb->checkPressedKey(act::action::MOVE_DOWN))
+         _speed.y += Ship::SHIP_SPEED;
+      if (_kb->checkPressedKey(act::action::MOVE_LEFT))
+         _speed.x -= Ship::SHIP_SPEED;
+      if (_kb->checkPressedKey(act::action::MOVE_RIGHT))
+         _speed.x += Ship::SHIP_SPEED;
+      if (_kb->checkPressedKey(act::action::FIRE_SECONDARY))
+         {} /* TO DO */
+      if (_kb->checkPressedKey(act::action::FIRE_PRIMARY))
+         {} /* TO DO*/
+   }
 }
 
 void Ship::loadSprites() {
@@ -58,61 +60,48 @@ void Ship::loadSprites() {
 	al_destroy_path(path);
 }
 
-
-
-
-
-void Ship::draw(std::shared_ptr<Sprite> sprite, int flags) 
-{   
-   sprite->draw_region(row, col, 47.0, 40.0, centre, flags);
-   drawLives();
-}
-
 void Ship::update(double dt) 
 {
-   centre = centre + speed * dt;
+   _position = _position + _speed * dt;
    selectShipAnimation();
-   speed = Vector(0, 0);
+   _speed = Vector(0, 0);
    checkBoundary();
 }
 
+void Ship::draw() 
+{   
+   Point centre = _position;
+   _sprite->draw_region(_row, _col, 47.0, 40.0, centre, 0);
+}
+
+
 void Ship::selectShipAnimation() 
 {
-   if (speed.x > 0) {
-      col = 1;
-      if (speed.y > 0) row = 2;
-      else if (speed.y < 0) row = 0;
-      else row = 1;
+   if (_speed.x > 0) {
+      _col = 1;
+      if (_speed.y > 0) _row = 2;
+      else if (_speed.y < 0) _row = 0;
+      else _row = 1;
    } else {
-      col = 0;
-      if (speed.y > 0) row = 2;
-      else if (speed.y < 0) row = 0;
-      else row = 1;
+      _col = 0;
+      if (_speed.y > 0) _row = 2;
+      else if (_speed.y < 0) _row = 0;
+      else _row = 1;
    }
 }
 
 void Ship::checkBoundary() 
 {   
    // check x bound and adjust if out
-   if (centre.x > 800 - PLAYER_SIZE)
-      centre.x = 800 - PLAYER_SIZE;
-   else if (centre.x < PLAYER_SIZE)
-      centre.x = PLAYER_SIZE;   
+   if (_position.x > 800 - SHIP_SIZE)
+      _position.x = 800 - SHIP_SIZE;
+   else if (_position.x < SHIP_SIZE)
+      _position.x = SHIP_SIZE;   
    // check y bound and adjust if out
-   if (centre.y > 600 - PLAYER_SIZE)
-      centre.y = 600 - PLAYER_SIZE;
-   else if (centre.y < PLAYER_SIZE)
-      centre.y = PLAYER_SIZE;
-}
-
-void Ship::drawLives()
-{   
-   al_draw_line(centre.x - PLAYER_SIZE*2, centre.y + PLAYER_SIZE*2,
-		(centre.x - PLAYER_SIZE*2) + (lives / MAX_LIFE) * (PLAYER_SIZE*4),
-		centre.y + PLAYER_SIZE*2,
-		al_map_rgb(255 * (1.0 - lives / MAX_LIFE),
-			   200 * (lives / MAX_LIFE),
-			   0), 5);
+   if (_position.y > 600 - SHIP_SIZE)
+      _position.y = 600 - SHIP_SIZE;
+   else if (_position.y < SHIP_SIZE)
+      _position.y = SHIP_SIZE;
 }
 
 void Ship::attachWindow(Window * window)
