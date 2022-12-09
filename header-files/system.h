@@ -2,7 +2,9 @@
 #define system_h
 
 #include <stdio.h>
+#include "thread.h"
 #include "traits.h"
+#include "debug.h"
 
 __BEGIN_API
 
@@ -12,7 +14,8 @@ public:
     /*
      * Este método irá realizar a inicialização de todas as variáveis internas do SO.
      */ 
-    static void init();
+    // ESTÁ RECLAMANDO DE OVERLOADING
+    //static void init();
 
     /*
      * Cria a Thread Main

@@ -2,75 +2,55 @@
 
 __BEGIN_API
 
-Thread * Game::_gameThread;
+Thread * Game::_shipThread;
+Thread * Game::_windowThread;
+Thread * Game::_kbThread;
 
-Game::Game(int w, int h, int fps) : _displayWidth(w), _displayHeight(h), 
-					_fps(fps),
-					_timer(NULL),
-					_eventQueue(NULL),
-                    _finish(false),
-                    _prevTime(0)
-{
-    al_init();
-    // create the display
-    if ((_display = al_create_display(_displayWidth, _displayHeight)) == NULL) {
-        std::cout << "Cannot initialize the display\n";
-        exit(1); 
-    }
+Ship * Game::_ship;
+Window * Game::_window;
+Input * Game::_kb;
 
-    // initialize addons
-    al_init_primitives_addon();
-    al_init_font_addon();
-    al_init_ttf_addon();
-    al_init_image_addon();
+int Game::_w = 800;
+int Game::_h = 600;
+int Game::_fps = 60;
+bool Game::_isRunning = true;
 
-    // initialize our timers
-    if ((_timer = al_create_timer(1.0 / _fps*1.5)) == NULL) {
-        std::cout << "error, could not create timer\n";
-        exit(1);
-    }
-    if ((_eventQueue = al_create_event_queue()) == NULL) {
-        std::cout << "error, could not create event queue\n";
-        exit(1);
-    }
+void Game::gameRun() {
+    db<System>(TRC) << ">> Game is starting...\n";
 
-    // register our allegro _eventQueue
-    al_register_event_source(_eventQueue, al_get_display_event_source(_display)); 
-    al_register_event_source(_eventQueue, al_get_timer_event_source(_timer));
-    al_start_timer(_timer);
-
-    // install keyboard
-    if (!al_install_keyboard())
-        std::cerr << "Could not install keyboard\n";
+    _kbThread = new Thread(Game::kbRun);
+    _windowThread = new Thread(Game::windowRun, _w, _h, _fps, &_isRunning);
+    _shipThread = new Thread(Game::shipRun);
     
-    // register keyboard
-    al_register_event_source(_eventQueue, al_get_keyboard_event_source());
-    loadSprites();
+    _kbThread->join();
+    _windowThread->join();
+    _shipThread->join();
 
-    Game * _game = this;
-    _gameThread = new Thread(Game::run, _game);
-    _inputHandler = new Input(&_actionPlayer, &_finish, &_kb, &speed);
-    _gameThread->join();
+    delete _kbThread;
+    delete _windowThread;
+    delete _shipThread;
+
+    db<System>(TRC) << ">> Game is ending...\n";
 }
 
-Game::~Game() {
-    if (_timer != NULL) al_destroy_timer(_timer);
-    if (_eventQueue != NULL) al_destroy_event_queue(_eventQueue);
-    if (_display != NULL) al_destroy_display(_display);
+void Game::kbRun() {
 
-    bg.reset();
-    spaceShip.reset();
 }
 
-void Game::run(Game * _game) {
-    db<System>(TRC) << ">> Thread Game is starting...\n";
-   
-    srand(time(0));
-    while (!_game->_finish)
-        _game->gameLoop();
-
-    db<System>(TRC) << ">> Thread Game is ending...\n";
+void Game::shipRun() {
+    _ship = new Ship(_kb);
+    _window->attachShip(_ship); _ship->attachWindow(_window);
+    _ship->runShip();
+    //DELETE SHIP (????)
 }
+
+void Game::windowRun(int w, int h, int fps,  bool * isRunning) {
+    _window = new Window(w, h, fps, isRunning);
+    _window->runWindow();
+    delete _window;
+}
+
+
 
 void Game::gameLoop() {
     ALLEGRO_EVENT event;
@@ -103,12 +83,6 @@ void Game::gameLoop() {
         al_flip_display();
     }
 
-    _inputHandler->join();
-    // check if ESC was pressed
-    if (_actionPlayer == act::action::QUIT_GAME) {
-        _finish = true;
-        return;
-    }
 }
 
 // update the game mode

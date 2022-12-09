@@ -1,6 +1,4 @@
 #include "header-files/system.h"
-#include <iostream>
-#include "header-files/thread.h"
 
 __BEGIN_API
 

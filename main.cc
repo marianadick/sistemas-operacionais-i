@@ -4,26 +4,15 @@
  * 
  */
 
-
-#include "header-files/Engine.h"
-#include <allegro5/allegro.h>
-#include <ctime>
-#include <cstdlib>
-#include <string>
-#include <iostream>
-
 #include "header-files/thread.h"
 #include "header-files/system.h"
-#include "header-files/main_class.h"
+#include "header-files/game.h"
 
 __USING_API
 
 int main() {
-
-   System::init(&MainClass::runGame);
-
+   System::init(&Game::gameRun);
    return 0;
-
 }
 
 

@@ -2,36 +2,65 @@
 
 __BEGIN_API
 
-const int PLAYER_SIZE = 16; // in pixels
-const int PLAYER_TRAVEL_SPEED = 250;
-const float MAX_LIFE = 3;
+int Ship::SHIP_SPEED = 250;
+ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(150, 0, 0);
 
-Thread * Ship::_shipThread;
-
-Ship::Ship(Point p, ALLEGRO_COLOR c) : centre(p), color(c), speed(Vector(0, 0)),
-					   lives(3), row(0), col(0), dead(false)
+Ship::Ship(Input * kb) : _kb(kb)
 {
-    Ship * _ship = this;
-    db<System>(TRC) << ">> Thread Ship is initializing...\n";
-    _shipThread = new Thread(Ship::run, _ship);
+   loadSprites();
 }
 
 Ship::~Ship()
 {
 }
 
-void Ship::run(Ship * _ship)
-{}
-
-void Ship::join()
+void Ship::runShip()
 {
-    if (_shipThread) {
-        _shipThread->join();
-        //_shipThread->yield();
-    }
-    else
-        db<CPU>(ERR) << ">> Unnable to join Thread Ship.\n";
+   while (*_gameRunning) {
+		if (_window == nullptr)
+			Thread::yield();
+
+		getInputKb();
+		Thread::yield();
+	}
 }
+
+void Ship::getInputKb() {
+   /* TO DO
+	if (_kb == nullptr)
+		return;
+	if (_kb->getKbKeyIsPressed(KbKey::MOVE_UP))
+		speed.y -= PlayerShip::PLAYER_TRAVEL_SPEED;
+	if (_kb->getKbKeyIsPressed(KbKey::MOVE_DOWN))
+		speed.y += PlayerShip::PLAYER_TRAVEL_SPEED;
+	if (_kb->getKbKeyIsPressed(KbKey::MOVE_LEFT))
+		speed.x -= PlayerShip::PLAYER_TRAVEL_SPEED;
+	if (_kb->getKbKeyIsPressed(KbKey::MOVE_RIGHT))
+		speed.x += PlayerShip::PLAYER_TRAVEL_SPEED;
+	if (_kb->getKbKeyIsPressed(KbKey::NUM_1))
+	if (_kb->getKbKeyIsPressed(KbKey::SPACE))
+   */
+}
+
+void Ship::loadSprites() {
+   _position = Point(215, 245);
+   _speed = Vector(0, 0);
+
+   // Go to resources directory
+	ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
+	al_append_path_component(path, "resources");
+	al_change_directory(al_path_cstr(path, '/'));
+
+	// sprites
+	_sprite = std::make_shared<Sprite>("Sprite2.png");
+
+	// delete path
+	al_destroy_path(path);
+}
+
+
+
+
 
 void Ship::draw(std::shared_ptr<Sprite> sprite, int flags) 
 {   
@@ -84,6 +113,11 @@ void Ship::drawLives()
 		al_map_rgb(255 * (1.0 - lives / MAX_LIFE),
 			   200 * (lives / MAX_LIFE),
 			   0), 5);
+}
+
+void Ship::attachWindow(Window * window)
+{
+   _window = window;
 }
 
 __END_API

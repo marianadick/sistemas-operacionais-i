@@ -3,46 +3,47 @@
 
 #include "traits.h"
 #include "thread.h"
-#include "cpu.h"
-#include "ship.h"
+
 #include "Point.h"
 #include "Vector.h"
 #include "Sprite.h"
 #include "Action.h"
-#include <allegro5/allegro_primitives.h>
 #include <memory>
 
-
-//#include "Vector.h"
+#include "input.h"
+#include "window.h"
 
 __BEGIN_API
 
 class Ship
 {
     public:
-        Point centre;        /**< ship position */
-        ALLEGRO_COLOR color; /**< ship color */
-   
-        Vector speed;        /**< movement speed in any direction */
-        float lives;         /**< lives remaining of Player object before destroyed */
-        int row;             /**<row of animation to be played */
-        int col;             /**< column of animation to be played */
-        bool dead;           /**< signals Player object has been killed */
-
-        Ship(Point p, ALLEGRO_COLOR c);
+        Ship(Input * kb);
         ~Ship();
-        static void run(Ship * _ship);
-        void join();
-        void draw(std::shared_ptr<Sprite> sprite, int flags);
+
+        void runShip();
         void update(double dt);
-        static Thread * _shipThread;
+        void getInputKb();
+
+        //void draw(std::shared_ptr<Sprite> sprite, int flags);
+
+        void attachWindow(Window * window);
         
     protected:
     private:
-        void drawLives();
-        void checkBoundary();
-        void update();
-        void selectShipAnimation();
+        void loadSprites();
+        
+	    static int SHIP_SPEED;
+    	static ALLEGRO_COLOR SHIP_COLOR;
+
+        Point * _position;
+        Vector * _speed;
+        std::shared_ptr<Sprite> _sprite;
+
+        /* Reference to game state and obj*/
+        bool * _gameRunning;
+        Input * _kb;
+        Window * _window;
 
 };
 
