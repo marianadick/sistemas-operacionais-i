@@ -1,18 +1,18 @@
 #ifndef ship_h
 #define ship_h
 
-#include "traits.h"
 #include "thread.h"
-
-#include "Point.h"
-#include "Vector.h"
-#include "Sprite.h"
-#include "Action.h"
+#include "traits.h"
 #include <memory>
 
 #include "configs.h"
 #include "input.h"
 #include "window.h"
+
+#include "Point.h"
+#include "Vector.h"
+#include "Sprite.h"
+#include "Action.h"
 
 __BEGIN_API
 class Window;

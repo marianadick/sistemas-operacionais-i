@@ -1,13 +1,21 @@
 #include "header-files/window.h"
+#include "header-files/configs.h"
+
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 
 __BEGIN_API
 
 Window::Window(int w, int h, int fps) :
     _widthDisplay(w),
     _heightDisplay(h),
-    _fps(fps),
+    _fps(fps)
 {
-    db<System>(TRC) << ">> Thread Window is initializing...\n";
+    db<System>(TRC) << ">> Window is initializing...\n";
     al_init();
     // create the display
     if ((_display = al_create_display(_widthDisplay, _heightDisplay)) == NULL) {
@@ -37,9 +45,11 @@ Window::Window(int w, int h, int fps) :
     al_start_timer(_timer);
 
     // install keyboard
-    if (!al_install_keyboard())
+    if (!al_install_keyboard()) {
         std::cerr << "Could not install keyboard\n";
-    
+        exit(1);
+    }
+
     // register keyboard
     al_register_event_source(_eventQueue, al_get_keyboard_event_source());
     loadSprites();
@@ -52,13 +62,14 @@ Window::~Window()
     if (_display != NULL) al_destroy_display(_display);
 
     _bgSprite.reset();
+    db<System>(TRC) << ">> Window destroyed...\n";
 }
 
 void Window::runWindow()
 {
     while(Configs::_isGameRunning) {
         checkEvent();
-        Thread::yield;
+        Thread::yield();
     }
 }
 
@@ -98,7 +109,7 @@ void Window::checkEvent()
     al_wait_for_event(_eventQueue, &event);
     // _display closes
     if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-        *_gameRunning = true;
+        Configs::_isGameRunning = false;
         return;
     }
     
@@ -123,7 +134,7 @@ void Window::loadSprites()
     al_change_directory(al_path_cstr(path, '/')); 
 
     // sprites
-    _bgSprite = std::make_shared<Sprite> ("BGstars.png"); //fundo da tela - background
+    _bgSprite = std::make_shared<Sprite> ("BGstars.png");
     
     // delete path 
     al_destroy_path(path);

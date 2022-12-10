@@ -3,10 +3,9 @@
  * @brief
  * 
  */
-
+#include "header-files/thread.h"
 #include "header-files/system.h"
 #include "header-files/game.h"
-#include "header-files/thread.h"
 
 __USING_API
 

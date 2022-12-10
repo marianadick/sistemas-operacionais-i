@@ -1,5 +1,5 @@
-#ifndef input_h
-#define input_h
+#ifndef INPUT_H
+#define INPUT_H
 
 #include "traits.h"
 #include "thread.h"

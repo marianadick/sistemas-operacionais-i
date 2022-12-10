@@ -9,4 +9,5 @@ Thread * Game::_kbThread;
 Ship * Game::_ship;
 Window * Game::_window;
 Input * Game::_kb;
+
 __END_API

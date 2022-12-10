@@ -1,6 +1,8 @@
 #include "header-files/Point.h"
 #include "header-files/Vector.h"
 
+__BEGIN_API
+
 Point::Point() {
    x = 0.0;
    y = 0.0;
@@ -41,3 +43,5 @@ void Point::rollRandomX() {
 void Point::rollRandomY() {
    y = rand() % 300 + 100;
 }
+
+__END_API

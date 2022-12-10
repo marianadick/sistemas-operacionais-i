@@ -2,45 +2,40 @@
 #define window_h
 
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_acodec.h>
 #include <memory>
+
+#include "ship.h"
+#include "input.h"
 
 #include "traits.h"
 #include "thread.h"
 
-#include "config.h"
-#include "ship.h"
-#include "input.h"
-
 #include "Vector.h"
 #include "Sprite.h"
-#include "Point.h"
 
 __BEGIN_API
+
 class Ship;
+class Input;
 
 class Window
 {
     public:
-        /* Methods */
         Window(int w, int h, int fps);
         ~Window();
 
         void runWindow();
+
+        void attachShip(Ship * ship); // Link ship to window
+        void attachKb(Input * kb); // Link keyboard to window (QUIT game)
+
+    protected:
+    private:
         void checkEvent();
         void drawWindow();
         void updateBg(double dt);
         void loadSprites();
 
-        void attachShip(Ship * ship); // Link ship to window
-        void attachKb(Input * kb);
-    protected:
-    private:
         /* Display parameters */
         int _widthDisplay;
         int _heightDisplay;

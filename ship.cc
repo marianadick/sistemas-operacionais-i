@@ -1,4 +1,5 @@
 #include "header-files/ship.h"
+#include "header-files/configs.h"
 
 __BEGIN_API
 
@@ -9,11 +10,14 @@ ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(150, 0, 0);
 Ship::Ship(Input * kb) :
             _kb(kb)
 {
+   db<System>(TRC) << ">> Player ship is initializing...\n";
    loadSprites();
 }
 
 Ship::~Ship()
 {
+   _sprite.reset();
+   db<System>(TRC) << ">> Player ship destroyed...\n";
 }
 
 void Ship::runShip()
@@ -37,15 +41,15 @@ void Ship::getInputKb() {
          _speed.x -= Ship::SHIP_SPEED;
       if (_kb->checkPressedKey(act::action::MOVE_RIGHT))
          _speed.x += Ship::SHIP_SPEED;
-      if (_kb->checkPressedKey(act::action::FIRE_SECONDARY))
-         {} /* TO DO */
       if (_kb->checkPressedKey(act::action::FIRE_PRIMARY))
          {} /* TO DO*/
+      if (_kb->checkPressedKey(act::action::FIRE_SECONDARY))
+         {} /* TO DO */
    }
 }
 
 void Ship::loadSprites() {
-   _position = Point(215, 245);
+   _position = Point(200, 300);
    _speed = Vector(0, 0);
 
    // Go to resources directory

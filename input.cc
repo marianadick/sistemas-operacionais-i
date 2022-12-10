@@ -4,9 +4,9 @@ __BEGIN_API
 
 Input::Input()
 {
+    db<System>(TRC) << ">> Input Handler is initializing...\n";
     // install keyboard
-    if (!al_install_keyboard())
-    {
+    if (!al_install_keyboard()) {
         std::cerr << "Could not install keyboard\n";
         exit(1);
     }
@@ -20,6 +20,7 @@ Input::Input()
 
 Input::~Input()
 {
+    db<System>(TRC) << ">> Input Handler destroyed...\n";
 }
 
 void Input::runInput()
@@ -32,9 +33,10 @@ void Input::runInput()
 
 bool Input::checkPressedKey(act::action key)
 {
-    // Quita game key
-    if (key == act::action::QUIT_GAME)
+    // Quit game key
+    if (key == act::action::QUIT_GAME) {
         return al_key_down(&_kb, ALLEGRO_KEY_ESCAPE);
+    }
 
     // Fire keys
     else if (key == act::action::FIRE_SECONDARY)

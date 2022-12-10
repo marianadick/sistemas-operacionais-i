@@ -9,6 +9,9 @@
 #define TIMER_H
 
 #include <allegro5/allegro.h>
+#include "traits.h"
+
+__BEGIN_API
 
 class Timer {
 
@@ -33,5 +36,7 @@ class Timer {
    int _fps;
    
 };
+
+__END_API
 
 #endif

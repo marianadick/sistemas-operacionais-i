@@ -6,12 +6,10 @@
 #include "traits.h"
 #include "thread.h"
 
-#include <stdexcept>
-
-#include "config.h"
 #include "window.h"
 #include "input.h"
 #include "ship.h"
+#include "config.h"
 
 __BEGIN_API
 
@@ -21,7 +19,7 @@ public:
     Game() {};
     ~Game() {};
 
-    static void gameRun() {
+    static void gameRun(void *name) {
         db<System>(TRC) << ">> Game is starting...\n";
 
         _windowThread = new Thread(windowRun);
@@ -38,21 +36,14 @@ public:
 
         db<System>(TRC) << ">> Game is ending...\n";
     };
-    
-    /* Window display parameters*/
-    static int _w;
-    static int _h;
-    static int _fps;
-
-    /* Game state */
-    static bool _isRunning;
 
 private:
     static Thread * _windowThread;
-    static Window * _window;
     static Thread * _shipThread;
-    static Ship * _ship;
     static Thread * _kbThread;
+
+    static Window * _window;
+    static Ship * _ship;
     static Input * _kb;
 
     /* WINDOW */
@@ -65,6 +56,7 @@ private:
     /* SHIP */
     static void shipRun() {
         _ship = new Ship(_kb);
+        // Window gets the Ship reference and the same ocurres for the Ship
         _window->attachShip(_ship); _ship->attachWindow(_window);
         _ship->runShip();
         //DELETE SHIP (????)
@@ -73,6 +65,7 @@ private:
     /* INPUT */
     static void kbRun() {
         _kb = new Input();
+        _kb->runInput();
         //DELETE SHIP (????)
     };
 };

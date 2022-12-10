@@ -12,6 +12,9 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
+#include "traits.h"
+
+__BEGIN_API
 
 class Sprite {
   private:
@@ -124,5 +127,7 @@ class Sprite {
 
    
 };
+
+__END_API
 
 #endif
