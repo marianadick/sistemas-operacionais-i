@@ -28,10 +28,10 @@ public:
 	bool getIsPlayerProjectile() { return this->isPlayerShot; }
 	bool isOutside()
 	{
-		if ((this->_point.x > Configs::_widthDisplay) ||
-			(this->_point.x < 0) ||
-			(this->_point.y > Configs::_heightDisplay) ||
-			(this->_point.y < 0))
+		if ((_point.x > Configs::_widthDisplay) ||
+			(_point.x < 0) ||
+			(_point.y > Configs::_heightDisplay) ||
+			(_point.y < 0))
 			return true;
 		return false;
 	}
@@ -45,4 +45,4 @@ protected:
 
 __END_API
 
-#endif
+    #endif
