@@ -59,14 +59,14 @@ private:
         // Window gets the Ship reference and the same ocurres for the Ship
         _window->attachShip(_ship); _ship->attachWindow(_window);
         _ship->runShip();
-        //DELETE SHIP (????)
+        delete _ship;
     };
 
     /* INPUT */
     static void kbRun() {
         _kb = new Input();
         _kb->runInput();
-        //DELETE SHIP (????)
+        delete _kb;
     };
 };
 

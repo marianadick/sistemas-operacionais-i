@@ -112,6 +112,14 @@ void Window::checkEvent()
         Configs::_isGameRunning = false;
         return;
     }
+
+    // Should check if ESC was pressed, exiting the game if so (NOT WORKING)
+	if (_kb != nullptr) {
+      if (_kb->checkPressedKey(act::action::QUIT_GAME)) {
+        Configs::_isGameRunning = false;
+        return;
+      }
+    }
     
     // timer
     if (event.type == ALLEGRO_EVENT_TIMER) {
