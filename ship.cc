@@ -42,7 +42,7 @@ void Ship::getInputKb() {
       if (_kb->checkPressedKey(act::action::MOVE_RIGHT))
          _speed.x += Ship::SHIP_SPEED;
       if (_kb->checkPressedKey(act::action::FIRE_PRIMARY))
-         {} /* TO DO*/
+         {shootProjectile();}
       if (_kb->checkPressedKey(act::action::FIRE_SECONDARY))
          {} /* TO DO */
    }
@@ -107,6 +107,15 @@ void Ship::checkBoundary()
    else if (_position.y < SHIP_SIZE)
       _position.y = SHIP_SIZE;
 }
+
+void Ship::shootProjectile() 
+{
+   printf("shoot shooted");
+   Vector teste = Vector(500, 0);
+   Laser *laserToShot = new Laser(_position, SHIP_COLOR, teste);
+	this->_window->addDrawableItem(laserToShot);
+}
+
 
 void Ship::attachWindow(Window * window)
 {

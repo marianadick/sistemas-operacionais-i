@@ -13,6 +13,9 @@
 #include "Vector.h"
 #include "Sprite.h"
 
+#include "Drawable.h"
+#include <list> 
+
 __BEGIN_API
 
 class Ship;
@@ -26,11 +29,15 @@ class Window
 
         void runWindow();
 
+        void addDrawableItem(Drawable *item) { this->drawableItens.push_front(item); }
+
         void attachShip(Ship * ship); // Link ship to window
         void attachKb(Input * kb); // Link keyboard to window (QUIT game)
 
     protected:
     private:
+        std::list<Drawable *> drawableItens;
+
         void checkEvent();
         void drawWindow();
         void updateBg(double dt);

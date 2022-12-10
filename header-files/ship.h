@@ -13,11 +13,13 @@
 #include "Vector.h"
 #include "Sprite.h"
 #include "Action.h"
+#include "Laser.h"
+#include "Drawable.h"
 
 __BEGIN_API
 class Window;
 
-class Ship
+class Ship: public Drawable
 {
     public:
         Ship(Input * kb);
@@ -35,6 +37,7 @@ class Ship
     private:
         void selectShipAnimation();
         void checkBoundary();
+        void shootProjectile();
         void loadSprites();
         
 	    static int SHIP_SPEED;

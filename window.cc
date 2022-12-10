@@ -88,6 +88,18 @@ void Window::drawWindow()
             _ship->draw();
         }
         _prevTime = crtTime;
+
+
+        // Para cada item para desenhar faz update, desenha e caso já tenha terminado então coloca numa outra lista para remover
+        for (auto listItem = this->drawableItens.begin(); listItem != this->drawableItens.end();)
+        {
+            Drawable *drawableItem = *listItem;
+            listItem++; // Já atualiza o ponteiro para o próximo
+
+            drawableItem->update(crtTime - _prevTime);
+            drawableItem->draw();
+        }
+
         al_flip_display();
     }
 }
