@@ -14,14 +14,19 @@ __BEGIN_API
 class Laser : public Projectile
 {
 public:
-    Laser(Point p, ALLEGRO_COLOR c, Vector s);
+    Laser(Point point, ALLEGRO_COLOR color, Vector vector, bool isPlayerShot);
     ~Laser();
 
+    int getDamage();
+    void ackHitSomething();
+    bool wasDestroyed();
+
     void draw();
-    bool stillLive();
     void update(double diffTime);
     int getSize();
-    Point getPosition();
+
+private:
+    int hitUntilDestroyed;
 };
 
 __END_API

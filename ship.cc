@@ -111,12 +111,17 @@ void Ship::checkBoundary()
 void Ship::shootProjectile() 
 {
    printf("shoot shooted");
-   Vector teste = Vector(500, 0);
-   Laser *laserToShot = new Laser(_position, SHIP_COLOR, teste);
+   Laser *laserToShot = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
 	this->_window->addDrawableItem(laserToShot);
 }
 
-
+void Ship::init()
+{
+	// Create the timers for the weapons
+	this->laserTimer = std::make_shared<Timer>(GameConfigs::fps);
+	this->laserTimer->create();
+	this->laserTimer->startTimer();
+}
 void Ship::attachWindow(Window * window)
 {
    _window = window;
