@@ -15,6 +15,7 @@
 #include "Action.h"
 #include "Laser.h"
 #include "Drawable.h"
+#include "Timer.h"
 
 __BEGIN_API
 class Window;
@@ -35,6 +36,7 @@ class Ship: public Drawable
         
     protected:
     private:
+        void init();
         void selectShipAnimation();
         void checkBoundary();
         void shootProjectile();
@@ -54,6 +56,8 @@ class Ship: public Drawable
         /* Reference to game state and obj*/
         Input * _kb;
         Window * _window;
+
+        std::shared_ptr<Timer> laserTimer;
 
 };
 

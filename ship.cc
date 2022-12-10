@@ -10,6 +10,7 @@ ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(150, 0, 0);
 Ship::Ship(Input * kb) :
             _kb(kb)
 {
+   init();
    db<System>(TRC) << ">> Player ship is initializing...\n";
    loadSprites();
 }
@@ -110,10 +111,22 @@ void Ship::checkBoundary()
 
 void Ship::shootProjectile() 
 {
-   Laser *laserToShot = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
-	this->_window->addDrawableItem(laserToShot);
+   if (this->laserTimer->getCount() > 8)
+	{
+      Laser *laserToShot = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
+		this->laserTimer->srsTimer();
+		// Coloca referência do tiro na classe Collision e Window
+		this->_window->addDrawableItem(laserToShot);
+	};
 }
 
+void Ship::init()
+{
+	// Create the timers for the weapons
+	this->laserTimer = std::make_shared<Timer>(60);
+	this->laserTimer->create();
+	this->laserTimer->startTimer();
+}
 void Ship::attachWindow(Window * window)
 {
    _window = window;
