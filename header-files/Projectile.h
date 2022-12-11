@@ -9,7 +9,7 @@
 
 __BEGIN_API
 
-class Projectile : public Drawable
+class Projectile
 {
 public:
 	Projectile(Point point, ALLEGRO_COLOR color, Vector speed, bool isPlayerShot) : _point(point), _color(color), _speed(speed) {}

@@ -3,13 +3,12 @@
 
 #include "traits.h"
 #include "Drawable.h"
-#include "hittable.h"
 #include "Point.h"
 #include "Vector.h"
 
 __BEGIN_API
 
-class Enemy : public Hittable
+class Enemy : public Drawable
 {
 public:
     Enemy(Point point, Vector vector, int life)

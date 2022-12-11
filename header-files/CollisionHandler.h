@@ -12,7 +12,6 @@
 #include "Enemy.h"
 #include "window.h"
 #include <allegro5/allegro_primitives.h>
-//#include "hittable.h"
 
 __BEGIN_API
 class Window;
@@ -44,7 +43,7 @@ class CollisionHandler {
         std::list<Enemy *> _enemies;
 
         void checkCollision();
-        bool checkHit(Projectile * proj, Hittable * hitObj);
+        bool checkHit(Projectile * proj, Drawable * hitObj);
         bool checkHit(Drawable * firstObj, Drawable * secondObj);
 
         void removeObjects();

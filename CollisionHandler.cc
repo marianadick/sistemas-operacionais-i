@@ -93,7 +93,7 @@ void CollisionHandler::checkCollision() {
   }
 }
 
-bool CollisionHandler::checkHit(Projectile *proj, Hittable *hitObj) {
+bool CollisionHandler::checkHit(Projectile *proj, Drawable *hitObj) {
   Point projPos = proj->getPosition();
   Point hitPos = hitObj->getPosition();
   int hitSize = hitObj->getSize();

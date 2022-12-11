@@ -15,7 +15,6 @@
 #include "Sprite.h"
 #include "Action.h"
 #include "Laser.h"
-#include "hittable.h"
 #include "Timer.h"
 #include "CollisionHandler.h"
 
@@ -23,7 +22,7 @@ __BEGIN_API
 //class Window;
 class CollisionHandler;
 
-class Ship : public Hittable {
+class Ship : public Drawable {
  public:
   Ship();
   Ship(Input *kb);
