@@ -1,7 +1,6 @@
 #ifndef enemy_h
 #define ENEMY_H
 
-#include "hittable.h"
 #include "traits.h"
 #include "Drawable.h"
 #include "Point.h"

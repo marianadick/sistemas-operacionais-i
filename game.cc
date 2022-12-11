@@ -10,4 +10,6 @@ Ship * Game::_ship;
 Window * Game::_window;
 Input * Game::_kb;
 
+EnemyGroupPurple *Game::_enemyGroupPurple;
+
 __END_API

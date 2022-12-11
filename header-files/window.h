@@ -30,6 +30,7 @@ class Window
         void runWindow();
 
         void addDrawableItem(Drawable *item) { this->drawableItens.push_front(item); }
+        void removeDrawableItem(Drawable *item) { this->drawableItens.remove(item); }
 
         void attachShip(Ship * ship); // Link ship to window
         void attachKb(Input * kb); // Link keyboard to window (QUIT game)

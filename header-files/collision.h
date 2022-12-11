@@ -11,6 +11,7 @@
 #include "Projectile.h"
 #include "enemy.h"
 #include "window.h"
+#include "hittable.h"
 
 __BEGIN_API
 
@@ -44,7 +45,7 @@ class Collision {
         bool checkHit(Drawable * firstObj, Drawable * secondObj);
 
         void removeObjects();
-}
+};
 
 
 __END_API

@@ -13,6 +13,7 @@ class Configs
         static int _widthDisplay;
         static int _heightDisplay;
         static int _fps;
+        static bool _isPurpleEnemyTime;
     protected:
     private:
 };

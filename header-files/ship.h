@@ -20,7 +20,7 @@
 __BEGIN_API
 class Window;
 
-class Ship: public Drawable
+class Ship: public Hittable
 {
     public:
         Ship(Input * kb);

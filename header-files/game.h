@@ -9,7 +9,8 @@
 #include "window.h"
 #include "input.h"
 #include "ship.h"
-#include "config.h"
+#include "configs.h"
+#include "enemyGroupPurple.h"
 
 __BEGIN_API
 
@@ -45,6 +46,8 @@ private:
     static Window * _window;
     static Ship * _ship;
     static Input * _kb;
+
+    static EnemyGroupPurple * _enemyGroupPurple;
 
     /* WINDOW */
     static void windowRun() {

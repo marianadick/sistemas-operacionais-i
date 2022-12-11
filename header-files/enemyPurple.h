@@ -6,15 +6,17 @@
 
 #include <memory>
 #include "Sprite.h"
-#include "enemy.h"
+#include "Enemy.h"
 #include "Timer.h"
 #include "configs.h"
 
+#include "enemyGroupPurple.h"
+
 __BEGIN_API
 
-class EnemyPurple : Enemy {
+class EnemyPurple : public Enemy {
     public:
-        EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, std::shared_ptr<Sprite> deathSprite, PurpleEnemiesControl *control);
+        EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, std::shared_ptr<Sprite> deathSprite, EnemyGroupPurple *enemyGroup);
         ~EnemyPurple();
 
         void draw();
@@ -37,7 +39,7 @@ class EnemyPurple : Enemy {
         std::shared_ptr<Timer> _shotsTimer;
 
         /* Reference to its controller */
-        EnemyGroupPurple * _controller;
+        EnemyGroupPurple * _enemyGroup;
 
         /* Enemy sprites */
         std::shared_ptr<Sprite> _shipSprite;
@@ -49,7 +51,7 @@ class EnemyPurple : Enemy {
         /* Color and timer of sprite */
         ALLEGRO_COLOR _color;
         int _deathSpriteTimer;
-}
+};
 
 __END_API
 

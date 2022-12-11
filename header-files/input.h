@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include <allegro5/allegro.h>
-#include "config.h"
+#include "configs.h"
 #include "Action.h"
 #include "Vector.h"
 #include "Sprite.h"
