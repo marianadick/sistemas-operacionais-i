@@ -14,6 +14,8 @@
 
 __BEGIN_API
 
+class EnemyGroupPurple;
+
 class EnemyPurple : public Enemy {
     public:
         EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, 
@@ -45,9 +47,6 @@ class EnemyPurple : public Enemy {
         /* Enemy sprites */
         std::shared_ptr<Sprite> _shipSprite;
         std::shared_ptr<Sprite> _deathSprite;
-
-        Point _point;
-        Vector _vector;
 
         /* Color and timer of sprite */
         ALLEGRO_COLOR _color;

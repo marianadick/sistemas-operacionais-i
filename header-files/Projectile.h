@@ -12,20 +12,19 @@ __BEGIN_API
 class Projectile : public Drawable
 {
 public:
-	Projectile(Point point, ALLEGRO_COLOR color, Vector speed, bool isPlayerShot) : _point(point), _color(color), _speed(speed),
-																					isPlayerShot(isPlayerShot) {}
+	Projectile(Point point, ALLEGRO_COLOR color, Vector speed, bool isPlayerShot) : _point(point), _color(color), _speed(speed) {}
 	virtual ~Projectile() {}
 
 	virtual void draw() = 0;
-	virtual void update(double diffTime) = 0;
+	virtual void update(double dt) = 0;
 	virtual int getSize() = 0;
 
 	virtual int getDamage() = 0;
 	virtual void ackHitSomething() = 0;
 	virtual bool wasDestroyed() = 0;
 
-	Point getPosition() { return this->_point; }
-	bool getIsPlayerProjectile() { return this->isPlayerShot; }
+	Point getPosition() { return _point; }
+	bool getIsPlayerProjectile() { return _isPlayerShot; }
 	bool isOutside()
 	{
 		if ((_point.x > Configs::_widthDisplay) ||
@@ -40,7 +39,7 @@ protected:
 	Point _point;
 	ALLEGRO_COLOR _color;
 	Vector _speed;
-	bool isPlayerShot;
+	bool _isPlayerShot;
 };
 
 __END_API

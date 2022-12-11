@@ -5,28 +5,36 @@ __BEGIN_API
 
 Laser::Laser(Point point, ALLEGRO_COLOR color, Vector speed, bool isPlayerShot) : Projectile(point, color, speed, isPlayerShot)
 {
-    this->hitUntilDestroyed = 1;
+    hitUntilDestroyed = 1;
 }
 
 Laser::~Laser() {}
 
 void Laser::draw()
 {
-    Point otherPoint = this->_point + this->_speed * (0.05);
-    al_draw_line(this->_point.x, this->_point.y, otherPoint.x, otherPoint.y, this->_color, 3);
+    Point otherPoint = _point + _speed * (0.05);
+    al_draw_line(_point.x, _point.y, otherPoint.x, otherPoint.y, _color, 3);
 }
 
 void Laser::update(double diffTime)
 {
-    this->_point = this->_point + this->_speed * diffTime;
+    _point = _point + _speed * diffTime;
 }
 
-int Laser::getSize() { return 3; }
+int Laser::getSize() { 
+    return 3; 
+}
 
-void Laser::ackHitSomething() { this->hitUntilDestroyed -= 1; }
+void Laser::ackHitSomething() {
+     hitUntilDestroyed -= 1; 
+}
 
-bool Laser::wasDestroyed() { return this->hitUntilDestroyed == 0; }
+bool Laser::wasDestroyed() {
+     return hitUntilDestroyed == 0; 
+}
 
-int Laser::getDamage() { return 1; }
+int Laser::getDamage() {
+     return 1; 
+}
 
 __END_API

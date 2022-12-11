@@ -18,16 +18,16 @@ void Collision::checkCollision()
     // Ship x Enemy
     for (auto listItem = _shipShots.begin(); listItem != _shipShots.end();)
     {
-        Projectile * shipShots = *listItem; listItem++;
+        Projectile * shipShot = *listItem; listItem++;
 
         // Checks if an enemy was hit
         for (auto enemyItem = _enemies.begin(); enemyItem != _enemies.end();)
         {
             Enemy * enemy = *enemyItem; enemyItem++;
 
-            if (checkHit(shipShots, enemy))
+            if (checkHit(shipShot, enemy))
             {
-                enemy->hit(shipShots->getDamage());
+                enemy->hit(shipShot->getDamage());
                 if (enemy->isDead())
                 {
                     _window->removeDrawableItem(enemy);
@@ -36,14 +36,14 @@ void Collision::checkCollision()
                 }
 
                 // Checks if ship shot hit something
-                shipShots->ackHitSomething();
+                shipShot->ackHitSomething();
 
                 // Checks if the shot was destroyed, if so remove it from window
-                if (shipShots->wasDestroyed())
+                if (shipShot->wasDestroyed())
                 {
-                    _window->removeDrawableItem(shipShots);
-                    _shipShots.remove(shipShots);
-                    delete shipShots;
+                    _window->removeDrawableItem(shipShot);
+                    _shipShots.remove(shipShot);
+                    delete shipShot;
                     break;
                 }
             }
@@ -99,7 +99,7 @@ void Collision::checkCollision()
             _ship->hit(1);
             if (_ship->isDead())
             {
-                Configs::_isGameRunning = true;
+                Configs::_isGameRunning = false;
                 return;
             }
         }
@@ -148,24 +148,24 @@ void Collision::removeObjects()
     // Remove enemies shots
     for (auto enemyItem = _enemiesShots.begin(); enemyItem != _enemiesShots.end();)
     {
-        Projectile * projectile = *enemyItem; enemyItem++;
-        if (projectile->isOutside())
+        Projectile * proj = *enemyItem; enemyItem++;
+        if (proj->isOutside())
         {
-            _window->removeDrawableItem(projectile);
-            _enemiesShots.remove(projectile);
-            delete projectile;
+            _window->removeDrawableItem(proj);
+            _enemiesShots.remove(proj);
+            delete proj;
         }
     }
 
     // Remove player shots
-    for (auto shipShots = _shipShots.begin(); shipShots != _shipShots.end();)
+    for (auto shipShot = _shipShots.begin(); shipShot != _shipShots.end();)
     {
-        Projectile * projectile = *shipShots; shipShots++;
-        if (projectile->isOutside())
+        Projectile * proj = *shipShot; shipShot++;
+        if (proj->isOutside())
         {
-            _window->removeDrawableItem(projectile);
-            _shipShots.remove(projectile);
-            delete projectile;
+            _window->removeDrawableItem(proj);
+            _shipShots.remove(proj);
+            delete proj;
         }
     }
 }

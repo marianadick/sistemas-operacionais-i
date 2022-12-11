@@ -10,6 +10,40 @@
 
 __BEGIN_API
 
+Window::Window()
+{
+    db<System>(TRC) << ">> Window is initializing...\n";
+    al_init();
+    // create the display
+    if ((_display = al_create_display(_widthDisplay, _heightDisplay)) == NULL) {
+        std::cout << "Cannot initialize the display\n";
+        exit(1); 
+    }
+
+    // initialize addons
+    al_init_primitives_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
+    al_init_image_addon();
+
+    // initialize our timers
+    if ((_timer = al_create_timer(1.0 / _fps)) == NULL) {
+        std::cout << "error, could not create timer\n";
+        exit(1);
+    }
+    if ((_eventQueue = al_create_event_queue()) == NULL) {
+        std::cout << "error, could not create Window event queue\n";
+        exit(1);
+    }
+
+    // register our allegro _eventQueue
+    al_register_event_source(_eventQueue, al_get_display_event_source(_display)); 
+    al_register_event_source(_eventQueue, al_get_timer_event_source(_timer));
+    al_start_timer(_timer);
+
+    loadSprites();
+}
+
 Window::Window(int w, int h, int fps) :
     _widthDisplay(w),
     _heightDisplay(h),
@@ -30,7 +64,7 @@ Window::Window(int w, int h, int fps) :
     al_init_image_addon();
 
     // initialize our timers
-    if ((_timer = al_create_timer(1.0 / _fps*1.5)) == NULL) {
+    if ((_timer = al_create_timer(1.0 / _fps)) == NULL) {
         std::cout << "error, could not create timer\n";
         exit(1);
     }
@@ -44,14 +78,6 @@ Window::Window(int w, int h, int fps) :
     al_register_event_source(_eventQueue, al_get_timer_event_source(_timer));
     al_start_timer(_timer);
 
-    // install keyboard
-    if (!al_install_keyboard()) {
-        std::cerr << "Could not install keyboard\n";
-        exit(1);
-    }
-
-    // register keyboard
-    al_register_event_source(_eventQueue, al_get_keyboard_event_source());
     loadSprites();
 }
 
@@ -68,6 +94,11 @@ Window::~Window()
 void Window::runWindow()
 {
     while(Configs::_isGameRunning) {
+        if (_ship == nullptr)
+        {
+            Thread::yield();
+            continue;
+        }
         checkEvent();
         Thread::yield();
     }
@@ -88,11 +119,9 @@ void Window::drawWindow()
             _ship->draw();
         }
 
-        // Para cada item para desenhar faz update, desenha e caso já tenha terminado então coloca numa outra lista para remover
-        for (auto listItem = this->drawableItens.begin(); listItem != this->drawableItens.end();)
+        for (auto listItem = drawableItens.begin(); listItem != drawableItens.end();)
         {
-            Drawable *drawableItem = *listItem;
-            listItem++; // Já atualiza o ponteiro para o próximo
+            Drawable *drawableItem = *listItem; listItem++;
 
             drawableItem->update(crtTime - _prevTime);
             drawableItem->draw();

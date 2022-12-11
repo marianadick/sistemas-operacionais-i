@@ -11,7 +11,7 @@
 #include "Projectile.h"
 #include "Enemy.h"
 #include "window.h"
-#include "hittable.h"
+//#include "hittable.h"
 
 __BEGIN_API
 class Window;
@@ -48,7 +48,6 @@ class Collision {
 
         void removeObjects();
 };
-
 
 __END_API
 

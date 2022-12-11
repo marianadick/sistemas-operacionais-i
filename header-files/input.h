@@ -3,10 +3,9 @@
 
 #include "traits.h"
 #include "thread.h"
-#include "cpu.h"
-#include <iostream>
-
 #include <allegro5/allegro.h>
+#include <memory>
+
 #include "configs.h"
 #include "Action.h"
 #include "Vector.h"

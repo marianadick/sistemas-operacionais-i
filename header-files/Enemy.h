@@ -14,9 +14,9 @@ class Enemy : public Hittable
 public:
     Enemy(Point point, Vector vector, int life)
     {
-        this->life = life;
-        this->_point = point;
-        this->_speed = vector;
+        _life = life;
+        _point = point;
+        _speed = vector;
     }
 
     virtual void draw() = 0;
@@ -25,16 +25,16 @@ public:
     virtual int getSize() = 0;
     virtual bool canFire() = 0;
 
-    Point getPosition() { return this->_point; }
-    Vector getVector() { return this->_speed; }
-    void hit(int damage) { this->life -= damage; }
-    bool isDead() { return this->life <= 0; }
-    int getLife() { return this->life; }
+    Point getPosition() { return _point; }
+    Vector getVector() { return _speed; }
+    void hit(int damage) { _life -= damage; }
+    bool isDead() { return _life <= 0; }
+    int getLife() { return _life; }
 
 protected:
     Point _point;
     Vector _speed;
-    int life;
+    int _life;
 };
 
 __END_API

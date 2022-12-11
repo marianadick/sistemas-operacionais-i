@@ -16,7 +16,7 @@
 #include "Laser.h"
 #include "hittable.h"
 #include "Timer.h"
-//#include "collision.h"
+#include "collision.h"
 
 __BEGIN_API
 //class Window;
@@ -25,6 +25,7 @@ class Collision;
 class Ship : public Hittable
 {
     public:
+        Ship();
         Ship(Input * kb);
         ~Ship();
 

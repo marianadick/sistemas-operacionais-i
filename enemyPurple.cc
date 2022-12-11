@@ -5,10 +5,7 @@ __BEGIN_API
 int EnemyPurple::_SHOTS_DELAY = 50;
 
 EnemyPurple::EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, 
-                        std::shared_ptr<Sprite> deathSprite, EnemyGroupPurple * enemyGroup) {
-    _point = point;
-    _vector = vector;
-    
+                        std::shared_ptr<Sprite> deathSprite, EnemyGroupPurple * enemyGroup) : Enemy(point, vector, 1) {
     _shipSprite = shipSprite;
     _deathSprite = deathSprite;
 
@@ -42,7 +39,8 @@ void EnemyPurple::draw()
 
 void EnemyPurple::update(double dt)
 {
-    _point = _point + _speed * dt;
+    _point = _point + _speed * dt; 
+    // Added some random delay
     if (_shotsTimer->getCount() > EnemyPurple::_SHOTS_DELAY + rand() % 60)
     {
         _canFire = true;

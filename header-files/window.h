@@ -7,7 +7,7 @@
 #include "traits.h"
 #include "thread.h"
 
-//#include "ship.h"
+#include "ship.h"
 #include "input.h"
 
 #include "Vector.h"
@@ -17,17 +17,19 @@
 
 __BEGIN_API
 class Ship;
+class Input;
 
 class Window
 {
     public:
+        Window();
         Window(int w, int h, int fps);
         ~Window();
 
         void runWindow();
 
-        void addDrawableItem(Drawable *item) { this->drawableItens.push_front(item); }
-        void removeDrawableItem(Drawable *item) { this->drawableItens.remove(item); }
+        void addDrawableItem(Drawable *item) { drawableItens.push_front(item); }
+        void removeDrawableItem(Drawable *item) { drawableItens.remove(item); }
 
         void attachShip(Ship * ship); // Link ship to window
         void attachKb(Input * kb); // Link keyboard to window (QUIT game)

@@ -5,10 +5,11 @@
 #include "cpu.h"
 #include "thread.h"
 #include "traits.h"
+
+#include "window.h"
 #include "configs.h"
 #include "input.h"
 #include "ship.h"
-#include "window.h"
 #include "collision.h"
 #include "enemyGroupPurple.h"
 

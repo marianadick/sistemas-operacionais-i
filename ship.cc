@@ -1,11 +1,19 @@
 #include "header-files/ship.h"
 #include "header-files/configs.h"
+#include "header-files/Laser.h"
 
 __BEGIN_API
 
 int Ship::SHIP_SPEED = 250;
 int Ship::SHIP_SIZE = 16;
 ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(150, 0, 0);
+
+Ship::Ship()
+{
+   init();
+   db<System>(TRC) << ">> Player ship is initializing...\n";
+   loadSprites();
+}
 
 Ship::Ship(Input * kb) :
             _kb(kb)
@@ -24,7 +32,7 @@ Ship::~Ship()
 void Ship::runShip()
 {
    while (Configs::_isGameRunning) {
-		if (_window == nullptr)
+		if (_window == nullptr || _collision == nullptr)
 			Thread::yield();
 
 		getInputKb();
@@ -111,21 +119,22 @@ void Ship::checkBoundary()
 
 void Ship::shootProjectile() 
 {
-   if (this->laserTimer->getCount() > 8)
+   if (laserTimer->getCount() > 8)
 	{
       Laser *laserToShot = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
-		this->laserTimer->srsTimer();
+		laserTimer->srsTimer();
 		// Coloca referência do tiro na classe Collision e Window
-		this->_window->addDrawableItem(laserToShot);
+		_window->addDrawableItem(laserToShot);
+      _collision->newPlayerShot(laserToShot);
 	};
 }
 
 void Ship::init()
 {
 	// Create the timers for the weapons
-	this->laserTimer = std::make_shared<Timer>(60);
-	this->laserTimer->create();
-	this->laserTimer->startTimer();
+	laserTimer = std::make_shared<Timer>(Configs::_fps);
+	laserTimer->create();
+	laserTimer->startTimer();
 }
 void Ship::attachWindow(Window * window)
 {
@@ -139,16 +148,27 @@ void Ship::attachCollision(Collision * collision)
 
 void Ship::hit(int damage)
 {
-	if (this->wasShot)
+	if (wasShot)
 		return;
 
-	this->life -= damage;
-	this->wasShot = true;
+	life -= damage;
+	wasShot = true;
 }
 
-int Ship::getSize() { return Ship::SHIP_SIZE; }
+int Ship::getSize() { 
+   return Ship::SHIP_SIZE; 
+}
 
-Point Ship::getPosition() { return this->_position; }
+Point Ship::getPosition() {
+   return _position; 
+}
 
+bool Ship::isDead() { 
+   return life <= 0; 
+}
+
+bool Ship::isOutside() {
+    return (!isDead()); 
+}
 
 __END_API

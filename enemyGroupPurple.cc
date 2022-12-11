@@ -6,31 +6,31 @@ std::shared_ptr<Sprite> purpleShipSprite;
 
 EnemyGroupPurple::EnemyGroupPurple()
 {
-    this->loadSprites();
-    this->DELAY_SHIPS_SPAWN = 60* 5; // 5seg
-    this->shipsSpawnTimer = std::make_shared<Timer>(60);
-    this->shipsSpawnTimer->create();
-    this->shipsSpawnTimer->startTimer();
+    loadSprites();
+    DELAY_SHIPS_SPAWN = 60* 5; // 5seg
+    shipsSpawnTimer = std::make_shared<Timer>(60);
+    shipsSpawnTimer->create();
+    shipsSpawnTimer->startTimer();
 }
 
 EnemyGroupPurple::~EnemyGroupPurple() {}
 
-void EnemyGroupPurple::setWindowReference(Window *window) { this->_window = window; }
-void EnemyGroupPurple::setCollisionReference(Collision *collision) { this->_collision = collision; }
-void EnemyGroupPurple::removeShip(EnemyPurple *enemy) { this->ships.remove(enemy); }
+void EnemyGroupPurple::setWindowReference(Window *window) { _window = window; }
+void EnemyGroupPurple::setCollisionReference(Collision *collision) { _collision = collision; }
+void EnemyGroupPurple::removeShip(EnemyPurple *enemy) { ships.remove(enemy); }
 
 void EnemyGroupPurple::run()
 {
-    this->loadSprites();
+    loadSprites();
     while (Configs::_isGameRunning)
     {
-        if (this->_window == nullptr || this->_collision == nullptr)
+        if (_window == nullptr || _collision == nullptr)
         {
             Thread::yield();
             continue;
         }
 
-        this->processLoop();
+        processLoop();
         Thread::yield();
     }
 }
@@ -38,14 +38,14 @@ void EnemyGroupPurple::run()
 void EnemyGroupPurple::processLoop()
 {
     // Há uma dependência aqui do timer ser maior do que o tempo para o ultimo sair da tela por causa de referência de ponteiros
-    if (this->shipsSpawnTimer->getCount() > this->DELAY_SHIPS_SPAWN)
-        this->createShips();
-    this->handleShips();
+    if (shipsSpawnTimer->getCount() > DELAY_SHIPS_SPAWN)
+        createShips();
+    handleShips();
 }
 
 void EnemyGroupPurple::handleShips()
 {
-    for (auto shipItem = this->ships.begin(); shipItem != this->ships.end();)
+    for (auto shipItem = ships.begin(); shipItem != ships.end();)
     {
         EnemyPurple *ship = *shipItem;
         shipItem++;
@@ -56,19 +56,19 @@ void EnemyGroupPurple::handleShips()
             ship->attack();
 
             int yVector = 60;
-            if (this->shipsSpawnTimer->getCount() % 4 == 0)
+            if (shipsSpawnTimer->getCount() % 4 == 0)
                 yVector = 100;
-            else if (this->shipsSpawnTimer->getCount() % 5 == 0)
+            else if (shipsSpawnTimer->getCount() % 5 == 0)
                 yVector = 140;
 
             Laser *laser1 = new Laser(ship->getPosition(), ship->getColor(), ship->getVector() + Vector(-200, (-1 * yVector)), false);
             Laser *laser2 = new Laser(ship->getPosition(), ship->getColor(), ship->getVector() + Vector(-250, yVector), false);
 
-            this->_collision->newEnemyShot(laser1);
-            this->_collision->newEnemyShot(laser2);
+            _collision->newEnemyShot(laser1);
+            _collision->newEnemyShot(laser2);
 
-            this->_window->addDrawableItem(laser1);
-            this->_window->addDrawableItem(laser2);
+            _window->addDrawableItem(laser1);
+            _window->addDrawableItem(laser2);
         }
     }
 }
@@ -76,43 +76,43 @@ void EnemyGroupPurple::handleShips()
 void EnemyGroupPurple::createShips()
 {
     // Cria os 5 ships purple
-    EnemyPurple *ship1 = new EnemyPurple(Point(800, 300), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
-    EnemyPurple *ship2 = new EnemyPurple(Point(900, 350), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
-    EnemyPurple *ship3 = new EnemyPurple(Point(900, 250), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
-    EnemyPurple *ship4 = new EnemyPurple(Point(1000, 400), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
-    EnemyPurple *ship5 = new EnemyPurple(Point(1000, 200), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
-    EnemyPurple *ship6 = new EnemyPurple(Point(1100, 100), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
-    EnemyPurple *ship7 = new EnemyPurple(Point(1100, 500), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
+    EnemyPurple *ship1 = new EnemyPurple(Point(800, 300), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+    EnemyPurple *ship2 = new EnemyPurple(Point(900, 350), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+    EnemyPurple *ship3 = new EnemyPurple(Point(900, 250), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+    EnemyPurple *ship4 = new EnemyPurple(Point(1000, 400), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+    EnemyPurple *ship5 = new EnemyPurple(Point(1000, 200), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+    EnemyPurple *ship6 = new EnemyPurple(Point(1100, 100), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+    EnemyPurple *ship7 = new EnemyPurple(Point(1100, 500), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
 
     // Manda para o objeto collision
-    this->_collision->newEnemyShip(ship1);
-    this->_collision->newEnemyShip(ship2);
-    this->_collision->newEnemyShip(ship3);
-    this->_collision->newEnemyShip(ship4);
-    this->_collision->newEnemyShip(ship5);
-    this->_collision->newEnemyShip(ship6);
-    this->_collision->newEnemyShip(ship7);
+    _collision->newEnemyShip(ship1);
+    _collision->newEnemyShip(ship2);
+    _collision->newEnemyShip(ship3);
+    _collision->newEnemyShip(ship4);
+    _collision->newEnemyShip(ship5);
+    _collision->newEnemyShip(ship6);
+    _collision->newEnemyShip(ship7);
 
     // Manda para o objeto window
-    this->_window->addDrawableItem(ship1);
-    this->_window->addDrawableItem(ship2);
-    this->_window->addDrawableItem(ship3);
-    this->_window->addDrawableItem(ship4);
-    this->_window->addDrawableItem(ship5);
-    this->_window->addDrawableItem(ship6);
-    this->_window->addDrawableItem(ship7);
+    _window->addDrawableItem(ship1);
+    _window->addDrawableItem(ship2);
+    _window->addDrawableItem(ship3);
+    _window->addDrawableItem(ship4);
+    _window->addDrawableItem(ship5);
+    _window->addDrawableItem(ship6);
+    _window->addDrawableItem(ship7);
 
     // Guarda na referência dos ships
-    this->ships.push_front(ship1);
-    this->ships.push_front(ship2);
-    this->ships.push_front(ship3);
-    this->ships.push_front(ship4);
-    this->ships.push_front(ship5);
-    this->ships.push_front(ship6);
-    this->ships.push_front(ship7);
+    ships.push_front(ship1);
+    ships.push_front(ship2);
+    ships.push_front(ship3);
+    ships.push_front(ship4);
+    ships.push_front(ship5);
+    ships.push_front(ship6);
+    ships.push_front(ship7);
 
     // Reset o timer
-    this->shipsSpawnTimer->srsTimer();
+    shipsSpawnTimer->srsTimer();
 }
 
 void EnemyGroupPurple::loadSprites()
@@ -122,8 +122,8 @@ void EnemyGroupPurple::loadSprites()
     al_append_path_component(path, "resources");
     al_change_directory(al_path_cstr(path, '/'));
 
-    this->purpleShipSprite = std::make_shared<Sprite>("EnemyBasic.png");
-    this->enemyExplosionSprite = std::make_shared<Sprite>("explode.png");
+    purpleShipSprite = std::make_shared<Sprite>("EnemyBasic.png");
+    enemyExplosionSprite = std::make_shared<Sprite>("explode.png");
     al_destroy_path(path);
 }
 
