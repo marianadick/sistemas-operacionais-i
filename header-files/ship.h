@@ -75,7 +75,7 @@ class Ship : public Hittable {
   CollisionHandler *_collision;
 
   std::shared_ptr<Timer> laserTimer;
-
+  std::shared_ptr<Timer> missileTimer;
 };
 
 __END_API

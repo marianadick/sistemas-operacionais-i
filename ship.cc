@@ -135,7 +135,12 @@ void Ship::init() {
   laserTimer = std::make_shared<Timer>(Configs::_fps);
   laserTimer->create();
   laserTimer->startTimer();
+
+  missileTimer = std::make_shared<Timer>(Configs::_fps);
+	missileTimer->create();
+	missileTimer->startTimer();
 }
+
 void Ship::attachWindow(Window *window) {
   _window = window;
 }
