@@ -35,7 +35,7 @@ void EnemyPurple::draw()
     }
     else
     {
-        _shipSprite->draw_tinted(_point, color, 0);
+        _shipSprite->draw_tinted(_point, _color, 0);
     }
 }
 

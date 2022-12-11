@@ -170,4 +170,29 @@ void Collision::removeObjects()
     }
 }
 
+void Collision::attachShip(PlayerShip * ship) {
+     _ship = ship; 
+}
+
+void Collision::attachWindow(Window * window) {
+     _window = window; 
+}
+
+void Collision::newPlayerShot(Projectile * proj) { 
+    playerShots.push_front(proj); 
+}
+
+void Collision::newEnemyShot(Projectile * proj) {
+     enemiesShots.push_front(proj); 
+}
+
+void Collision::newEnemyShip(Enemy * enemy) {
+     enemies.push_front(enemy); 
+}
+
+void Collision::removeEnemyShip(Enemy * enemy) {
+     enemies.remove(enemy); 
+}
+
+
 __END_API
