@@ -14,12 +14,12 @@
 #include "Sprite.h"
 #include "Action.h"
 #include "Laser.h"
-#include "Drawable.h"
+#include "hittable.h"
 #include "Timer.h"
 #include "collision.h"
 
 __BEGIN_API
-class Window;
+//class Window;
 class Collision;
 
 class Ship : public Hittable

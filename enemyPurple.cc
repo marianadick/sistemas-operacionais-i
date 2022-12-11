@@ -4,14 +4,15 @@ __BEGIN_API
 
 int EnemyPurple::_SHOTS_DELAY = 50;
 
-EnemyPurple::EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, std::shared_ptr<Sprite> deathSprite, PurpleEnemiesControl * controller) {
+EnemyPurple::EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, 
+                        std::shared_ptr<Sprite> deathSprite, EnemyGroupPurple * enemyGroup) {
     _point = point;
     _vector = vector;
     
     _shipSprite = shipSprite;
     _deathSprite = deathSprite;
 
-    _controller = controller;
+    _enemyGroup = enemyGroup;
 
     _color = al_map_rgb(150, 0, 150);
     _deathSpriteTimer = 5;
@@ -22,8 +23,8 @@ EnemyPurple::EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shi
 }
 
 EnemyPurple::~EnemyPurple() {
-    if (_controller != nullptr)
-        _controller->removeShip(this);
+    if (_enemyGroup != nullptr)
+        _enemyGroup->removeShip(this);
 }
 
 void EnemyPurple::draw()

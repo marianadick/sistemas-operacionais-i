@@ -3,21 +3,20 @@
 
 #include <allegro5/allegro.h>
 #include <memory>
+#include <list> 
+#include "traits.h"
+#include "thread.h"
 
 #include "ship.h"
 #include "input.h"
-
-#include "traits.h"
-#include "thread.h"
 
 #include "Vector.h"
 #include "Sprite.h"
 
 #include "Drawable.h"
-#include <list> 
 
 __BEGIN_API
-class Ship;
+//class Ship;
 
 class Window
 {

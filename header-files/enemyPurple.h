@@ -13,11 +13,11 @@
 #include "enemyGroupPurple.h"
 
 __BEGIN_API
-class EnemyGroupPurple;
 
 class EnemyPurple : public Enemy {
     public:
-        EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, std::shared_ptr<Sprite> deathSprite, EnemyGroupPurple *enemyGroup);
+        EnemyPurple(Point point, Vector vector, std::shared_ptr<Sprite> shipSprite, 
+                    std::shared_ptr<Sprite> deathSprite, EnemyGroupPurple * enemyGroup);
         ~EnemyPurple();
 
         void draw();

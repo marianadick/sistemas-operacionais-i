@@ -14,14 +14,16 @@
 
 __BEGIN_API
 
+class EnemyPurple;
+
 class EnemyGroupPurple
 {
 public:
     EnemyGroupPurple();
     ~EnemyGroupPurple();
-    void setWindowReference(Window *window);
-    void setCollisionReference(Collision *collision);
-    void removeShip(EnemyPurple *enemy);
+    void setWindowReference(Window * window);
+    void setCollisionReference(Collision * collision);
+    void removeShip(EnemyPurple * enemy);
 
     void run();
 
