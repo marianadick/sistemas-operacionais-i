@@ -150,11 +150,9 @@ void Ship::attachCollision(CollisionHandler *collision) {
 }
 
 void Ship::hit(int damage) {
-  if (wasShot)
-	return;
-
-  life -= damage;
-  wasShot = true;
+  _life -= damage;
+  if (_life < 1)
+      _dead = true;
 }
 
 int Ship::getSize() {
@@ -165,25 +163,25 @@ Point Ship::getPosition() {
   return _position;
 }
 
-bool Ship::isDead() {
-  return life <= 0;
+bool Ship::getDead() {
+  return _dead;
 }
 
 bool Ship::isOutOfBounds() {
-  return (!isDead());
+  return (!getDead());
 }
 
 int Ship::getShipLives() {
-  return life;
+  return _life;
 }
 
 void Ship::drawLives() {
   Point centre = _position;
   al_draw_line(centre.x - SHIP_SIZE * 2, centre.y + SHIP_SIZE * 2,
-			   (centre.x - SHIP_SIZE * 2) + (life / 3) * (SHIP_SIZE * 4),
+			   (centre.x - SHIP_SIZE * 2) + (_life / 3) * (SHIP_SIZE * 4),
 			   centre.y + SHIP_SIZE * 2,
-			   al_map_rgb(255 * (1.0 - life / 3),
-						  200 * (life / 3),
+			   al_map_rgb(255 * (1.0 - _life / 3),
+						  200 * (_life / 3),
 						  0), 5);
 }
 __END_API

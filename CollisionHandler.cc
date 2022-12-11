@@ -66,7 +66,7 @@ void CollisionHandler::checkCollidingEnemyWithPlayer()
 	  }
 
 	  _ship->hit(1);
-	  if (_ship->isDead()) {
+	  if (_ship->getDead()) {
 		Configs::_isGameRunning = false;
 		return;
 	  }
@@ -95,7 +95,7 @@ void CollisionHandler::checkCollisionOnPlayer() {
 		delete enemyShot;
 	  }
 
-	  if (_ship->isDead()) {
+	  if (_ship->getDead()) {
 		Configs::_isGameRunning = false;
 		return;
 	  }

@@ -34,7 +34,7 @@ class Ship : public Drawable {
   void hit(int damage);
   int getSize();
   Point getPosition();
-  bool isDead();
+  bool getDead();
   bool isOutOfBounds();
 
   void draw();
@@ -61,8 +61,8 @@ class Ship : public Drawable {
   static ALLEGRO_COLOR SHIP_COLOR;
 
   /* Ship position */
-  int life = 3;
-  bool wasShot = false;
+  int _life = 3;
+  bool _dead = false;
   int _row;            /**<row of animation to be played */
   int _col;            /**< column of animation to be played */
   Point _position;
