@@ -24,26 +24,7 @@ void CollisionHandler::checkCollisionOnEnemies()
 	for (auto enemyItem = _enemies.begin(); enemyItem != _enemies.end();) {
 	  Enemy *enemy = *enemyItem;
 	  enemyItem++;
-
-	  if (checkHit(shipShot, enemy)) {
-		enemy->hit(shipShot->getDamage());
-		if (enemy->isDead()) {
-		  _window->removeEnemy(enemy);
-		  _enemies.remove(enemy);
-		  delete enemy;
-		}
-
-		// Checks if ship shot hit something
-		shipShot->ackHitSomething();
-
-		// Checks if the shot was destroyed, if so remove it from window
-		if (shipShot->wasDestroyed()) {
-		  _window->removeProjectile(shipShot);
-		  _shipShots.remove(shipShot);
-		  delete shipShot;
-		  break;
-		}
-	  }
+	  checkHit(shipShot, enemy);
 	}
   }
 
@@ -55,24 +36,8 @@ void CollisionHandler::checkCollidingEnemyWithPlayer()
   for (auto listItem = _enemies.begin(); listItem != _enemies.end();) {
 	Enemy *enemy = *listItem;
 	listItem++;
-
-	if (checkHit(enemy, _ship)) {
-	  enemy->hit(1);
-
-	  if (enemy->isDead()) {
-		_window->removeEnemy(enemy);
-		_enemies.remove(enemy);
-		delete enemy;
-	  }
-
-	  _ship->hit(1);
-	  if (_ship->isDead()) {
-		Configs::_isGameRunning = false;
-		return;
-	  }
-	}
+	checkHit(enemy, _ship);
   }
-
 }
 
 void CollisionHandler::checkCollisionOnPlayer() {
@@ -80,51 +45,90 @@ void CollisionHandler::checkCollisionOnPlayer() {
   for (auto listItem = _enemiesShots.begin(); listItem != _enemiesShots.end();) {
 	Projectile *enemyShot = *listItem;
 	listItem++;
-
-	if (checkHit(enemyShot, _ship)) {
-	  // Checks if an enemy hit something
-	  enemyShot->ackHitSomething();
-
-	  // Inflicts the damage to the player
-	  _ship->hit(enemyShot->getDamage());
-
-	  // Checks if the shot was destroyed, if so remove it from window
-	  if (enemyShot->wasDestroyed()) {
-		_window->removeProjectile(enemyShot);
-		_enemiesShots.remove(enemyShot);
-		delete enemyShot;
-	  }
-
-	  if (_ship->isDead()) {
-		Configs::_isGameRunning = false;
-		return;
-	  }
-	}
+	checkHit(enemyShot, _ship);
   }
 }
 
-
-bool CollisionHandler::checkHit(Projectile *proj, Drawable *hitObj) {
+// Checks Player shot -> Enemy Ship
+void CollisionHandler::checkHit(Projectile *proj, Enemy *target) {
   Point projPos = proj->getPosition();
-  Point hitPos = hitObj->getPosition();
-  int hitSize = hitObj->getSize();
+  Point targetPos = target->getPosition();
+  int targetSize = target->getSize();
 
-  if (projPos.x > hitPos.x - hitSize &&
-	  (projPos.x < hitPos.x + hitSize) &&
-	  (projPos.y > hitPos.y - hitSize) &&
-	  (projPos.y < hitPos.y + hitSize))
-	return true;
-  return false;
+  if (projPos.x > targetPos.x - targetSize &&
+	  (projPos.x < targetPos.x + targetSize) &&
+	  (projPos.y > targetPos.y - targetSize) &&
+	  (projPos.y < targetPos.y + targetSize))
+	{
+		target->hit(proj->getDamage());
+		if (target->isDead()) {
+			_window->removeEnemy(target);
+			_enemies.remove(target);
+			delete target;
+		}
+		// Checks if ship shot hit something
+
+		proj->ackHitSomething();
+
+		// Checks if the shot was destroyed, if so remove it from window
+		if (proj->wasDestroyed()) {
+		  _window->removeProjectile(proj);
+		  _shipShots.remove(proj);
+		  delete proj;
+		}
+	 }
 }
 
-bool CollisionHandler::checkHit(Drawable *firstObj, Drawable *secondObj) {
+// Checks Enemy shot -> Player Ship
+void CollisionHandler::checkHit(Projectile *proj, Ship *target) {
+  Point projPos = proj->getPosition();
+  Point targetPos = target->getPosition();
+  int targetSize = target->getSize();
+
+  if (projPos.x > targetPos.x - targetSize &&
+	  (projPos.x < targetPos.x + targetSize) &&
+	  (projPos.y > targetPos.y - targetSize) &&
+	  (projPos.y < targetPos.y + targetSize))
+	{
+	  // Checks if an enemy hit something
+	  proj->ackHitSomething();
+
+	  // Inflicts the damage to the player
+	  _ship->hit(proj->getDamage());
+
+	  // Checks if the shot was destroyed, if so remove it from window
+	  if (proj->wasDestroyed()) {
+		_window->removeProjectile(proj);
+		_enemiesShots.remove(proj);
+		delete proj;
+	  }
+
+	  if (_ship->isDead())
+		Configs::_isGameRunning = false;
+	}
+}
+
+// Checks if Player ship collides Enemy Ship
+void CollisionHandler::checkHit(Drawable *firstObj, Drawable *secondObj) {
   int firstSize = firstObj->getSize();
   int secondSize = secondObj->getSize();
   Point firstPos = firstObj->getPosition();
   Point secondPos = secondObj->getPosition();
 
-  return (abs(firstPos.x - secondPos.x) < (firstSize + secondSize) &&
-	  abs(firstPos.y - secondPos.y) < (firstSize + secondSize));
+	if( abs(firstPos.x - secondPos.x) < (firstSize + secondSize) &&
+		abs(firstPos.y - secondPos.y) < (firstSize + secondSize)) {
+		
+		firstObj->hit(1);
+		if (firstObj->isDead()) {
+			_window->removeEnemy((Enemy *) firstObj);
+			_enemies.remove((Enemy *) firstObj);
+			delete firstObj;
+		}
+
+		_ship->hit(1);
+		if (_ship->isDead())
+			Configs::_isGameRunning = false;
+	}
 }
 
 void CollisionHandler::clearEnemies() {
