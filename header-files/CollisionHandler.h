@@ -11,16 +11,17 @@
 #include "Projectile.h"
 #include "Enemy.h"
 #include "window.h"
+#include <allegro5/allegro_primitives.h>
 //#include "hittable.h"
 
 __BEGIN_API
 class Window;
 class Ship;
 
-class Collision {
+class CollisionHandler {
     public:
-        Collision() {};
-        ~Collision() {};
+        CollisionHandler() {};
+        ~CollisionHandler() {};
 
         void newPlayerShot(Projectile * shot);
         void newEnemyShot(Projectile * shot);

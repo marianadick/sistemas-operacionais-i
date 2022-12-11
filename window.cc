@@ -53,7 +53,7 @@ Window::Window(int w, int h, int fps) :
   al_init_ttf_addon();
   al_init_image_addon();
 
-  // initialize our timers
+  // initialize timers
   if ((_timer = al_create_timer(1.0 / _fps)) == nullptr) {
 	std::cout << "error, could not create timer\n";
 	exit(1);
@@ -88,6 +88,29 @@ void Window::runWindow() {
 	}
 	checkEvent();
 	Thread::yield();
+  }
+}
+
+void Window::checkEvent() {
+  ALLEGRO_EVENT event;
+  al_wait_for_event(_eventQueue, &event);
+  // _display closes
+  if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+	Configs::_isGameRunning = false;
+	return;
+  }
+
+  // Should check if ESC was pressed, exiting the game if so (NOT WORKING)
+  if (_kb != nullptr) {
+	if (_kb->checkPressedKey(act::action::QUIT_GAME)) {
+	  Configs::_isGameRunning = false;
+	  return;
+	}
+  }
+
+  // timer
+  if (event.type == ALLEGRO_EVENT_TIMER) {
+	drawWindow();
   }
 }
 
@@ -131,29 +154,6 @@ void Window::updateBg(double dt) {
   _bgSprite->draw_parallax_background(_bgMid.x, 0);
 }
 
-void Window::checkEvent() {
-  ALLEGRO_EVENT event;
-  al_wait_for_event(_eventQueue, &event);
-  // _display closes
-  if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-	Configs::_isGameRunning = false;
-	return;
-  }
-
-  // Should check if ESC was pressed, exiting the game if so (NOT WORKING)
-  if (_kb != nullptr) {
-	if (_kb->checkPressedKey(act::action::QUIT_GAME)) {
-	  Configs::_isGameRunning = false;
-	  return;
-	}
-  }
-
-  // timer
-  if (event.type == ALLEGRO_EVENT_TIMER) {
-	drawWindow();
-  }
-}
-
 void Window::loadSprites() {
   // represents the middle of the image width-wise, and top height-wise
   _bgMid = Point(0, 0);
@@ -193,6 +193,27 @@ void Window::drawProjectiles(double dt) {
 	projectile->draw();
   }
 }
+
+void Window::addEnemy(Enemy *enemy)
+{
+  enemies.push_front(enemy);
+}
+
+void Window::removeEnemy(Enemy *enemy)
+{
+  enemies.remove(enemy);
+}
+
+void Window::addProjectile(Projectile *projectile)
+{
+  projectiles.push_front(projectile);
+}
+
+void Window::removeProjectile(Projectile *projectile)
+{
+  projectiles.remove(projectile);
+}
+
 void Window::attachShip(Ship *ship) {
   _ship = ship;
 }

@@ -21,9 +21,9 @@ public:
 
     virtual void draw() = 0;
     virtual void update(double diffTime) = 0;
-    virtual bool isOutside() = 0;
+    virtual bool isOutOfBounds() = 0;
     virtual int getSize() = 0;
-    virtual bool canFire() = 0;
+    virtual bool setFire() = 0;
 
     Point getPosition() { return _point; }
     Vector getVector() { return _speed; }

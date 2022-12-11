@@ -11,8 +11,8 @@ Thread * Game::_enemyGroupPurpleThread;
 Ship * Game::_ship;
 Window * Game::_window;
 Input * Game::_kb;
-Collision * Game::_collision;
-EnemyGroupPurple * Game::_enemyGroupPurple;
+CollisionHandler * Game::_collision;
+PurpleCreepLauncher * Game::_enemyGroupPurple;
 
 
 __END_API

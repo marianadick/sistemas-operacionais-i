@@ -1,9 +1,8 @@
-#include "header-files/collision.h"
-#include <allegro5/allegro_primitives.h>
+#include "header-files/CollisionHandler.h"
 
 __BEGIN_API
 
-void Collision::runCollision() {
+void CollisionHandler::runCollision() {
   while (Configs::_isGameRunning) {
 	checkCollision();
 	removeObjects();
@@ -11,7 +10,7 @@ void Collision::runCollision() {
   }
 }
 
-void Collision::checkCollision() {
+void CollisionHandler::checkCollision() {
   // Ship x Enemy
   for (auto listItem = _shipShots.begin(); listItem != _shipShots.end();) {
 	Projectile *shipShot = *listItem;
@@ -94,7 +93,7 @@ void Collision::checkCollision() {
   }
 }
 
-bool Collision::checkHit(Projectile *proj, Hittable *hitObj) {
+bool CollisionHandler::checkHit(Projectile *proj, Hittable *hitObj) {
   Point projPos = proj->getPosition();
   Point hitPos = hitObj->getPosition();
   int hitSize = hitObj->getSize();
@@ -107,7 +106,7 @@ bool Collision::checkHit(Projectile *proj, Hittable *hitObj) {
   return false;
 }
 
-bool Collision::checkHit(Drawable *firstObj, Drawable *secondObj) {
+bool CollisionHandler::checkHit(Drawable *firstObj, Drawable *secondObj) {
   int firstSize = firstObj->getSize();
   int secondSize = secondObj->getSize();
   Point firstPos = firstObj->getPosition();
@@ -117,12 +116,12 @@ bool Collision::checkHit(Drawable *firstObj, Drawable *secondObj) {
 	  abs(firstPos.y - secondPos.y) < (firstSize + secondSize));
 }
 
-void Collision::removeObjects() {
+void CollisionHandler::removeObjects() {
   // Remove enemies
   for (auto enemyItem = _enemies.begin(); enemyItem != _enemies.end();) {
 	Enemy *enemy = *enemyItem;
 	enemyItem++;
-	if (enemy->isOutside()) {
+	if (enemy->isOutOfBounds()) {
 	  _window->removeEnemy(enemy);
 	  _enemies.remove(enemy);
 	  delete enemy;
@@ -133,7 +132,7 @@ void Collision::removeObjects() {
   for (auto enemyItem = _enemiesShots.begin(); enemyItem != _enemiesShots.end();) {
 	Projectile *proj = *enemyItem;
 	enemyItem++;
-	if (proj->isOutside()) {
+	if (proj->isOutOfBounds()) {
 	  _window->removeProjectile(proj);
 	  _enemiesShots.remove(proj);
 	  delete proj;
@@ -144,7 +143,7 @@ void Collision::removeObjects() {
   for (auto shipShot = _shipShots.begin(); shipShot != _shipShots.end();) {
 	Projectile *proj = *shipShot;
 	shipShot++;
-	if (proj->isOutside()) {
+	if (proj->isOutOfBounds()) {
 	  _window->removeProjectile(proj);
 	  _shipShots.remove(proj);
 	  delete proj;
@@ -152,27 +151,27 @@ void Collision::removeObjects() {
   }
 }
 
-void Collision::attachShip(Ship *ship) {
+void CollisionHandler::attachShip(Ship *ship) {
   _ship = ship;
 }
 
-void Collision::attachWindow(Window *window) {
+void CollisionHandler::attachWindow(Window *window) {
   _window = window;
 }
 
-void Collision::newPlayerShot(Projectile *proj) {
+void CollisionHandler::newPlayerShot(Projectile *proj) {
   _shipShots.push_front(proj);
 }
 
-void Collision::newEnemyShot(Projectile *proj) {
+void CollisionHandler::newEnemyShot(Projectile *proj) {
   _enemiesShots.push_front(proj);
 }
 
-void Collision::newEnemyShip(Enemy *enemy) {
+void CollisionHandler::newEnemyShip(Enemy *enemy) {
   _enemies.push_front(enemy);
 }
 
-void Collision::removeEnemyShip(Enemy *enemy) {
+void CollisionHandler::removeEnemyShip(Enemy *enemy) {
   _enemies.remove(enemy);
 }
 

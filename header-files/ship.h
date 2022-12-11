@@ -16,11 +16,11 @@
 #include "Laser.h"
 #include "hittable.h"
 #include "Timer.h"
-#include "collision.h"
+#include "CollisionHandler.h"
 
 __BEGIN_API
 //class Window;
-class Collision;
+class CollisionHandler;
 
 class Ship : public Hittable
 {
@@ -35,13 +35,13 @@ class Ship : public Hittable
         int getSize();
         Point getPosition();
         bool isDead();
-        bool isOutside();
+        bool isOutOfBounds();
 
         void draw();
         void update(double dt);
 
         void attachWindow(Window * window);
-        void attachCollision(Collision * colision);
+        void attachCollision(CollisionHandler * colision);
         
     protected:
     private:
@@ -50,9 +50,11 @@ class Ship : public Hittable
         void checkBoundary();
         void shootProjectile();
         void loadSprites();
+		void drawLives();
         
 	    static int SHIP_SPEED;
         static int SHIP_SIZE;
+		static int LASER_DELAY;
     	static ALLEGRO_COLOR SHIP_COLOR;
 
         /* Ship position */
@@ -67,7 +69,7 @@ class Ship : public Hittable
         /* Reference to game state and obj*/
         Input * _kb;
         Window * _window;
-        Collision * _collision;
+        CollisionHandler * _collision;
 
         std::shared_ptr<Timer> laserTimer;
 

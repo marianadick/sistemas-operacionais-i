@@ -10,8 +10,8 @@
 #include "configs.h"
 #include "input.h"
 #include "ship.h"
-#include "collision.h"
-#include "enemyGroupPurple.h"
+#include "CollisionHandler.h"
+#include "PurpleCreepLauncher.h"
 
 __BEGIN_API
 
@@ -55,8 +55,8 @@ private:
     static Window * _window;
     static Ship * _ship;
     static Input * _kb;
-    static Collision * _collision;
-    static EnemyGroupPurple * _enemyGroupPurple;
+    static CollisionHandler * _collision;
+    static PurpleCreepLauncher * _enemyGroupPurple;
 
     /* WINDOW */
     static void windowRun() {
@@ -84,16 +84,16 @@ private:
 
     /* ENEMY GROUP PURPLE */
     static void enemyGroupPurpleRun() {
-        _enemyGroupPurple = new EnemyGroupPurple();
-        _enemyGroupPurple->setCollisionReference(_collision);
-        _enemyGroupPurple->setWindowReference(_window);
+        _enemyGroupPurple = new PurpleCreepLauncher();
+	  _enemyGroupPurple->attachCollision(_collision);
+	  _enemyGroupPurple->attachWindow(_window);
         _enemyGroupPurple->run();
         delete _enemyGroupPurple;
     };
 
     /* COLLISION */
     static void collisionRun() {
-        _collision = new Collision();
+        _collision = new CollisionHandler();
         _collision->attachShip(_ship);
         _collision->attachWindow(_window);
         _ship->attachCollision(_collision);

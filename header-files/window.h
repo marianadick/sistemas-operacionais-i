@@ -33,12 +33,12 @@ class Window {
   void runWindow();
 
   // Should add / remove enemies to be drawn
-  void addEnemy(Enemy *enemy) { enemies.push_front(enemy); }
-  void removeEnemy(Enemy *enemy) { enemies.remove(enemy); }
+  void addEnemy(Enemy *enemy);
+  void removeEnemy(Enemy *enemy);
 
   // Should add / remove projectiles to be drawn
-  void addProjectile(Projectile *projectile) { projectiles.push_front(projectile); }
-  void removeProjectile(Projectile *projectile) { projectiles.remove(projectile); }
+  void addProjectile(Projectile *projectile);
+  void removeProjectile(Projectile *projectile);
 
   void attachShip(Ship *ship); // Link ship to window
   void attachKb(Input *kb); // Link keyboard to window (QUIT game)

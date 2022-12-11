@@ -1,10 +1,10 @@
-#include "header-files/enemyGroupPurple.h"
+#include "header-files/PurpleCreepLauncher.h"
 
 __BEGIN_API
 
 std::shared_ptr<Sprite> purpleShipSprite;
 
-EnemyGroupPurple::EnemyGroupPurple() {
+PurpleCreepLauncher::PurpleCreepLauncher() {
   loadSprites();
   DELAY_SHIPS_SPAWN = 60 * 5; // 5seg
   shipsSpawnTimer = std::make_shared<Timer>(60);
@@ -12,13 +12,13 @@ EnemyGroupPurple::EnemyGroupPurple() {
   shipsSpawnTimer->startTimer();
 }
 
-EnemyGroupPurple::~EnemyGroupPurple() {}
+PurpleCreepLauncher::~PurpleCreepLauncher() {}
 
-void EnemyGroupPurple::setWindowReference(Window *window) { _window = window; }
-void EnemyGroupPurple::setCollisionReference(Collision *collision) { _collision = collision; }
-void EnemyGroupPurple::removeShip(EnemyPurple *enemy) { ships.remove(enemy); }
+void PurpleCreepLauncher::attachWindow(Window *window) { _window = window; }
+void PurpleCreepLauncher::attachCollision(CollisionHandler *collision) { _collision = collision; }
+void PurpleCreepLauncher::removeShip(PurpleCreep *enemy) { ships.remove(enemy); }
 
-void EnemyGroupPurple::run() {
+void PurpleCreepLauncher::run() {
   loadSprites();
   while (Configs::_isGameRunning) {
 	if (_window == nullptr || _collision == nullptr) {
@@ -31,19 +31,19 @@ void EnemyGroupPurple::run() {
   }
 }
 
-void EnemyGroupPurple::processLoop() {
+void PurpleCreepLauncher::processLoop() {
   // Há uma dependência aqui do timer ser maior do que o tempo para o ultimo sair da tela por causa de referência de ponteiros
   if (shipsSpawnTimer->getCount() > DELAY_SHIPS_SPAWN)
 	createShips();
   handleShips();
 }
 
-void EnemyGroupPurple::handleShips() {
+void PurpleCreepLauncher::handleShips() {
   for (auto shipItem = ships.begin(); shipItem != ships.end();) {
-	EnemyPurple *ship = *shipItem;
+	PurpleCreep *ship = *shipItem;
 	shipItem++;
 
-	if (ship->canFire()) {
+	if (ship->setFire()) {
 	  // Chama o método attack do ship mas essa função aqui que vai lidar com a criação dos vetores
 	  ship->attack();
 
@@ -66,15 +66,15 @@ void EnemyGroupPurple::handleShips() {
   }
 }
 
-void EnemyGroupPurple::createShips() {
+void PurpleCreepLauncher::createShips() {
   // Cria os 5 ships purple
-  auto *ship1 = new EnemyPurple(Point(800, 300), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
-  auto *ship2 = new EnemyPurple(Point(900, 350), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
-  auto *ship3 = new EnemyPurple(Point(900, 250), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
-  auto *ship4 = new EnemyPurple(Point(1000, 400), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
-  auto *ship5 = new EnemyPurple(Point(1000, 200), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
-  auto *ship6 = new EnemyPurple(Point(1100, 100), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
-  auto *ship7 = new EnemyPurple(Point(1100, 500), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+  auto *ship1 = new PurpleCreep(Point(800, 300), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+  auto *ship2 = new PurpleCreep(Point(900, 350), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+  auto *ship3 = new PurpleCreep(Point(900, 250), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+  auto *ship4 = new PurpleCreep(Point(1000, 400), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+  auto *ship5 = new PurpleCreep(Point(1000, 200), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+  auto *ship6 = new PurpleCreep(Point(1100, 100), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
+  auto *ship7 = new PurpleCreep(Point(1100, 500), Vector(-180, 0), purpleShipSprite, enemyExplosionSprite, this);
 
   // Manda para o objeto collision
   _collision->newEnemyShip(ship1);
@@ -107,7 +107,7 @@ void EnemyGroupPurple::createShips() {
   shipsSpawnTimer->srsTimer();
 }
 
-void EnemyGroupPurple::loadSprites() {
+void PurpleCreepLauncher::loadSprites() {
   // Go to resources directory
   ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
   al_append_path_component(path, "resources");

@@ -6,7 +6,8 @@ __BEGIN_API
 
 int Ship::SHIP_SPEED = 250;
 int Ship::SHIP_SIZE = 16;
-ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(150, 0, 0);
+int Ship::LASER_DELAY = 6;
+ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(0, 200, 0);
 
 Ship::Ship()
 {
@@ -85,8 +86,8 @@ void Ship::draw()
 {   
    Point centre = _position;
    _sprite->draw_region(_row, _col, 47.0, 40.0, centre, 0);
+   drawLives();
 }
-
 
 void Ship::selectShipAnimation() 
 {
@@ -119,11 +120,11 @@ void Ship::checkBoundary()
 
 void Ship::shootProjectile() 
 {
-   if (laserTimer->getCount() > 8)
+   if (laserTimer->getCount() > LASER_DELAY)
 	{
       Laser *laserToShot = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
 		laserTimer->srsTimer();
-		// Coloca referência do tiro na classe Collision e Window
+		// Coloca referência do tiro na classe CollisionHandler e Window
 		_window->addProjectile(laserToShot);
       _collision->newPlayerShot(laserToShot);
 	};
@@ -141,7 +142,7 @@ void Ship::attachWindow(Window * window)
    _window = window;
 }
 
-void Ship::attachCollision(Collision * collision)
+void Ship::attachCollision(CollisionHandler * collision)
 {
    _collision = collision;
 }
@@ -167,8 +168,18 @@ bool Ship::isDead() {
    return life <= 0; 
 }
 
-bool Ship::isOutside() {
+bool Ship::isOutOfBounds() {
     return (!isDead()); 
 }
 
+void Ship::drawLives()
+{
+  Point centre = _position;
+  al_draw_line(centre.x - SHIP_SIZE * 2, centre.y + SHIP_SIZE * 2,
+			   (centre.x - SHIP_SIZE * 2) + (life / 3) * (SHIP_SIZE * 4),
+			   centre.y + SHIP_SIZE * 2,
+			   al_map_rgb(255 * (1.0 - life / 3),
+						  200 * (life / 3),
+						  0), 5);
+}
 __END_API

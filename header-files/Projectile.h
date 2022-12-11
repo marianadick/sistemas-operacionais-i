@@ -25,7 +25,7 @@ public:
 
 	Point getPosition() { return _point; }
 	bool getIsPlayerProjectile() { return _isPlayerShot; }
-	bool isOutside()
+	bool isOutOfBounds()
 	{
 		if ((_point.x > Configs::_widthDisplay) ||
 			(_point.x < 0) ||
