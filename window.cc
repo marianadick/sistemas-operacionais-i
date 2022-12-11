@@ -136,6 +136,7 @@ void Window::drawWindow() {
 	// draw and update variable elements
 	drawEnemies(dt);
 	drawProjectiles(dt);
+  drawShipLives();
 
 	// update previous time
 	_prevTime = crtTime;
@@ -192,6 +193,23 @@ void Window::drawProjectiles(double dt) {
 	projectile->update(dt);
 	projectile->draw();
   }
+}
+
+void Window::drawShipLives() {
+  int shipLives = _ship->getShipLives();
+   Point centre(_widthDisplay-70, _widthDisplay-50);
+   if (shipLives > 0) {
+	  al_draw_rectangle(_widthDisplay - 70, 50, _widthDisplay - 50, 70,
+			    al_map_rgb(0, 255, 0), 5);
+   }
+   if (shipLives > 1) {
+      al_draw_rectangle(_widthDisplay - 110, 50, _widthDisplay - 90, 70,
+			al_map_rgb(0, 255, 0), 5);
+   }
+   if (shipLives > 2) {
+      al_draw_rectangle(_widthDisplay - 150, 50, _widthDisplay - 130, 70,
+			al_map_rgb(0, 255, 0) , 5);
+   }
 }
 
 void Window::addEnemy(Enemy *enemy)

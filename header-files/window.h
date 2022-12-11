@@ -55,9 +55,10 @@ class Window {
   void updateBg(double dt);
   void loadSprites();
 
-  /* Helper functions to draw and update enemies and projectiles */
+  /* Helper functions to draw and update variable elements */
   void drawEnemies(double dt);
   void drawProjectiles(double dt);
+  void drawShipLives();
 
   /* Display parameters */
   int _widthDisplay;

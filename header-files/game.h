@@ -63,6 +63,7 @@ private:
         _window = new Window(Configs::_widthDisplay, Configs::_heightDisplay, Configs::_fps);
         _window->runWindow();
         delete _window;
+        _windowThread->thread_exit(2);
     };
 
     /* SHIP */
@@ -72,6 +73,7 @@ private:
         _window->attachShip(_ship); _ship->attachWindow(_window);
         _ship->runShip();
         delete _ship;
+        _shipThread->thread_exit(3);
     };
 
     /* INPUT */
@@ -80,15 +82,18 @@ private:
         _window->attachKb(_kb);
         _kb->runInput();
         delete _kb;
+        _kbThread->thread_exit(4);
     };
 
     /* ENEMY GROUP PURPLE */
     static void enemyGroupPurpleRun() {
         _enemyGroupPurple = new PurpleCreepLauncher();
-	  _enemyGroupPurple->attachCollision(_collision);
-	  _enemyGroupPurple->attachWindow(_window);
+	    _enemyGroupPurple->attachCollision(_collision);
+	    _enemyGroupPurple->attachWindow(_window);
         _enemyGroupPurple->run();
         delete _enemyGroupPurple;
+        _enemyGroupPurpleThread->thread_exit(5);
+
     };
 
     /* COLLISION */
@@ -99,6 +104,7 @@ private:
         _ship->attachCollision(_collision);
         _collision->runCollision();
         delete _collision;
+        //_collisionThread->thread_exit(6);
     };
 };
 

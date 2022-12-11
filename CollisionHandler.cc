@@ -4,13 +4,17 @@ __BEGIN_API
 
 void CollisionHandler::runCollision() {
   while (Configs::_isGameRunning) {
-	checkCollision();
-	removeObjects();
+	checkCollidingEnemyWithPlayer();
+	checkCollisionOnEnemies();
+	checkCollisionOnPlayer();
+	clearEnemies();
+	clearProjectiles();
 	Thread::yield();
   }
 }
 
-void CollisionHandler::checkCollision() {
+void CollisionHandler::checkCollisionOnEnemies()
+{
   // Ship x Enemy
   for (auto listItem = _shipShots.begin(); listItem != _shipShots.end();) {
 	Projectile *shipShot = *listItem;
@@ -43,33 +47,10 @@ void CollisionHandler::checkCollision() {
 	}
   }
 
-  // Enemy x Ship
-  for (auto listItem = _enemiesShots.begin(); listItem != _enemiesShots.end();) {
-	Projectile *enemyShot = *listItem;
-	listItem++;
+}
 
-	if (checkHit(enemyShot, _ship)) {
-	  // Checks if an enemy hit something
-	  enemyShot->ackHitSomething();
-
-	  // Inflicts the damage to the player
-	  _ship->hit(enemyShot->getDamage());
-
-	  // Checks if the shot was destroyed, if so remove it from window
-	  if (enemyShot->wasDestroyed()) {
-		// Destrói o tiro
-		_window->removeProjectile(enemyShot);
-		_enemiesShots.remove(enemyShot);
-		delete enemyShot;
-	  }
-
-	  if (_ship->isDead()) {
-		Configs::_isGameRunning = false;
-		return;
-	  }
-	}
-  }
-
+void CollisionHandler::checkCollidingEnemyWithPlayer()
+{
   // Checks if the enemy ship and the player ship collided
   for (auto listItem = _enemies.begin(); listItem != _enemies.end();) {
 	Enemy *enemy = *listItem;
@@ -91,7 +72,37 @@ void CollisionHandler::checkCollision() {
 	  }
 	}
   }
+
 }
+
+void CollisionHandler::checkCollisionOnPlayer() {
+  // Enemy x Ship
+  for (auto listItem = _enemiesShots.begin(); listItem != _enemiesShots.end();) {
+	Projectile *enemyShot = *listItem;
+	listItem++;
+
+	if (checkHit(enemyShot, _ship)) {
+	  // Checks if an enemy hit something
+	  enemyShot->ackHitSomething();
+
+	  // Inflicts the damage to the player
+	  _ship->hit(enemyShot->getDamage());
+
+	  // Checks if the shot was destroyed, if so remove it from window
+	  if (enemyShot->wasDestroyed()) {
+		_window->removeProjectile(enemyShot);
+		_enemiesShots.remove(enemyShot);
+		delete enemyShot;
+	  }
+
+	  if (_ship->isDead()) {
+		Configs::_isGameRunning = false;
+		return;
+	  }
+	}
+  }
+}
+
 
 bool CollisionHandler::checkHit(Projectile *proj, Drawable *hitObj) {
   Point projPos = proj->getPosition();
@@ -116,7 +127,7 @@ bool CollisionHandler::checkHit(Drawable *firstObj, Drawable *secondObj) {
 	  abs(firstPos.y - secondPos.y) < (firstSize + secondSize));
 }
 
-void CollisionHandler::removeObjects() {
+void CollisionHandler::clearEnemies() {
   // Remove enemies
   for (auto enemyItem = _enemies.begin(); enemyItem != _enemies.end();) {
 	Enemy *enemy = *enemyItem;
@@ -127,7 +138,9 @@ void CollisionHandler::removeObjects() {
 	  delete enemy;
 	}
   }
+}
 
+void CollisionHandler::clearProjectiles() {
   // Remove enemies shots
   for (auto enemyItem = _enemiesShots.begin(); enemyItem != _enemiesShots.end();) {
 	Projectile *proj = *enemyItem;

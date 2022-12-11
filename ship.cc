@@ -173,6 +173,10 @@ bool Ship::isOutOfBounds() {
   return (!isDead());
 }
 
+int Ship::getShipLives() {
+  return life;
+}
+
 void Ship::drawLives() {
   Point centre = _position;
   al_draw_line(centre.x - SHIP_SIZE * 2, centre.y + SHIP_SIZE * 2,

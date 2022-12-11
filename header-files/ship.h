@@ -30,6 +30,7 @@ class Ship : public Drawable {
 
   void runShip();
   void getInputKb();
+  int getShipLives();
   void hit(int damage);
   int getSize();
   Point getPosition();

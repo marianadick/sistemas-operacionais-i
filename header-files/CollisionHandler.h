@@ -43,10 +43,14 @@ class CollisionHandler {
         std::list<Enemy *> _enemies;
 
         void checkCollision();
+        void checkCollisionOnEnemies();
+        void checkCollidingEnemyWithPlayer();
+        void checkCollisionOnPlayer();
         bool checkHit(Projectile * proj, Drawable * hitObj);
         bool checkHit(Drawable * firstObj, Drawable * secondObj);
 
-        void removeObjects();
+        void clearEnemies();
+        void clearProjectiles();
 };
 
 __END_API
