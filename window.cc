@@ -177,21 +177,21 @@ void Window::loadSprites() {
 
 void Window::drawEnemies(double dt) {
   for (auto listItem = enemies.begin(); listItem != enemies.end();) {
-	Enemy *enemy = *listItem;
-	listItem++;
+    Enemy *enemy = *listItem;
+    listItem++;
 
-	enemy->update(dt);
-	enemy->draw();
+    enemy->update(dt);
+    enemy->draw();
   }
 }
 
 void Window::drawProjectiles(double dt) {
   for (auto listItem = projectiles.begin(); listItem != projectiles.end();) {
-	Projectile *projectile = *listItem;
-	listItem++;
+    Projectile *projectile = *listItem;
+    listItem++;
 
-	projectile->update(dt);
-	projectile->draw();
+    projectile->update(dt);
+    projectile->draw();
   }
 }
 
@@ -199,8 +199,8 @@ void Window::drawShipLives() {
   int shipLives = _ship->getShipLives();
    Point centre(_widthDisplay-70, _widthDisplay-50);
    if (shipLives > 0) {
-	  al_draw_rectangle(_widthDisplay - 70, 50, _widthDisplay - 50, 70,
-			    al_map_rgb(0, 255, 0), 5);
+	    al_draw_rectangle(_widthDisplay - 70, 50, _widthDisplay - 50, 70,
+			al_map_rgb(0, 255, 0), 5);
    }
    if (shipLives > 1) {
       al_draw_rectangle(_widthDisplay - 110, 50, _widthDisplay - 90, 70,
@@ -232,11 +232,13 @@ void Window::removeProjectile(Projectile *projectile)
   projectiles.remove(projectile);
 }
 
-void Window::attachShip(Ship *ship) {
+void Window::attachShip(Ship *ship)
+{
   _ship = ship;
 }
 
-void Window::attachKb(Input *kb) {
+void Window::attachKb(Input *kb)
+{
   _kb = kb;
 }
 

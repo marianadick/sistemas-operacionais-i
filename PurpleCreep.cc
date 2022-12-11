@@ -31,7 +31,7 @@ void PurpleCreep::initializeTimer() {
 }
 
 void PurpleCreep::draw() {
-  if (isDead()) {
+  if (getDead()) {
 	_deathSpriteTimer -= 1;
 	_deathSprite->draw_death_anim(_deathSpriteTimer, _point, 0);
   } else {

@@ -1,14 +1,13 @@
 #ifndef ship_h
 #define ship_h
 
-#include "thread.h"
-#include "traits.h"
 #include <memory>
 
+#include "thread.h"
+#include "traits.h"
 #include "configs.h"
 #include "input.h"
 #include "window.h"
-
 #include "Missile.h"
 #include "Point.h"
 #include "Vector.h"
@@ -19,7 +18,7 @@
 #include "CollisionHandler.h"
 
 __BEGIN_API
-//class Window;
+
 class CollisionHandler;
 
 class Ship : public Drawable {
@@ -35,7 +34,6 @@ class Ship : public Drawable {
   int getSize();
   Point getPosition();
   bool getDead();
-  bool isOutOfBounds();
 
   void draw();
   void update(double dt);
@@ -45,13 +43,13 @@ class Ship : public Drawable {
 
  protected:
  private:
-  void init();
+  void initializeTimers();
   void selectShipAnimation();
   void checkBoundary();
   void shootLaser();
   void shootMissile();
   void loadSprites();
-  void drawLives();
+  void drawHealthBar();
 
   static int SHIP_SPEED;
   static int SHIP_SIZE;
@@ -74,8 +72,8 @@ class Ship : public Drawable {
   Window *_window;
   CollisionHandler *_collision;
 
-  std::shared_ptr<Timer> laserTimer;
-  std::shared_ptr<Timer> missileTimer;
+  std::shared_ptr<Timer> laserDelayTimer;
+  std::shared_ptr<Timer> missileDelayTimer;
 };
 
 __END_API

@@ -1,6 +1,4 @@
 #include "header-files/ship.h"
-#include "header-files/configs.h"
-#include "header-files/Laser.h"
 
 __BEGIN_API
 
@@ -12,15 +10,15 @@ int Ship::MISSILE_DELAY = 20;
 ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(0, 200, 0);
 
 Ship::Ship() {
-  init();
   db<System>(TRC) << ">> Player ship is initializing...\n";
+  this->initializeTimers();
   loadSprites();
 }
 
 Ship::Ship(Input *kb) :
 	_kb(kb) {
-  init();
   db<System>(TRC) << ">> Player ship is initializing...\n";
+  this->initializeTimers();
   loadSprites();
 }
 
@@ -80,7 +78,7 @@ void Ship::update(double dt) {
 void Ship::draw() {
   Point centre = _position;
   _sprite->draw_region(_row, _col, 47.0, 40.0, centre, 0);
-  drawLives();
+  drawHealthBar();
 }
 
 void Ship::selectShipAnimation() {
@@ -111,34 +109,31 @@ void Ship::checkBoundary() {
 }
 
 void Ship::shootLaser() {
-  if (laserTimer->getCount() > LASER_DELAY) {
-	Laser *laserToShot = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
-	laserTimer->srsTimer();
-	// Coloca referência do tiro na classe CollisionHandler e Window
-	_window->addProjectile(laserToShot);
-	_collision->newPlayerShot(laserToShot);
+  if (laserDelayTimer->getCount() > LASER_DELAY) {
+    Laser * laser = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
+    laserDelayTimer->srsTimer();
+    _window->addProjectile(laser);
+    _collision->newPlayerShot(laser);
   };
 }
 
 void Ship::shootMissile() {
-  if (laserTimer->getCount() > MISSILE_DELAY) {
-	Missile *missileToShot = new Missile(_position, SHIP_COLOR, Vector(500, 0), true);
-	laserTimer->srsTimer();
-	// Coloca referência do tiro na classe CollisionHandler e Window
-	_window->addProjectile(missileToShot);
-	_collision->newPlayerShot(missileToShot);
+  if (laserDelayTimer->getCount() > MISSILE_DELAY) {
+	Missile * missile = new Missile(_position, SHIP_COLOR, Vector(500, 0), true);
+	laserDelayTimer->srsTimer();
+	_window->addProjectile(missile);
+	_collision->newPlayerShot(missile);
   };
 }
 
-void Ship::init() {
-  // Create the timers for the weapons
-  laserTimer = std::make_shared<Timer>(Configs::_fps);
-  laserTimer->create();
-  laserTimer->startTimer();
+void Ship::initializeTimers() {
+  laserDelayTimer = std::make_shared<Timer>(Configs::_fps);
+  laserDelayTimer->create();
+  laserDelayTimer->startTimer();
 
-  missileTimer = std::make_shared<Timer>(Configs::_fps);
-	missileTimer->create();
-	missileTimer->startTimer();
+  missileDelayTimer = std::make_shared<Timer>(Configs::_fps);
+	missileDelayTimer->create();
+	missileDelayTimer->startTimer();
 }
 
 void Ship::attachWindow(Window *window) {
@@ -167,15 +162,11 @@ bool Ship::getDead() {
   return _dead;
 }
 
-bool Ship::isOutOfBounds() {
-  return (!getDead());
-}
-
 int Ship::getShipLives() {
   return _life;
 }
 
-void Ship::drawLives() {
+void Ship::drawHealthBar() {
   Point centre = _position;
   al_draw_line(centre.x - SHIP_SIZE * 2, centre.y + SHIP_SIZE * 2,
 			   (centre.x - SHIP_SIZE * 2) + (_life / 3) * (SHIP_SIZE * 4),
@@ -184,4 +175,5 @@ void Ship::drawLives() {
 						  200 * (_life / 3),
 						  0), 5);
 }
+
 __END_API

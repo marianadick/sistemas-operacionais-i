@@ -61,7 +61,7 @@ void CollisionHandler::checkHit(Projectile *proj, Enemy *target) {
 	  (projPos.y < targetPos.y + targetSize))
 	{
 		target->hit(proj->getDamage());
-		if (target->isDead()) {
+		if (target->getDead()) {
 			_window->removeEnemy(target);
 			_enemies.remove(target);
 			delete target;
@@ -103,7 +103,7 @@ void CollisionHandler::checkHit(Projectile *proj, Ship *target) {
 		delete proj;
 	  }
 
-	  if (_ship->isDead())
+	  if (_ship->getDead())
 		Configs::_isGameRunning = false;
 	}
 }
@@ -119,14 +119,14 @@ void CollisionHandler::checkHit(Drawable *firstObj, Drawable *secondObj) {
 		abs(firstPos.y - secondPos.y) < (firstSize + secondSize)) {
 		
 		firstObj->hit(1);
-		if (firstObj->isDead()) {
+		if (firstObj->getDead()) {
 			_window->removeEnemy((Enemy *) firstObj);
 			_enemies.remove((Enemy *) firstObj);
 			delete firstObj;
 		}
 
 		_ship->hit(1);
-		if (_ship->isDead())
+		if (_ship->getDead())
 			Configs::_isGameRunning = false;
 	}
 }

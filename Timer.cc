@@ -19,8 +19,7 @@ Timer::Timer(int fps) : _timer(NULL), _fps(fps) {
 
 Timer::~Timer() {
    if (_timer != NULL) {
-      al_destroy_timer(_timer);
-      //std::cout << "timer deleted\n";      
+      al_destroy_timer(_timer);    
    }
 }
 
