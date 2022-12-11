@@ -9,6 +9,7 @@
 #include "input.h"
 #include "window.h"
 
+#include "Missile.h"
 #include "Point.h"
 #include "Vector.h"
 #include "Sprite.h"
@@ -22,56 +23,58 @@ __BEGIN_API
 //class Window;
 class CollisionHandler;
 
-class Ship : public Hittable
-{
-    public:
-        Ship();
-        Ship(Input * kb);
-        ~Ship();
+class Ship : public Hittable {
+ public:
+  Ship();
+  Ship(Input *kb);
+  ~Ship();
 
-        void runShip();
-        void getInputKb();
-        void hit(int damage);
-        int getSize();
-        Point getPosition();
-        bool isDead();
-        bool isOutOfBounds();
+  void runShip();
+  void getInputKb();
+  void hit(int damage);
+  int getSize();
+  Point getPosition();
+  bool isDead();
+  bool isOutOfBounds();
 
-        void draw();
-        void update(double dt);
+  void draw();
+  void update(double dt);
 
-        void attachWindow(Window * window);
-        void attachCollision(CollisionHandler * colision);
-        
-    protected:
-    private:
-        void init();
-        void selectShipAnimation();
-        void checkBoundary();
-        void shootProjectile();
-        void loadSprites();
-		void drawLives();
-        
-	    static int SHIP_SPEED;
-        static int SHIP_SIZE;
-		static int LASER_DELAY;
-    	static ALLEGRO_COLOR SHIP_COLOR;
+  void attachWindow(Window *window);
+  void attachCollision(CollisionHandler *colision);
 
-        /* Ship position */
-        int life = 3;
-        bool wasShot = false;
-	    int _row;			/**<row of animation to be played */
-	    int _col;			/**< column of animation to be played */
-        Point _position;
-        Vector _speed;
-        std::shared_ptr<Sprite> _sprite;
+ protected:
+ private:
+  void init();
+  void selectShipAnimation();
+  void checkBoundary();
+  void shootLaser();
+  void shootMissile();
+  void loadSprites();
+  void drawLives();
 
-        /* Reference to game state and obj*/
-        Input * _kb;
-        Window * _window;
-        CollisionHandler * _collision;
+  static int SHIP_SPEED;
+  static int SHIP_SIZE;
+  static int LASER_DELAY;
+  static int MISSILE_DELAY;
+  
+  static ALLEGRO_COLOR SHIP_COLOR;
 
-        std::shared_ptr<Timer> laserTimer;
+  /* Ship position */
+  int life = 3;
+  bool wasShot = false;
+  int _row;            /**<row of animation to be played */
+  int _col;            /**< column of animation to be played */
+  Point _position;
+  Vector _speed;
+  std::shared_ptr<Sprite> _sprite;
+
+  /* Reference to game state and obj*/
+  Input *_kb;
+  Window *_window;
+  CollisionHandler *_collision;
+
+  std::shared_ptr<Timer> laserTimer;
 
 };
 
