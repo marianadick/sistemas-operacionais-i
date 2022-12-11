@@ -32,7 +32,7 @@ class EnemyPurple : Enemy {
         /* Checks if enemy is able to fire */
         bool _canFire;
 
-        /* SHot delay*/
+        /* Shot delay */
         static int _SHOTS_DELAY;
         std::shared_ptr<Timer> _shotsTimer;
 
