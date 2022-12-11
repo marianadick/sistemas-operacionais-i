@@ -7,7 +7,7 @@
 #include "traits.h"
 #include "thread.h"
 
-#include "ship.h"
+//#include "ship.h"
 #include "input.h"
 
 #include "Vector.h"
@@ -16,7 +16,7 @@
 #include "Drawable.h"
 
 __BEGIN_API
-//class Ship;
+class Ship;
 
 class Window
 {

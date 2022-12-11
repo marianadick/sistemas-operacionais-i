@@ -14,7 +14,7 @@
 
 __BEGIN_API
 
-class EnemyPurple;
+//class EnemyPurple;
 
 class EnemyGroupPurple
 {

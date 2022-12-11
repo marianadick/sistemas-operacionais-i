@@ -132,4 +132,23 @@ void Ship::attachWindow(Window * window)
    _window = window;
 }
 
+void Ship::attachCollision(Collision * collision)
+{
+   _collision = collision;
+}
+
+void Ship::hit(int damage)
+{
+	if (this->wasShot)
+		return;
+
+	this->life -= damage;
+	this->wasShot = true;
+}
+
+int Ship::getSize() { return Ship::SHIP_SIZE; }
+
+Point Ship::getPosition() { return this->_position; }
+
+
 __END_API
