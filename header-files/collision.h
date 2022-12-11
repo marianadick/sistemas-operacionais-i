@@ -9,11 +9,13 @@
 #include "configs.h"
 #include "ship.h"
 #include "Projectile.h"
-#include "enemy.h"
+#include "Enemy.h"
 #include "window.h"
 #include "hittable.h"
 
 __BEGIN_API
+class Window;
+class Ship;
 
 class Collision {
     public:

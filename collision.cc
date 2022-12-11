@@ -42,7 +42,7 @@ void Collision::checkCollision()
                 if (shipShots->wasDestroyed())
                 {
                     _window->removeDrawableItem(shipShots);
-                    shipShots.remove(shipShots);
+                    _shipShots.remove(shipShots);
                     delete shipShots;
                     break;
                 }
@@ -74,7 +74,7 @@ void Collision::checkCollision()
 
             if (_ship->isDead())
             {
-                GameConfigs::finished = true;
+                Configs::_isGameRunning = false;
                 return;
             }
         }
@@ -158,19 +158,19 @@ void Collision::removeObjects()
     }
 
     // Remove player shots
-    for (auto shipShots = shipShots.begin(); shipShots != shipShots.end();)
+    for (auto shipShots = _shipShots.begin(); shipShots != _shipShots.end();)
     {
         Projectile * projectile = *shipShots; shipShots++;
         if (projectile->isOutside())
         {
             _window->removeDrawableItem(projectile);
-            shipShots.remove(projectile);
+            _shipShots.remove(projectile);
             delete projectile;
         }
     }
 }
 
-void Collision::attachShip(PlayerShip * ship) {
+void Collision::attachShip(Ship * ship) {
      _ship = ship; 
 }
 
@@ -179,19 +179,19 @@ void Collision::attachWindow(Window * window) {
 }
 
 void Collision::newPlayerShot(Projectile * proj) { 
-    playerShots.push_front(proj); 
+    _shipShots.push_front(proj); 
 }
 
 void Collision::newEnemyShot(Projectile * proj) {
-     enemiesShots.push_front(proj); 
+     _enemiesShots.push_front(proj); 
 }
 
 void Collision::newEnemyShip(Enemy * enemy) {
-     enemies.push_front(enemy); 
+     _enemies.push_front(enemy); 
 }
 
 void Collision::removeEnemyShip(Enemy * enemy) {
-     enemies.remove(enemy); 
+     _enemies.remove(enemy); 
 }
 
 

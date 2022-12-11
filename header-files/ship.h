@@ -16,11 +16,13 @@
 #include "Laser.h"
 #include "Drawable.h"
 #include "Timer.h"
+#include "collision.h"
 
 __BEGIN_API
 class Window;
+class Collision;
 
-class Ship: public Hittable
+class Ship : public Hittable
 {
     public:
         Ship(Input * kb);

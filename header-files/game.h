@@ -27,9 +27,9 @@ public:
         _kbThread = new Thread(kbRun);
         _shipThread = new Thread(shipRun);
         
+        _kbThread->join();
         _shipThread->join();
         _windowThread->join();
-        _kbThread->join();
 
         delete _shipThread;
         delete _windowThread;
@@ -68,6 +68,7 @@ private:
     /* INPUT */
     static void kbRun() {
         _kb = new Input();
+        _window->attachKb(_kb);
         _kb->runInput();
         delete _kb;
     };

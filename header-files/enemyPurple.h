@@ -13,6 +13,7 @@
 #include "enemyGroupPurple.h"
 
 __BEGIN_API
+class EnemyGroupPurple;
 
 class EnemyPurple : public Enemy {
     public:

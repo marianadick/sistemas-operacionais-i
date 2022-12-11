@@ -64,8 +64,8 @@ void EnemyGroupPurple::handleShips()
             Laser *laser1 = new Laser(ship->getPosition(), ship->getColor(), ship->getVector() + Vector(-200, (-1 * yVector)), false);
             Laser *laser2 = new Laser(ship->getPosition(), ship->getColor(), ship->getVector() + Vector(-250, yVector), false);
 
-            // this->_collision->addEnemiesShot(laser1);
-            // this->_collision->addEnemiesShot(laser2);
+            this->_collision->newEnemyShot(laser1);
+            this->_collision->newEnemyShot(laser2);
 
             this->_window->addDrawableItem(laser1);
             this->_window->addDrawableItem(laser2);
@@ -85,13 +85,13 @@ void EnemyGroupPurple::createShips()
     EnemyPurple *ship7 = new EnemyPurple(Point(1100, 500), Vector(-180, 0), this->purpleShipSprite, this->enemyExplosionSprite, this);
 
     // Manda para o objeto collision
-    this->_collision->addEnemies(ship1);
-    this->_collision->addEnemies(ship2);
-    this->_collision->addEnemies(ship3);
-    this->_collision->addEnemies(ship4);
-    this->_collision->addEnemies(ship5);
-    this->_collision->addEnemies(ship6);
-    this->_collision->addEnemies(ship7);
+    this->_collision->newEnemyShip(ship1);
+    this->_collision->newEnemyShip(ship2);
+    this->_collision->newEnemyShip(ship3);
+    this->_collision->newEnemyShip(ship4);
+    this->_collision->newEnemyShip(ship5);
+    this->_collision->newEnemyShip(ship6);
+    this->_collision->newEnemyShip(ship7);
 
     // Manda para o objeto window
     this->_window->addDrawableItem(ship1);
@@ -115,7 +115,7 @@ void EnemyGroupPurple::createShips()
     this->shipsSpawnTimer->srsTimer();
 }
 
-void PurpleEnemiesControl::loadSprites()
+void EnemyGroupPurple::loadSprites()
 {
     // Go to resources directory
     ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);

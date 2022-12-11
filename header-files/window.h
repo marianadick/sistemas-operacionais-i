@@ -17,9 +17,7 @@
 #include <list> 
 
 __BEGIN_API
-
 class Ship;
-class Input;
 
 class Window
 {
