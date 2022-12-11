@@ -124,7 +124,7 @@ void Ship::shootProjectile()
       Laser *laserToShot = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
 		laserTimer->srsTimer();
 		// Coloca referência do tiro na classe Collision e Window
-		_window->addDrawableItem(laserToShot);
+		_window->addProjectile(laserToShot);
       _collision->newPlayerShot(laserToShot);
 	};
 }
