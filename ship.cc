@@ -145,9 +145,12 @@ void Ship::attachCollision(CollisionHandler *collision) {
 }
 
 void Ship::hit(int damage) {
-  _life -= damage;
-  if (_life < 1)
-      _dead = true;
+  _health -= 1;
+  if (_health < 1) {
+      _health = 3;
+      _life -= 1;
+      drawHealthBar();
+  }
 }
 
 int Ship::getSize() {
@@ -169,10 +172,10 @@ int Ship::getShipLives() {
 void Ship::drawHealthBar() {
   Point centre = _position;
   al_draw_line(centre.x - SHIP_SIZE * 2, centre.y + SHIP_SIZE * 2,
-			   (centre.x - SHIP_SIZE * 2) + (_life / 3) * (SHIP_SIZE * 4),
+			   (centre.x - SHIP_SIZE * 2) + (_health / 3) * (SHIP_SIZE * 4),
 			   centre.y + SHIP_SIZE * 2,
-			   al_map_rgb(255 * (1.0 - _life / 3),
-						  200 * (_life / 3),
+			   al_map_rgb(255 * (1.0 - _health / 3),
+						  200 * (_health / 3),
 						  0), 5);
 }
 

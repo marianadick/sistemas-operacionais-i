@@ -59,7 +59,8 @@ class Ship : public Drawable {
   static ALLEGRO_COLOR SHIP_COLOR;
 
   /* Ship position */
-  int _life = 3;
+  float _life = 3;
+  float _health = 3;
   bool _dead = false;
   int _row;            /**<row of animation to be played */
   int _col;            /**< column of animation to be played */
