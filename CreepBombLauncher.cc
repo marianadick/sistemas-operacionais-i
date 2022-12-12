@@ -2,7 +2,7 @@
 
 __BEGIN_API
 
-int CreepBombLauncher::_DELAY_BOMBS_SPAWN = Configs::_fps * 3;
+int CreepBombLauncher::_DELAY_BOMBS_SPAWN = Configs::_fps * 30;
 
 CreepBombLauncher::CreepBombLauncher()
 {

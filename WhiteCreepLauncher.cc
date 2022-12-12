@@ -4,7 +4,7 @@ __BEGIN_API
 
 WhiteCreepLauncher::WhiteCreepLauncher() {
   loadSprites();
-  NEW_GROUP_DELAY = 60 * 15; // 5seg
+  NEW_GROUP_DELAY = 60 * 11;
   newGroupTimer = std::make_shared<Timer>(60);
   newGroupTimer->create();
   newGroupTimer->startTimer();
