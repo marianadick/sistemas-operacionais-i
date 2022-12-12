@@ -22,27 +22,34 @@ class CreepBombLauncher
 public:
     CreepBombLauncher();
     ~CreepBombLauncher();
+
+    void runCreepBombLauncher();
+
     void setWindowReference(Window *window);
     void setCollisionHandlerReference(CollisionHandler *CollisionHandler);
     void removeCreepBomb(CreepBomb *enemy);
 
-    void runCreepBombLauncher();
-
+protected:
 private:
-    void loadSprites();
-    void createCreepBomb();
-    void processLoop();
+    void processLoop(); // Loop waiting for its timer (delay)
     void handleCreepBombs();
+    void createCreepBomb();
+    void loadSprites();
 
-    Window *_window;
-    CollisionHandler *_CollisionHandler;
-
-    static int _DELAY_BOMBS_SPAWN;
-
-    std::list<CreepBomb *> _creepBombs;
-    std::shared_ptr<Timer> _creepBombsSpawnTimer;
+    /* Sprites*/
     std::shared_ptr<Sprite> _creepBombsSprite;
     std::shared_ptr<Sprite> _creepBombsExplosionSprite;
+
+    /* Reference to the window and collisionHandler */
+    Window *_window;
+    CollisionHandler *_collisionHandler;
+
+    std::list<CreepBomb *> _creepBombs;
+
+    /* Timer */
+    std::shared_ptr<Timer> _creepBombsSpawnTimer;
+    static int _DELAY_BOMBS_SPAWN;
+
     ALLEGRO_COLOR _color;
 };
 

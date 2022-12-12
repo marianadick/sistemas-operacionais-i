@@ -2,7 +2,7 @@
 
 __BEGIN_API
 
-int Creep::_ATTACK_DELAY = 50;
+int Creep::_ATTACK_DELAY = 65;
 
 Creep::Creep(Point point, Vector vector, std::shared_ptr<Sprite> creepSprite, ALLEGRO_COLOR color,
 						 Launcher * launcher) : Enemy(point, vector, 1) {

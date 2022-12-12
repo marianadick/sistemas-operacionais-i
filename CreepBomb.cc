@@ -2,82 +2,81 @@
 
 __BEGIN_API
 
-int CreepBomb::_CREEP_BOMB_EXPLOSION_DELAY = Configs::_fps * 5;
+int CreepBomb::_CREEP_BOMB_EXPLOSION_DELAY = Configs::_fps * 7;
 int CreepBomb::_CREEP_BOMB_LIFE = 5;
 
-CreepBomb::CreepBomb(Point point, Vector vector, std::shared_ptr<Sprite> CreepBombSprite, std::shared_ptr<Sprite> deathSprite, CreepBombLauncher * launcher) : Enemy(point, vector, CreepBomb::_CREEP_BOMB_LIFE)
+CreepBomb::CreepBomb(Point point, Vector vector, std::shared_ptr<Sprite> creepBombSprite, std::shared_ptr<Sprite> deathSprite, CreepBombLauncher * launcher) : 
+                        Enemy(point, vector, CreepBomb::_CREEP_BOMB_LIFE)
 {
-    this->_CreepBombSprite = CreepBombSprite;
-    this->_deathSprite = deathSprite;
-    this->_launcher = launcher;
+    _creepBombSprite = creepBombSprite;
+    _deathSprite = deathSprite;
+    _launcher = launcher;
+    _col = 0; 
+    _row = 0;
+    _deathSpriteTimer = 5;
+    _destroyed = false;
     this->color = al_map_rgb(150, 0, 150);
-    this->deathSpriteTimer = 5;
-    this->wasExploded = false;
-
-    this->row = 0;
-    this->col = 0;
-
-    this->explodeTimer = std::make_shared<Timer>(Configs::_fps);
-    this->explodeTimer->create();
-    this->explodeTimer->startTimer();
-}
-
-void CreepBomb::hit(int damage)
-{
-    this->_life -= damage;
-    if (this->col < 2)
-        this->col++;
+    _explodeTimer = std::make_shared<Timer>(Configs::_fps);
+    _explodeTimer->create();
+    _explodeTimer->startTimer();
 }
 
 CreepBomb::~CreepBomb()
 {
-    if (this->_launcher != nullptr && Configs::_isGameRunning)
-        this->_launcher->removeCreepBomb(this);
+    if (_launcher != nullptr && Configs::_isGameRunning)
+        _launcher->removeCreepBomb(this);
     
-    this->explodeTimer.reset();
-    this->_CreepBombSprite.reset();
-    this->_deathSprite.reset();
+    _deathSprite.reset();
+    _creepBombSprite.reset();
+    _explodeTimer.reset();
 }
 
 void CreepBomb::draw()
 {
-    if (this->_life <= 0)
+    if (_life <= 0) // if it has no more lives
     {
-        this->deathSpriteTimer -= 1;
-        this->_deathSprite->draw_death_anim(this->deathSpriteTimer, this->_point, 0);
-        if (this->deathSpriteTimer <= 0)
+        _deathSpriteTimer -= 1;
+        _deathSprite->draw_death_anim(_deathSpriteTimer, _point, 0);
+        if (_deathSpriteTimer <= 0) // if time expired
             _dead = true;
     }
-    else
-    {
-        this->_CreepBombSprite->draw_region(this->row, this->col, 40, 41, this->_point, 0);
-    }
-}
-
-bool CreepBomb::getFire()
-{
-    return this->explodeTimer->getCount() > CreepBomb::_CREEP_BOMB_EXPLOSION_DELAY;
+    else // if it is still alive
+        _creepBombSprite->draw_region(_row, _col, 40, 41, _point, 0);
 }
 
 void CreepBomb::attack()
 {
-    this->wasExploded = true;
+    _destroyed = true;
+}
+
+void CreepBomb::hit(int damage)
+{
+    _life = _life - damage;
+    if (_col < 2)
+        _col++;
 }
 
 void CreepBomb::update(double dt)
 {
     if (_dead)
-    {
         return;
-    }
+    _point = _point + _speed * dt;
+    if (_point.x < 670 && _row == 0)
+        _row++;
+    if (_point.x < 540 && _row == 1)
+        _row++;
+}
 
-    this->_point = this->_point + this->_speed * dt;
+ALLEGRO_COLOR CreepBomb::getColor() {
+     return this->color; 
+}
 
-    if (this->_point.x < 670 && this->row == 0)
-        this->row++;
-
-    if (this->_point.x < 540 && this->row == 1)
-        this->row++;
+bool CreepBomb::getFire() {
+    // Can only fire in the right time
+    if ( _explodeTimer->getCount() > CreepBomb::_CREEP_BOMB_EXPLOSION_DELAY)
+        return true;
+    else
+        return false;
 }
 
 int CreepBomb::getSize() {
@@ -85,7 +84,7 @@ int CreepBomb::getSize() {
 }
 
 bool CreepBomb::isOutOfBounds() {
-    return this->wasExploded; 
+    return _destroyed; 
 }
 
 __END_API

@@ -209,6 +209,14 @@ void Window::drawShipLives() {
       al_draw_rectangle(_widthDisplay - 150, 50, _widthDisplay - 130, 70,
 			al_map_rgb(0, 255, 0) , 5);
    }
+   if (shipLives > 3) {
+      al_draw_rectangle(_widthDisplay - 190, 50, _widthDisplay - 170, 70,
+			al_map_rgb(0, 255, 0), 5);
+   }
+   if (shipLives > 4) {
+      al_draw_rectangle(_widthDisplay - 230, 50, _widthDisplay - 210, 70,
+			al_map_rgb(0, 255, 0) , 5);
+   }
 }
 
 void Window::addEnemy(Enemy *enemy)

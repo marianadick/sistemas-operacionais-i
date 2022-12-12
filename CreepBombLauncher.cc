@@ -6,84 +6,78 @@ int CreepBombLauncher::_DELAY_BOMBS_SPAWN = Configs::_fps * 30;
 
 CreepBombLauncher::CreepBombLauncher()
 {
-    this->loadSprites();
-    this->_color = al_map_rgb(255, 0, 0);
-    this->_creepBombsSpawnTimer = std::make_shared<Timer>(Configs::_fps);
-    this->_creepBombsSpawnTimer->create();
-    this->_creepBombsSpawnTimer->startTimer();
+    _creepBombsSpawnTimer = std::make_shared<Timer>(Configs::_fps);
+    _creepBombsSpawnTimer->create();
+    _creepBombsSpawnTimer->startTimer();
+    _color = al_map_rgb(255, 255, 0);
+    loadSprites();
 }
 
 CreepBombLauncher::~CreepBombLauncher()
 {
-    this->_creepBombsSpawnTimer.reset();
-    this->_creepBombsSprite.reset();
-    this->_creepBombsExplosionSprite.reset();
+    _creepBombsExplosionSprite.reset();
+    _creepBombsSpawnTimer.reset();
+    _creepBombsSprite.reset();
 }
 
-void CreepBombLauncher::setWindowReference(Window *window) { 
-    this->_window = window; 
-}
-void CreepBombLauncher::setCollisionHandlerReference(CollisionHandler *collision) {
-    this->_CollisionHandler = collision; 
-}
 void CreepBombLauncher::removeCreepBomb(CreepBomb *enemy)
 {
-    if (this->_creepBombs.size() == 0)
+    // No bombs
+    if (!_creepBombs.size())
         return;
 
     if (Configs::_isGameRunning)
-        this->_creepBombs.remove(enemy);
+        _creepBombs.remove(enemy);
     else
-        this->_creepBombs.clear();
+        _creepBombs.clear();
 }
 
 void CreepBombLauncher::runCreepBombLauncher()
 {
-    this->loadSprites();
     while (Configs::_isGameRunning)
     {
-        if (this->_window == nullptr || this->_CollisionHandler == nullptr)
+        // While undefinied references, wait
+        if (_window == nullptr || _collisionHandler == nullptr)
         {
             Thread::yield();
             continue;
         }
-
-        this->processLoop();
+        processLoop();
         Thread::yield();
     }
 }
 
 void CreepBombLauncher::processLoop()
 {
-    if (this->_creepBombsSpawnTimer->getCount() > this->_DELAY_BOMBS_SPAWN)
-        this->createCreepBomb();
-    this->handleCreepBombs();
+    if (_creepBombsSpawnTimer->getCount() > _DELAY_BOMBS_SPAWN) {
+        createCreepBomb();
+        _creepBombsSpawnTimer->srsTimer();
+    }
+    handleCreepBombs();
 }
 
 void CreepBombLauncher::handleCreepBombs()
 {
-    for (auto creepBombItem = this->_creepBombs.begin(); creepBombItem != this->_creepBombs.end();)
+    for (auto creepBombItem = _creepBombs.begin(); creepBombItem != _creepBombs.end();)
     {
         CreepBomb *creepBomb = *creepBombItem;
         creepBombItem++;
 
-        // Caso a mina já tenha sido destruída mas não foi removida ainda
+        // if dead or destroyed
         if (creepBomb->getDead() || creepBomb->isOutOfBounds())
             continue;
 
-        // Caso a mina já esteja pronta para atacar
         if (creepBomb->getFire())
         {
-            // Executa o ataque
             creepBomb->attack();
             for (int i = -500; i <= 500; i += 325)
             {
                 for (int j = -500; j <= 500; j += 325)
                 {
                     // Cria o tiro a adiciona nas listas
-                    Laser *laser = new Laser(creepBomb->getPosition(), this->_color, Vector(i, j), false);
-                    this->_CollisionHandler->newEnemyShot(laser);
-                    this->_window->addProjectile(laser);
+                    Laser *laser = new Laser(creepBomb->getPosition(), _color, Vector(i, j), false);
+                    _collisionHandler->newEnemyShot(laser);
+                    _window->addProjectile(laser);
                 }
             }
         }
@@ -92,21 +86,14 @@ void CreepBombLauncher::handleCreepBombs()
 
 void CreepBombLauncher::createCreepBomb()
 {
-    // Gera um ponto aleatório em y para a bomba aparecer
-    Point point = Point(0, 0);
-    point.rollRandom();
-    point.x = Configs::_widthDisplay;
+    Point point = Point(800, 0);
+    point.rollRandomY();
 
-    // Cria uma mina
-    CreepBomb *creepBomb = new CreepBomb(point, Vector(-100, 0), this->_creepBombsSprite, this->_creepBombsExplosionSprite, this);
+    CreepBomb * creepBomb = new CreepBomb(point, Vector(-50, 0), _creepBombsSprite, _creepBombsExplosionSprite, this);
 
-    // Adiciona referência dela nas listas
-    this->_creepBombs.push_back(creepBomb);
-    this->_CollisionHandler->newEnemyShip(creepBomb);
-    this->_window->addEnemy(creepBomb);
-
-    // Reset o timer
-    this->_creepBombsSpawnTimer->srsTimer();
+    _creepBombs.push_back(creepBomb);
+    _collisionHandler->newEnemyShip(creepBomb);
+    _window->addEnemy(creepBomb);
 }
 
 void CreepBombLauncher::loadSprites()
@@ -116,9 +103,17 @@ void CreepBombLauncher::loadSprites()
     al_append_path_component(path, "resources");
     al_change_directory(al_path_cstr(path, '/'));
 
-    this->_creepBombsSprite = std::make_shared<Sprite>("spikebomb.png");
-    this->_creepBombsExplosionSprite = std::make_shared<Sprite>("explode.png");
+    _creepBombsSprite = std::make_shared<Sprite>("spikebomb.png");
+    _creepBombsExplosionSprite = std::make_shared<Sprite>("explode.png");
     al_destroy_path(path);
+}
+
+void CreepBombLauncher::setWindowReference(Window *window) { 
+    _window = window; 
+}
+
+void CreepBombLauncher::setCollisionHandlerReference(CollisionHandler *collision) {
+    _collisionHandler = collision; 
 }
 
 __END_API

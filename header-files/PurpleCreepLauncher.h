@@ -20,29 +20,30 @@ class PurpleCreepLauncher : public Launcher
 {
 public:
     PurpleCreepLauncher();
-    ~PurpleCreepLauncher();
-
-    void attachWindow(Window * window);
-    void attachCollision(CollisionHandler * collisionHandler);
-    void removeCreep(Creep * creep);
+    ~PurpleCreepLauncher() {};
 
     void runLauncher();
+    void removeCreep(Creep * creep);
 
+    /* Set references to the window and collisionHandler */
+    void attachWindow(Window * window);
+    void attachCollision(CollisionHandler * collisionHandler);
 private:
-    int NEW_GROUP_DELAY;
+    static int _NEW_GROUP_DELAY;
 
     void loadSprites();
     void createCreepGroup();
     void createCreepBehavior();
 
-    /* Reference to game state and obj*/
+    /* Reference to thee window and collisionHandler */
     Window *_window;
     CollisionHandler *_collisionHandler;
 
-    std::list<Creep *> creeps;
+    /* Stores the purple creeps */
+    std::list<Creep *> _creeps;
 
-    std::shared_ptr<Timer> newGroupTimer;
-    std::shared_ptr<Sprite> purpleCreepSprite;
+    std::shared_ptr<Timer> _newGroupTimer;
+    std::shared_ptr<Sprite> _purpleCreepSprite;
 };
 
 __END_API
