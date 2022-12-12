@@ -16,7 +16,7 @@ __BEGIN_API
 
 class Creep : public Enemy {
  public:
-  Creep(Point point, Vector vector, std::shared_ptr<Sprite> creepSprite, ALLEGRO_COLOR color, Launcher * launcher, Point stop1 = Point(0,0), Point stop2 = Point(0,0), Point stop3 = Point(0,0), Point stop4 = Point(0,0));
+  Creep(Point point, Vector vector, std::shared_ptr<Sprite> creepSprite, ALLEGRO_COLOR color, Launcher * launcher);
   ~Creep();
 
   void draw();
@@ -24,6 +24,15 @@ class Creep : public Enemy {
   void attack();
 
   bool init = false;
+  bool at1 = false;
+  bool at2 =false;
+  bool at3 = false;
+  bool at4 = false;
+
+  Point stop1 = Point(0,0);
+  Point stop2 = Point(0,0);
+  Point stop3 = Point(0,0);
+  Point stop4 = Point(0,0);
 
   /* Getters */
   ALLEGRO_COLOR getColor();
@@ -33,6 +42,8 @@ class Creep : public Enemy {
 
   double getAngle() {return _angle; };
   Vector getProjSpeed() {return _projSpeed; };
+
+  void setSpeed(Vector speed) {_speed = speed; }
   void setAngle(double angle) {_angle = angle; };
   void setProjSpeed(Vector vector) {_projSpeed = vector; };
   void setStop1(Point point) { _stop1 = point; }

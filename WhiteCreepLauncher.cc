@@ -39,6 +39,9 @@ void WhiteCreepLauncher::createCreepBehavior() {
 	Creep *ship = *shipItem;
 	shipItem++;
 
+  updateAngle(ship);
+  updateVector(ship);
+
 	if (ship->getFire()) {
 	  // Chama o método attack do ship mas essa função aqui que vai lidar com a criação dos vetores
 	  ship->attack();
@@ -66,22 +69,33 @@ void WhiteCreepLauncher::createCreepGroup() {
     Point shipPosition = _window->_ship->getPosition();
 
 
-    Point pt = Point(800, 200);
-    Point point1 = Point(800, 500);
-    Point point2 = Point(800, 580);
-    Point point3 = Point(850, 300);
-    Vector vector1 = Vector(0, 0);
+    // Point pt = Point(800, 200);
+    // Point point1 = Point(800, 500);
+    // Point point2 = Point(800, 580);
+    // Point point3 = Point(850, 300);
+    // Vector vector1 = Vector(0, 0);
 
+    for(int i = 800; i <= 1000; i += 50) {
+	    Creep * creep = new Creep(Point(i,300), Vector(-90, 0), purpleCreepSprite, al_map_rgb(255,254,253), this);
+      creep->stop1 = Point(700,100);
+      creep->stop2 = Point(100,100);
+      creep->stop3 = Point(100,500);
+      creep->stop4 = Point(700,500);
+      _collisionHandler->newEnemyShip(creep);
+      _window->addEnemy(creep);
+      creeps.push_front(creep);
 
-    pt.rollRandom();
-    vector1.rollRandom();
-    Creep * creep1 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
-    pt.rollRandom();
-    vector1.rollRandom();
-    Creep * creep2 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
-    pt.rollRandom();
-    vector1.rollRandom();
-    Creep * creep3 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+	 }
+
+    // pt.rollRandom();
+    // vector1.rollRandom();
+    // Creep * creep1 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+    // pt.rollRandom();
+    // vector1.rollRandom();
+    // Creep * creep2 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+    // pt.rollRandom();
+    // vector1.rollRandom();
+    // Creep * creep3 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
 
 //     vector1.Angle(shipPosition, point1, 1);
 
@@ -93,18 +107,18 @@ void WhiteCreepLauncher::createCreepGroup() {
 
 
   // Manda para o objeto collision
-  _collisionHandler->newEnemyShip(creep1);
-  _collisionHandler->newEnemyShip(creep2);
-  _collisionHandler->newEnemyShip(creep3);
+  // _collisionHandler->newEnemyShip(creep1);
+  // _collisionHandler->newEnemyShip(creep2);
+  // _collisionHandler->newEnemyShip(creep3);
 
-  // Manda para o objeto window
-  this->_window->addEnemy(creep1);
-  this->_window->addEnemy(creep2);
-  this->_window->addEnemy(creep3);
+  // // Manda para o objeto window
+  // this->_window->addEnemy(creep1);
+  // this->_window->addEnemy(creep2);
+  // this->_window->addEnemy(creep3);
 
-  creeps.push_front(creep1);
-  creeps.push_front(creep2);
-  creeps.push_front(creep3);
+  // creeps.push_front(creep1);
+  // creeps.push_front(creep2);
+  // creeps.push_front(creep3);
 
   // Reset o timer
   newGroupTimer->srsTimer();
@@ -154,37 +168,45 @@ void WhiteCreepLauncher::updateVector(Creep * creep)
    {
       Vector vector2 = creep->getVector();
       vector2.flip();
-
+      creep->setSpeed(vector2);
       creep->init=true;
    }
 
    
-   if((centre.y<stop1.y)&& !at1)//top right corner
+   if((centre.y<stop1.y)&& !creep->at1)//top right corner
    {
       std::cout<<"1 is true";
-      speed.flip();
-      at1=true;
+      Vector vector2 = creep->getVector();
+      vector2.flip();
+      creep->setSpeed(vector2);
+      creep->at1=true;
    }
-   if((centre.x<stop2.x) && !at2)//top left corner
+   if((centre.x<stop2.x) && !creep->at2)//top left corner
    {
       std::cout<<"2 is true";
-      speed.flip();
-      speed.reflectY();
-      at2=true;
+      Vector vector2 = creep->getVector();
+      vector2.flip();
+      vector2.reflectY();
+      creep->setSpeed(vector2);
+      creep->at2=true;
    }
-   if((centre.y > stop3.y) && !at3)//bottom left
+   if((centre.y > stop3.y) && !creep->at3)//bottom left
    {
       std::cout<<"3 is true";
       // speed.reflectY();
-      speed.flip();
-      at3=true;
+      Vector vector2 = creep->getVector();
+      vector2.flip();
+      creep->setSpeed(vector2);
+      creep->at3=true;
    }
-   if((centre.x>stop4.x) && at1 && at2 && at3)//bottom right
+   if((centre.x>stop4.x) && creep->at1 && creep->at2 && creep->at3)//bottom right
    {
       std::cout<<"4 is true";
-      speed.flip();
-      speed.reflectY();
-      at1=at2=at3=at4=false;
+      Vector vector2 = creep->getVector();
+      vector2.flip();
+      vector2.reflectY();
+      creep->setSpeed(vector2);
+      creep->at1=creep->at2=creep->at3=creep->at4=false;
    }
 }
 
