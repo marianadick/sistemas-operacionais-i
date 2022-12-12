@@ -105,7 +105,7 @@ void MinesLauncher::createMine()
 
     // Adiciona referência dela nas listas
     _mines.push_back(mine);
-    _collision->newMine(mine);
+    _collision->newEnemyShip(mine);
     _window->addEnemy(mine);
 
     // Reset o timer
