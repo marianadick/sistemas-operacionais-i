@@ -65,17 +65,31 @@ void WhiteCreepLauncher::createCreepBehavior() {
 void WhiteCreepLauncher::createCreepGroup() {
     Point shipPosition = _window->_ship->getPosition();
 
+
+    Point pt = Point(800, 200);
     Point point1 = Point(800, 500);
     Point point2 = Point(800, 580);
     Point point3 = Point(850, 300);
     Vector vector1 = Vector(0, 0);
-    vector1.Angle(shipPosition, point1, 1);
 
-  Creep * creep1 = new Creep(point1, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
-  vector1.Angle(shipPosition, point2, 1);
-  Creep * creep2 = new Creep(point2, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
-  vector1.Angle(shipPosition, point3, 1);
-  Creep * creep3 = new Creep(point3, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+
+    pt.rollRandom();
+    vector1.rollRandom();
+    Creep * creep1 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+    pt.rollRandom();
+    vector1.rollRandom();
+    Creep * creep2 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+    pt.rollRandom();
+    vector1.rollRandom();
+    Creep * creep3 = new Creep(pt, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+
+//     vector1.Angle(shipPosition, point1, 1);
+
+//   Creep * creep1 = new Creep(point1, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+//   vector1.Angle(shipPosition, point2, 1);
+//   Creep * creep2 = new Creep(point2, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
+//   vector1.Angle(shipPosition, point3, 1);
+//   Creep * creep3 = new Creep(point3, vector1, purpleCreepSprite, al_map_rgb(255, 255, 255), this);
 
 
   // Manda para o objeto collision
@@ -103,6 +117,75 @@ void WhiteCreepLauncher::loadSprites() {
   al_change_directory(al_path_cstr(path, '/'));
   purpleCreepSprite = std::make_shared<Sprite>("EnemyBasic.png");
   al_destroy_path(path);
+}
+
+void WhiteCreepLauncher::updateAngle(Creep * creep)
+{
+   Point centre = creep->getPosition();
+   Point delta;
+   if(centre.x>400)
+   {
+      delta.x=centre.x-400;
+      delta.y=centre.y-300;
+     
+      creep->setAngle(atan(delta.y/delta.x));
+   }
+   else
+   {
+      delta.x=centre.x-400;
+      delta.y=centre.y-300;
+      creep->setAngle((delta.y/delta.x)+3.14);
+   }
+
+   Vector vector1 = creep->getProjSpeed();
+   vector1.Angle(Point(400,300), centre, 0.5);
+    creep->setProjSpeed(vector1);
+}
+
+void WhiteCreepLauncher::updateVector(Creep * creep)
+{
+   Point centre = creep->getPosition();
+   Point stop1 = creep->getStop1();
+   Point stop2 = creep->getStop2();
+   Point stop3 = creep->getStop3();
+   Point stop4 = creep->getStop4();
+
+   if ((centre.x < stop1.x && centre.y > stop1.y && !(creep->init)))//initial 
+   {
+      Vector vector2 = creep->getVector();
+      vector2.flip();
+
+      creep->init=true;
+   }
+
+   
+   if((centre.y<stop1.y)&& !at1)//top right corner
+   {
+      std::cout<<"1 is true";
+      speed.flip();
+      at1=true;
+   }
+   if((centre.x<stop2.x) && !at2)//top left corner
+   {
+      std::cout<<"2 is true";
+      speed.flip();
+      speed.reflectY();
+      at2=true;
+   }
+   if((centre.y > stop3.y) && !at3)//bottom left
+   {
+      std::cout<<"3 is true";
+      // speed.reflectY();
+      speed.flip();
+      at3=true;
+   }
+   if((centre.x>stop4.x) && at1 && at2 && at3)//bottom right
+   {
+      std::cout<<"4 is true";
+      speed.flip();
+      speed.reflectY();
+      at1=at2=at3=at4=false;
+   }
 }
 
 __END_API

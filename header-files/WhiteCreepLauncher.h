@@ -34,6 +34,8 @@ private:
     void loadSprites();
     void createCreepGroup();
     void createCreepBehavior();
+    void updateAngle(Creep * creep);
+    void updateVector(Creep * creep);
 
     /* Reference to game state and obj*/
     Window *_window;
