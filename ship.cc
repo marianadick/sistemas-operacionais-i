@@ -29,7 +29,7 @@ Ship::~Ship() {
 
 void Ship::runShip() {
   while (Configs::_isGameRunning) {
-	if (_window == nullptr || _collision == nullptr)
+	if (_window == nullptr || _collisionHandler == nullptr)
 	  Thread::yield();
 
 	getInputKb();
@@ -113,7 +113,7 @@ void Ship::shootLaser() {
     Laser * laser = new Laser(_position, SHIP_COLOR, Vector(500, 0), true);
     laserDelayTimer->srsTimer();
     _window->addProjectile(laser);
-    _collision->newPlayerShot(laser);
+    _collisionHandler->newPlayerShot(laser);
   };
 }
 
@@ -122,7 +122,7 @@ void Ship::shootMissile() {
 	Missile * missile = new Missile(_position, SHIP_COLOR, Vector(500, 0), true);
 	laserDelayTimer->srsTimer();
 	_window->addProjectile(missile);
-	_collision->newPlayerShot(missile);
+	_collisionHandler->newPlayerShot(missile);
   };
 }
 
@@ -140,8 +140,8 @@ void Ship::attachWindow(Window *window) {
   _window = window;
 }
 
-void Ship::attachCollision(CollisionHandler *collision) {
-  _collision = collision;
+void Ship::attachCollision(CollisionHandler * collisionHandler) {
+  _collisionHandler = collisionHandler;
 }
 
 void Ship::hit(int damage) {

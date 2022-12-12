@@ -38,8 +38,8 @@ class Ship : public Drawable {
   void draw();
   void update(double dt);
 
-  void attachWindow(Window *window);
-  void attachCollision(CollisionHandler *colision);
+  void attachWindow(Window * window);
+  void attachCollision(CollisionHandler * collisionHandler);
 
  protected:
  private:
@@ -71,7 +71,7 @@ class Ship : public Drawable {
   /* Reference to game state and obj*/
   Input *_kb;
   Window *_window;
-  CollisionHandler *_collision;
+  CollisionHandler *_collisionHandler;
 
   std::shared_ptr<Timer> laserDelayTimer;
   std::shared_ptr<Timer> missileDelayTimer;
