@@ -2,12 +2,14 @@
 #define LASER_H
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+
+#include "configs.h"
+#include "Projectile.h"
 
 #include "traits.h"
 #include "Point.h"
 #include "Vector.h"
-#include "Projectile.h"
-#include "configs.h"
 
 __BEGIN_API
 
@@ -17,16 +19,16 @@ public:
     Laser(Point point, ALLEGRO_COLOR color, Vector vector, bool isPlayerShot);
     ~Laser();
 
+    void draw();
+    void update(double dt);
+
+    int getSize();
     int getDamage();
-    void ackHitSomething();
     bool wasDestroyed();
 
-    void draw();
-    void update(double diffTime);
-    int getSize();
-
+    void ackHitSomething();
 private:
-    int hitUntilDestroyed;
+    bool _destroyed;
 };
 
 __END_API

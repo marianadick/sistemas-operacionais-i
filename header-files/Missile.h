@@ -2,15 +2,17 @@
 #define MISSILE_H
 
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include <memory>
 #include <vector>
+
+#include "configs.h"
+#include "Projectile.h"
 
 #include "traits.h"
 #include "Point.h"
 #include "Vector.h"
 #include "Sprite.h"
-#include "Projectile.h"
-#include "configs.h"
 
 __BEGIN_API
 
@@ -19,22 +21,21 @@ class Missile : public Projectile {
   Missile(Point point, ALLEGRO_COLOR color, Vector vector, bool isPlayerShot);
   ~Missile();
 
-  int getDamage();
-  void ackHitSomething();
-  bool wasDestroyed();
-
   void draw();
   void update(double dt);
+
+  int getDamage();
+  bool wasDestroyed();
   int getSize();
 
+  void ackHitSomething() {}; // virtual method
  private:
   double angle;
 
   // Sprites
   void loadSprites();
-  int currentSpriteIndex = 0;
-  std::vector<std::shared_ptr<Sprite>> sprites;
-  static int SPRITES_VECTOR_MAX_INDEX;
+  int idx = 0;
+  std::vector<std::shared_ptr<Sprite>> sprite;
   static int DAMAGE;
 };
 

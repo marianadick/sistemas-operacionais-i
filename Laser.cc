@@ -1,40 +1,40 @@
-#include <allegro5/allegro_primitives.h>
 #include "header-files/Laser.h"
 
 __BEGIN_API
 
 Laser::Laser(Point point, ALLEGRO_COLOR color, Vector speed, bool isPlayerShot) : Projectile(point, color, speed, isPlayerShot)
 {
-    hitUntilDestroyed = 1;
+    _point = _point + speed * 0.1;
+    _destroyed = false;
 }
 
 Laser::~Laser() {}
 
 void Laser::draw()
 {
-    Point otherPoint = _point + _speed * (0.05);
-    al_draw_line(_point.x, _point.y, otherPoint.x, otherPoint.y, _color, 3);
+    Point nextPos = _point + _speed * (0.05);
+    al_draw_line(_point.x, _point.y, nextPos.x, nextPos.y, _color, 3);
 }
 
-void Laser::update(double diffTime)
+void Laser::update(double dt)
 {
-    _point = _point + _speed * diffTime;
+    _point = _point + _speed * dt;
 }
 
 int Laser::getSize() { 
-    return 3; 
-}
-
-void Laser::ackHitSomething() {
-     hitUntilDestroyed -= 1; 
+    return 4; 
 }
 
 bool Laser::wasDestroyed() {
-     return hitUntilDestroyed == 0; 
+     return _destroyed; 
 }
 
 int Laser::getDamage() {
      return 1; 
+}
+
+void Laser::ackHitSomething() {
+     _destroyed = true; 
 }
 
 __END_API

@@ -5,7 +5,7 @@ __BEGIN_API
 int Ship::SHIP_SPEED = 250;
 int Ship::SHIP_SIZE = 16;
 int Ship::LASER_DELAY = 6;
-int Ship::MISSILE_DELAY = 20;
+int Ship::MISSILE_DELAY = 40;
 
 ALLEGRO_COLOR Ship::SHIP_COLOR = al_map_rgb(0, 200, 0);
 
@@ -146,7 +146,11 @@ void Ship::attachCollision(CollisionHandler *collision) {
 
 void Ship::hit(int damage) {
   _health -= 1;
-  if (_health < 1) {
+  if (_life < 2) {
+    _dead = true;
+    Configs::_isGameRunning = false;
+  }
+  else if (_health < 1) {
       _health = 3;
       _life -= 1;
       drawHealthBar();
