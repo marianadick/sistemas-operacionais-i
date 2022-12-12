@@ -121,8 +121,8 @@ void Ship::shootMissile() {
   if (laserDelayTimer->getCount() > MISSILE_DELAY) {
 	Missile * missile = new Missile(_position, SHIP_COLOR, Vector(500, 0), true);
 	laserDelayTimer->srsTimer();
+  _collision->newPlayerShot(missile);
 	_window->addProjectile(missile);
-	_collision->newPlayerShot(missile);
   };
 }
 
