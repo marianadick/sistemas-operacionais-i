@@ -12,38 +12,39 @@
 #include "MinesLauncher.h"
 
 __BEGIN_API
-class MinesLauncher;
+class MinesControl; // Forward declaration, avoid compilation error
 
 class Mine : public Enemy
 {
 public:
-    Mine(Point p, Vector v, std::shared_ptr<Sprite> sprite, MinesLauncher *launcher);
+    Mine(Point point, Vector vector, std::shared_ptr<Sprite> mineSprite, std::shared_ptr<Sprite> deathSprite, MinesControl *control);
     ~Mine();
 
-    bool canFire();
+    bool getFire();
     void draw();
     void attack();
-    void update(double dt);
-    bool isOutside();
+    void update(double diffTime);
+    bool isOutOfBounds();
     void hit(int damage);
-    ALLEGRO_COLOR getColor() { return _color; }
+    ALLEGRO_COLOR getColor() { return this->color; }
     int getSize();
 
-    bool isOutOfBounds() {return false;}
-    bool getFire() {return false;}
-
 private:
-    std::shared_ptr<Timer> _explodeTimer;
-    static int _MINE_EXPLOSION_DELAY;
-    static int _MINE_LIFE;
-    bool _wasExploded;
+    // Logic
+    std::shared_ptr<Timer> explodeTimer;
+    static int MINE_EXPLOSION_DELAY;
+    static int MINE_LIFE;
+    bool wasExploded;
 
-    std::shared_ptr<Sprite> _sprite;
-    ALLEGRO_COLOR _color;
-    int _row;
-    int _col;
+    MinesControl *_control;
 
-    MinesLauncher *_launcher;
+    // Sprites
+    std::shared_ptr<Sprite> _mineSprite;
+    std::shared_ptr<Sprite> _deathSprite;
+    ALLEGRO_COLOR color;
+    int deathSpriteTimer;
+    int row;
+    int col;
 };
 
 __END_API

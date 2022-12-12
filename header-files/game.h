@@ -31,7 +31,7 @@ public:
         _collisionThread = new Thread(collisionRun);
         _enemyGroupPurpleThread = new Thread(enemyGroupPurpleRun);
         _enemyGroupWhiteThread = new Thread(enemyGroupWhiteRun);
-        _minesLauncherThread = new Thread(minesRun);
+        _MinesControlThread = new Thread(minesRun);
         
         _kbThread->join();
         _shipThread->join();
@@ -39,7 +39,7 @@ public:
         _collisionThread->join();
         _enemyGroupPurpleThread->join();
         _enemyGroupWhiteThread->join();
-        _minesLauncherThread->join();
+        _MinesControlThread->join();
 
         delete _shipThread;
         delete _windowThread;
@@ -47,7 +47,7 @@ public:
         delete _collisionThread;
         delete _enemyGroupPurpleThread;
         delete _enemyGroupWhiteThread;
-        delete _minesLauncherThread;
+        delete _MinesControlThread;
 
         db<System>(TRC) << ">> Game is ending...\n";
     };
@@ -59,7 +59,7 @@ private:
     static Thread * _enemyGroupPurpleThread;
     static Thread * _enemyGroupWhiteThread;
     static Thread * _collisionThread;
-    static Thread * _minesLauncherThread;
+    static Thread * _MinesControlThread;
 
     static Window * _window;
     static Ship * _ship;
@@ -67,7 +67,7 @@ private:
     static CollisionHandler * _collision;
     static PurpleCreepLauncher * _enemyGroupPurple;
     static WhiteCreepLauncher * _enemyGroupWhite;
-    static MinesLauncher * _minesLauncher;
+    static MinesControl * _MinesControl;
 
     /* WINDOW */
     static void windowRun() {
@@ -130,12 +130,12 @@ private:
     };
 
     static void minesRun() {
-        _minesLauncher = new MinesLauncher();
-        _minesLauncher->setCollisionReference(_collision);
-        _minesLauncher->setWindowReference(_window);
-        _minesLauncher->runMineLauncher();
-        delete _minesLauncher;
-        //_minesLauncherThread->thread_exit(8);
+        _MinesControl = new MinesControl();
+        _MinesControl->setCollisionHandlerReference(_collision);
+        _MinesControl->setWindowReference(_window);
+        _MinesControl->run();
+        delete _MinesControl;
+        //_MinesControlThread->thread_exit(8);
     }
 };
 

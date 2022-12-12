@@ -1,81 +1,74 @@
-
 #include "header-files/MinesLauncher.h"
 
 __BEGIN_API
+// 30 segundos
+int MinesControl::DELAY_MINE_SPAWN = Configs::_fps * 3;
 
-int MinesLauncher::_DELAY_MINE_SPAWN = Configs::_fps * 3;
-
-MinesLauncher::MinesLauncher()
+MinesControl::MinesControl()
 {
-    loadSprites();
-    _color = al_map_rgb(255, 0, 0);
-    _minesSpawnTimer = std::make_shared<Timer>(Configs::_fps);
-    _minesSpawnTimer->create();
-    _minesSpawnTimer->startTimer();
+    this->loadSprites();
+    this->_color = al_map_rgb(255, 0, 0);
+    this->minesSpawnTimer = std::make_shared<Timer>(Configs::_fps);
+    this->minesSpawnTimer->create();
+    this->minesSpawnTimer->startTimer();
 }
 
-MinesLauncher::~MinesLauncher()
+MinesControl::~MinesControl()
 {
-    _minesSpawnTimer.reset();
-    _mineSprite.reset();
-    _mineExplosionSprite.reset();
+    this->minesSpawnTimer.reset();
+    this->mineSprite.reset();
+    this->mineExplosionSprite.reset();
 }
 
-void MinesLauncher::setWindowReference(Window *window) {
-    _window = window; 
-}
-
-void MinesLauncher::setCollisionReference(CollisionHandler *collision) {
-    _collision = collision; 
-}
-
-void MinesLauncher::removeMine(Mine *enemy)
+void MinesControl::setWindowReference(Window *window) { this->_window = window; }
+void MinesControl::setCollisionHandlerReference(CollisionHandler *collision) { this->_CollisionHandler = collision; }
+void MinesControl::removeMine(Mine *enemy)
 {
-    if (_mines.size() == 0)
+    if (this->mines.size() == 0)
         return;
 
     if (Configs::_isGameRunning)
-        _mines.remove(enemy);
+        this->mines.remove(enemy);
     else
-        _mines.clear();
+        this->mines.clear();
 }
 
-void MinesLauncher::runMineLauncher()
+void MinesControl::run()
 {
-    loadSprites();
+    this->loadSprites();
     while (Configs::_isGameRunning)
     {
-        if (_window == nullptr || _collision == nullptr)
+        if (this->_window == nullptr || this->_CollisionHandler == nullptr)
         {
             Thread::yield();
             continue;
         }
 
-        processLoop();
+        this->processLoop();
         Thread::yield();
     }
 }
 
-void MinesLauncher::processLoop()
+void MinesControl::processLoop()
 {
-    if (_minesSpawnTimer->getCount() > _DELAY_MINE_SPAWN)
-        createMine();
-    handleMines();
+    if (this->minesSpawnTimer->getCount() > this->DELAY_MINE_SPAWN)
+        this->createMine();
+    this->handleMines();
 }
 
-void MinesLauncher::handleMines()
+void MinesControl::handleMines()
 {
-    for (auto mineItem = _mines.begin(); mineItem != _mines.end();)
+    for (auto mineItem = this->mines.begin(); mineItem != this->mines.end();)
     {
         Mine *mine = *mineItem;
         mineItem++;
 
         // Caso a mina já tenha sido destruída mas não foi removida ainda
-        if (mine->getDead() || mine->isOutside())
+        if (mine->getDead() || mine->isOutOfBounds())
             continue;
 
         // Caso a mina já esteja pronta para atacar
-        if (mine->canFire())
+        if (mine->getFire())
         {
             // Executa o ataque
             mine->attack();
@@ -84,16 +77,16 @@ void MinesLauncher::handleMines()
                 for (int j = -500; j <= 500; j += 325)
                 {
                     // Cria o tiro a adiciona nas listas
-                    Laser *laser = new Laser(mine->Enemy::getPosition(), _color, Vector(i, j), false);
-                    _collision->newEnemyShot(laser);
-                    _window->addProjectile(laser);
+                    Laser *laser = new Laser(mine->getPosition(), this->_color, Vector(i, j), false);
+                    this->_CollisionHandler->newEnemyShot(laser);
+                    this->_window->addProjectile(laser);
                 }
             }
         }
     }
 }
 
-void MinesLauncher::createMine()
+void MinesControl::createMine()
 {
     // Gera um ponto aleatório em y para a bomba aparecer
     Point point = Point(0, 0);
@@ -101,26 +94,26 @@ void MinesLauncher::createMine()
     point.x = Configs::_widthDisplay;
 
     // Cria uma mina
-    Mine *mine = new Mine(point, Vector(-100, 0), _mineSprite, this);
+    Mine *mine = new Mine(point, Vector(-100, 0), this->mineSprite, this->mineExplosionSprite, this);
 
     // Adiciona referência dela nas listas
-    _mines.push_back(mine);
-    _collision->newEnemyShip(mine);
-    _window->addEnemy(mine);
+    this->mines.push_back(mine);
+    this->_CollisionHandler->newEnemyShip(mine);
+    this->_window->addEnemy(mine);
 
     // Reset o timer
-    _minesSpawnTimer->srsTimer();
+    this->minesSpawnTimer->srsTimer();
 }
 
-void MinesLauncher::loadSprites()
+void MinesControl::loadSprites()
 {
     // Go to resources directory
     ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
     al_append_path_component(path, "resources");
     al_change_directory(al_path_cstr(path, '/'));
 
-    _mineSprite = std::make_shared<Sprite>("spikebomb.png");
-    _mineExplosionSprite = std::make_shared<Sprite>("explode.png");
+    this->mineSprite = std::make_shared<Sprite>("spikebomb.png");
+    this->mineExplosionSprite = std::make_shared<Sprite>("explode.png");
     al_destroy_path(path);
 }
 

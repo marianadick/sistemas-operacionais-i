@@ -1,81 +1,87 @@
 #include "header-files/Mines.h"
 
 __BEGIN_API
+// 5 seg
+int Mine::MINE_EXPLOSION_DELAY = Configs::_fps * 5;
+int Mine::MINE_LIFE = 5;
 
-int Mine::_MINE_EXPLOSION_DELAY = Configs::_fps * 5;
-int Mine::_MINE_LIFE = 3;
-
-Mine::Mine(Point p, Vector v, std::shared_ptr<Sprite> sprite, MinesLauncher *launcher) : Enemy(p, v, Mine::_MINE_LIFE)
+Mine::Mine(Point point, Vector vector, std::shared_ptr<Sprite> mineSprite, std::shared_ptr<Sprite> deathSprite, MinesControl *control) : Enemy(point, vector, Mine::MINE_LIFE)
 {
-    _sprite = sprite;
-    _launcher = launcher;
-    _color = al_map_rgb(150, 0, 150);
-    _wasExploded = false;
+    this->_mineSprite = mineSprite;
+    this->_deathSprite = deathSprite;
+    this->_control = control;
+    this->color = al_map_rgb(150, 0, 150);
+    this->deathSpriteTimer = 5;
+    this->wasExploded = false;
 
-    _row = 0;
-    _col = 0;
+    this->row = 0;
+    this->col = 0;
 
-    _explodeTimer = std::make_shared<Timer>(Configs::_fps);
-    _explodeTimer->create();
-    _explodeTimer->startTimer();
+    this->explodeTimer = std::make_shared<Timer>(Configs::_fps);
+    this->explodeTimer->create();
+    this->explodeTimer->startTimer();
 }
 
 void Mine::hit(int damage)
 {
-    _life -= damage;
-    if (_col < 2)
-        _col++;
+    this->_life -= damage;
+    if (this->col < 2)
+        this->col++;
 }
 
 Mine::~Mine()
 {
-    if (_launcher != nullptr && Configs::_isGameRunning == false)
-        _launcher->removeMine(this);
+    if (this->_control != nullptr && Configs::_isGameRunning)
+        this->_control->removeMine(this);
     
-    _explodeTimer.reset();
-    _sprite.reset();
+    this->explodeTimer.reset();
+    this->_mineSprite.reset();
+    this->_deathSprite.reset();
 }
 
 void Mine::draw()
 {
-    if (_life <= 0)
-        _dead = true;
+    if (this->_life <= 0)
+    {
+        this->deathSpriteTimer -= 1;
+        this->_deathSprite->draw_death_anim(this->deathSpriteTimer, this->_point, 0);
+        if (this->deathSpriteTimer <= 0)
+            _dead = true;
+    }
     else
-        _sprite->draw_region(_row, _col, 40, 41, Enemy::_point, 0);
+    {
+        this->_mineSprite->draw_region(this->row, this->col, 40, 41, this->_point, 0);
+    }
 }
 
-bool Mine::canFire()
+bool Mine::getFire()
 {
-    if (_explodeTimer->getCount() > Mine::_MINE_EXPLOSION_DELAY)
-        return true;
-    else
-        return false;
+    return this->explodeTimer->getCount() > Mine::MINE_EXPLOSION_DELAY;
 }
 
 void Mine::attack()
 {
-    _wasExploded = true;
+    this->wasExploded = true;
 }
 
 void Mine::update(double diffTime)
 {
     if (_dead)
+    {
         return;
+    }
 
-    Enemy::_point = Enemy::_point + Enemy::_speed * diffTime;
+    this->_point = this->_point + this->_speed * diffTime;
 
-    if (Enemy::_point.x < 670 && _row == 0)
-        _row++;
-    if (Enemy::_point.x < 540 && _row == 1)
-        _row++;
+    if (this->_point.x < 670 && this->row == 0)
+        this->row++;
+
+    if (this->_point.x < 540 && this->row == 1)
+        this->row++;
 }
 
-int Mine::getSize() { 
-    return 20; 
-}
+int Mine::getSize() { return 20; }
 
-bool Mine::isOutside() {
-    return _wasExploded; 
-}
+bool Mine::isOutOfBounds() { return this->wasExploded; }
 
 __END_API

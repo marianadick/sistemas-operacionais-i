@@ -1,5 +1,5 @@
-#ifndef Mines_Launcher_h
-#define Mines_Launcher_h
+#ifndef MINES_CONTROL_H
+#define MINES_CONTROL_H
 
 #include <list>
 #include <memory>
@@ -13,20 +13,20 @@
 #include "Mines.h"
 
 __BEGIN_API
-class Mine;
+class Mine; // Forward declaration, avoid compilation error
 class Window;
 class CollisionHandler;
 
-class MinesLauncher
+class MinesControl
 {
 public:
-    MinesLauncher();
-    ~MinesLauncher();
+    MinesControl();
+    ~MinesControl();
     void setWindowReference(Window *window);
-    void setCollisionReference(CollisionHandler *collision);
+    void setCollisionHandlerReference(CollisionHandler *CollisionHandler);
     void removeMine(Mine *enemy);
 
-    void runMineLauncher();
+    void run();
 
 private:
     void loadSprites();
@@ -34,15 +34,17 @@ private:
     void processLoop();
     void handleMines();
 
+    // Referências de Window e CollisionHandler para passar para as Ships
     Window *_window;
-    CollisionHandler *_collision;
+    CollisionHandler *_CollisionHandler;
 
-    static int _DELAY_MINE_SPAWN;
+    static int DELAY_MINE_SPAWN;
 
-    std::list<Mine *> _mines;
-    std::shared_ptr<Timer> _minesSpawnTimer;
-    std::shared_ptr<Sprite> _mineSprite;
-    std::shared_ptr<Sprite> _mineExplosionSprite;
+    // Sprites
+    std::list<Mine *> mines;
+    std::shared_ptr<Timer> minesSpawnTimer;
+    std::shared_ptr<Sprite> mineSprite;
+    std::shared_ptr<Sprite> mineExplosionSprite;
     ALLEGRO_COLOR _color;
 };
 
