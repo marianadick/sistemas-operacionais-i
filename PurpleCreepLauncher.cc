@@ -2,8 +2,6 @@
 
 __BEGIN_API
 
-std::shared_ptr<Sprite> purpleShipSprite;
-
 PurpleCreepLauncher::PurpleCreepLauncher() {
   loadSprites();
   NEW_GROUP_DELAY = 60 * 5; // 5seg
@@ -66,12 +64,12 @@ void PurpleCreepLauncher::createCreepBehavior() {
 
 void PurpleCreepLauncher::createCreepGroup() {
   Creep * creep1 = new Creep(Point(800, 300), Vector(-180, 0), purpleCreepSprite, al_map_rgb(246, 64, 234), this);
-  Creep * creep2 = new Creep(Point(900, 350), Vector(-180, 0), purpleShipSprite, al_map_rgb(246, 64, 234), this);
-  Creep * creep3 = new Creep(Point(900, 250), Vector(-180, 0), purpleShipSprite, al_map_rgb(246, 64, 234), this);
-  Creep * creep4 = new Creep(Point(1000, 400), Vector(-180, 0), purpleShipSprite, al_map_rgb(246, 64, 234), this);
-  Creep * creep5 = new Creep(Point(1000, 200), Vector(-180, 0), purpleShipSprite, al_map_rgb(246, 64, 234), this);
-  Creep * creep6 = new Creep(Point(1100, 100), Vector(-180, 0), purpleShipSprite, al_map_rgb(246, 64, 234), this);
-  Creep * creep7 = new Creep(Point(1100, 500), Vector(-180, 0), purpleShipSprite, al_map_rgb(246, 64, 234), this);
+  Creep * creep2 = new Creep(Point(900, 350), Vector(-180, 0), purpleCreepSprite, al_map_rgb(246, 64, 234), this);
+  Creep * creep3 = new Creep(Point(900, 250), Vector(-180, 0), purpleCreepSprite, al_map_rgb(246, 64, 234), this);
+  Creep * creep4 = new Creep(Point(1000, 400), Vector(-180, 0), purpleCreepSprite, al_map_rgb(246, 64, 234), this);
+  Creep * creep5 = new Creep(Point(1000, 200), Vector(-180, 0), purpleCreepSprite, al_map_rgb(246, 64, 234), this);
+  Creep * creep6 = new Creep(Point(1100, 100), Vector(-180, 0), purpleCreepSprite, al_map_rgb(246, 64, 234), this);
+  Creep * creep7 = new Creep(Point(1100, 500), Vector(-180, 0), purpleCreepSprite, al_map_rgb(246, 64, 234), this);
 
   // Manda para o objeto collision
   _collisionHandler->newEnemyShip(creep1);
@@ -108,8 +106,7 @@ void PurpleCreepLauncher::loadSprites() {
   ALLEGRO_PATH *path = al_get_standard_path(ALLEGRO_RESOURCES_PATH);
   al_append_path_component(path, "resources");
   al_change_directory(al_path_cstr(path, '/'));
-
-  purpleShipSprite = std::make_shared<Sprite>("EnemyBasic.png");
+  purpleCreepSprite = std::make_shared<Sprite>("EnemyBasic.png");
   al_destroy_path(path);
 }
 
