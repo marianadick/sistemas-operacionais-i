@@ -39,11 +39,6 @@ void Creep::update(double dt) {
   }
 }
 
-void Creep::rotateSprite()
-{
- //_creepSprite->draw_rotated(_position, _angle, 0); 
-}
-
 void Creep::attack() 
 {
   _fire = false;

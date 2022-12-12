@@ -170,6 +170,19 @@ void CollisionHandler::clearProjectiles() {
   }
 }
 
+void CollisionHandler::clearMines() {
+	// Remove mines
+  	for (auto mines = _mines.begin(); mines != _mines.end();) {
+	Mine *mine = *mines;
+	mines++;
+	if (mine->isOutOfBounds()) {
+	  _window->removeEnemy(mine);
+	  delete mine;
+	}
+  }
+}
+
+
 void CollisionHandler::attachShip(Ship *ship) {
   _ship = ship;
 }
@@ -192,6 +205,14 @@ void CollisionHandler::newEnemyShip(Enemy *enemy) {
 
 void CollisionHandler::removeEnemyShip(Enemy *enemy) {
   _enemies.remove(enemy);
+}
+
+void CollisionHandler::newMine(Mine *mine) {
+	_mines.push_front(mine);
+}
+
+void CollisionHandler::removeMine(Mine *mine) {
+	_mines.remove(mine);
 }
 
 __END_API

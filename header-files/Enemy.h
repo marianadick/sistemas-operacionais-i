@@ -13,6 +13,7 @@ class Enemy : public Drawable
 public:
     Enemy(Point point, Vector vector, int life)
     {
+        _dead = false;
         _life = life;
         _point = point;
         _speed = vector;
@@ -27,12 +28,13 @@ public:
     Point getPosition() { return _point; }
     Vector getVector() { return _speed; }
     void hit(int damage) { _life -= damage; }
-    bool getDead() { return _life <= 0; }
+    bool getDead() { return _life <= 0 && _dead; }
     int getLife() { return _life; }
 
 protected:
     Point _point;
     Vector _speed;
+    bool _dead;
     int _life;
 };
 

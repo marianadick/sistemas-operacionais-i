@@ -82,16 +82,17 @@ Window::~Window() {
 
 void Window::runWindow() {
   while (Configs::_isGameRunning) {
-	if (_ship == nullptr)
-	  Thread::yield();
-	checkEvent();
-	Thread::yield();
+    if (_ship == nullptr)
+      Thread::yield();
+    checkEvent();
+    Thread::yield();
   }
 }
 
 void Window::checkEvent() {
   ALLEGRO_EVENT event;
   al_wait_for_event(_eventQueue, &event);
+
   // _display closes
   if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 	Configs::_isGameRunning = false;

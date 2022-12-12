@@ -31,6 +31,7 @@ public:
         _collisionThread = new Thread(collisionRun);
         _enemyGroupPurpleThread = new Thread(enemyGroupPurpleRun);
         _enemyGroupWhiteThread = new Thread(enemyGroupWhiteRun);
+        _minesLauncherThread = new Thread(minesRun);
         
         _kbThread->join();
         _shipThread->join();
@@ -38,6 +39,7 @@ public:
         _collisionThread->join();
         _enemyGroupPurpleThread->join();
         _enemyGroupWhiteThread->join();
+        _minesLauncherThread->join();
 
         delete _shipThread;
         delete _windowThread;
@@ -45,6 +47,7 @@ public:
         delete _collisionThread;
         delete _enemyGroupPurpleThread;
         delete _enemyGroupWhiteThread;
+        delete _minesLauncherThread;
 
         db<System>(TRC) << ">> Game is ending...\n";
     };
@@ -56,6 +59,7 @@ private:
     static Thread * _enemyGroupPurpleThread;
     static Thread * _enemyGroupWhiteThread;
     static Thread * _collisionThread;
+    static Thread * _minesLauncherThread;
 
     static Window * _window;
     static Ship * _ship;
@@ -63,6 +67,7 @@ private:
     static CollisionHandler * _collision;
     static PurpleCreepLauncher * _enemyGroupPurple;
     static WhiteCreepLauncher * _enemyGroupWhite;
+    static MinesLauncher * _minesLauncher;
 
     /* WINDOW */
     static void windowRun() {
@@ -123,6 +128,15 @@ private:
         delete _collision;
         //_collisionThread->thread_exit(7);
     };
+
+    static void minesRun() {
+        _minesLauncher = new MinesLauncher();
+        _minesLauncher->setCollisionReference(_collision);
+        _minesLauncher->setWindowReference(_window);
+        _minesLauncher->runMineLauncher();
+        delete _minesLauncher;
+        //_minesLauncherThread->thread_exit(8);
+    }
 };
 
 __END_API

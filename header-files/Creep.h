@@ -50,8 +50,6 @@ class Creep : public Enemy {
   Point getStop3() { return _stop3; }
   Point getStop4() { return _stop4; }
 
-  void rotateSprite();
-
  protected:
  private:
   void initializeTimer();

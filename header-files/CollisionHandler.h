@@ -12,10 +12,12 @@
 #include "Enemy.h"
 #include "window.h"
 #include <allegro5/allegro_primitives.h>
+#include "Mines.h"
 
 __BEGIN_API
 class Window;
 class Ship;
+class Mine;
 
 class CollisionHandler {
     public:
@@ -26,6 +28,9 @@ class CollisionHandler {
         void newEnemyShot(Projectile * shot);
         void newEnemyShip(Enemy * enemy);
         void removeEnemyShip(Enemy * enemy);
+
+        void newMine(Mine * mine);
+        void removeMine(Mine * mine);
 
         /* Loop */
         void runCollision();
@@ -41,6 +46,7 @@ class CollisionHandler {
         std::list<Projectile *> _shipShots;
         std::list<Projectile *> _enemiesShots;
         std::list<Enemy *> _enemies;
+        std::list<Mine *> _mines;
 
         void checkCollision();
         void checkCollisionOnEnemies();
@@ -53,6 +59,7 @@ class CollisionHandler {
 
         void clearEnemies();
         void clearProjectiles();
+        void clearMines();
 };
 
 __END_API
