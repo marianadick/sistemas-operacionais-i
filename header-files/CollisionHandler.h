@@ -47,7 +47,7 @@ class CollisionHandler {
         void checkCollidingEnemyWithPlayer();
         void checkCollisionOnPlayer();
 
-        void checkHit(Projectile * proj, Enemy * target); // Checks Player shot -> Enemy Ship
+        bool checkHit(Projectile * proj, Enemy * target); // Checks Player shot -> Enemy Ship
         void checkHit(Projectile * proj, Ship * target); // Checks Enemy shot -> Player Ship
         void checkHit(Drawable * firstObj, Drawable * secondObj); // Checks if Player ship is colliding with the Enemy Ship
 

@@ -82,10 +82,8 @@ Window::~Window() {
 
 void Window::runWindow() {
   while (Configs::_isGameRunning) {
-	if (_ship == nullptr) {
+	if (_ship == nullptr)
 	  Thread::yield();
-	  continue;
-	}
 	checkEvent();
 	Thread::yield();
   }
@@ -187,11 +185,11 @@ void Window::drawEnemies(double dt) {
 
 void Window::drawProjectiles(double dt) {
   for (auto listItem = projectiles.begin(); listItem != projectiles.end();) {
-    Projectile *projectile = *listItem;
+    Projectile *projectiles = *listItem;
     listItem++;
 
-    projectile->update(dt);
-    projectile->draw();
+    projectiles->update(dt);
+    projectiles->draw();
   }
 }
 

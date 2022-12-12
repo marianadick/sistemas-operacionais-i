@@ -24,10 +24,10 @@ void CollisionHandler::checkCollisionOnEnemies()
 	for (auto enemyItem = _enemies.begin(); enemyItem != _enemies.end();) {
 	  Enemy *enemy = *enemyItem;
 	  enemyItem++;
-	  checkHit(shipShot, enemy);
+	  if (checkHit(shipShot, enemy))
+	  	break;
 	}
   }
-
 }
 
 void CollisionHandler::checkCollidingEnemyWithPlayer()
@@ -50,7 +50,7 @@ void CollisionHandler::checkCollisionOnPlayer() {
 }
 
 // Checks Player shot -> Enemy Ship
-void CollisionHandler::checkHit(Projectile *proj, Enemy *target) {
+bool CollisionHandler::checkHit(Projectile *proj, Enemy *target) {
   Point projPos = proj->getPosition();
   Point targetPos = target->getPosition();
   int targetSize = target->getSize();
@@ -66,8 +66,8 @@ void CollisionHandler::checkHit(Projectile *proj, Enemy *target) {
 			_enemies.remove(target);
 			delete target;
 		}
-		// Checks if ship shot hit something
 
+		// Notifies the ship that the shot hit something
 		proj->ackHitSomething();
 
 		// Checks if the shot was destroyed, if so remove it from window
@@ -75,8 +75,10 @@ void CollisionHandler::checkHit(Projectile *proj, Enemy *target) {
 		  _window->removeProjectile(proj);
 		  _shipShots.remove(proj);
 		  delete proj;
+		  return true;
 		}
 	 }
+	return false;
 }
 
 // Checks Enemy shot -> Player Ship
@@ -90,7 +92,7 @@ void CollisionHandler::checkHit(Projectile *proj, Ship *target) {
 	  (projPos.y > targetPos.y - targetSize) &&
 	  (projPos.y < targetPos.y + targetSize))
 	{
-	  // Checks if an enemy hit something
+	  // Notifies the enemy that he hit something
 	  proj->ackHitSomething();
 
 	  // Inflicts the damage to the player
