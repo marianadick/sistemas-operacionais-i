@@ -10,39 +10,39 @@
 #include "window.h"
 #include "CollisionHandler.h"
 #include "configs.h"
-#include "PurpleCreep.h"
+#include "Creep.h"
 
 __BEGIN_API
 
-class PurpleCreep;
+class Creep;
 
-class PurpleCreepLauncher
+class PurpleCreepLauncher : public Launcher
 {
 public:
     PurpleCreepLauncher();
     ~PurpleCreepLauncher();
-    void attachWindow(Window * window);
-    void attachCollision(CollisionHandler * collision);
-    void removeShip(PurpleCreep * enemy);
 
-    void run();
+    void attachWindow(Window * window);
+    void attachCollision(CollisionHandler * collisionHandler);
+    void removeCreep(Creep * creep);
+
+    void runLauncher();
 
 private:
+    int NEW_GROUP_DELAY;
+
     void loadSprites();
-    void createShips();
-    void processLoop();
-    void handleShips();
-    int DELAY_SHIPS_SPAWN;
+    void createCreepGroup();
+    void createCreepBehavior();
 
-    // Referências de Window e CollisionHandler para passar para as Ships
+    /* Reference to game state and obj*/
     Window *_window;
-    CollisionHandler *_collision;
+    CollisionHandler *_collisionHandler;
 
-    // Sprites
-    std::list<PurpleCreep *> ships;
-    std::shared_ptr<Timer> shipsSpawnTimer;
-    std::shared_ptr<Sprite> purpleShipSprite;
-    std::shared_ptr<Sprite> enemyExplosionSprite;
+    std::list<Creep *> creeps;
+
+    std::shared_ptr<Timer> newGroupTimer;
+    std::shared_ptr<Sprite> purpleCreepSprite;
 };
 
 __END_API

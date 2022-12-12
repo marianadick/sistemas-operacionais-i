@@ -22,7 +22,7 @@ public:
     virtual void update(double diffTime) = 0;
     virtual bool isOutOfBounds() = 0;
     virtual int getSize() = 0;
-    virtual bool setFire() = 0;
+    virtual bool getFire() = 0;
 
     Point getPosition() { return _point; }
     Vector getVector() { return _speed; }

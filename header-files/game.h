@@ -90,7 +90,7 @@ private:
         _enemyGroupPurple = new PurpleCreepLauncher();
 	    _enemyGroupPurple->attachCollision(_collision);
 	    _enemyGroupPurple->attachWindow(_window);
-        _enemyGroupPurple->run();
+        _enemyGroupPurple->runLauncher();
         delete _enemyGroupPurple;
         _enemyGroupPurpleThread->thread_exit(5);
 
