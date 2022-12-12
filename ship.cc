@@ -145,8 +145,8 @@ void Ship::attachCollision(CollisionHandler *collision) {
 }
 
 void Ship::hit(int damage) {
-  _life -= damage;
-  if (_life < 1)
+  _life -= 1;
+  if (_life <= 0)
       _dead = true;
 }
 
