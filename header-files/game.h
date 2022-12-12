@@ -13,6 +13,7 @@
 #include "CollisionHandler.h"
 #include "PurpleCreepLauncher.h"
 #include "WhiteCreepLauncher.h"
+#include "CreepBombLauncher.h"
 
 __BEGIN_API
 
@@ -31,7 +32,7 @@ public:
         _collisionThread = new Thread(collisionRun);
         _enemyGroupPurpleThread = new Thread(enemyGroupPurpleRun);
         _enemyGroupWhiteThread = new Thread(enemyGroupWhiteRun);
-        _MinesControlThread = new Thread(minesRun);
+        _creepBombLauncherThread = new Thread(creepBombRun);
         
         _kbThread->join();
         _shipThread->join();
@@ -39,7 +40,7 @@ public:
         _collisionThread->join();
         _enemyGroupPurpleThread->join();
         _enemyGroupWhiteThread->join();
-        _MinesControlThread->join();
+        _creepBombLauncherThread->join();
 
         delete _shipThread;
         delete _windowThread;
@@ -47,7 +48,7 @@ public:
         delete _collisionThread;
         delete _enemyGroupPurpleThread;
         delete _enemyGroupWhiteThread;
-        delete _MinesControlThread;
+        delete _creepBombLauncherThread;
 
         db<System>(TRC) << ">> Game is ending...\n";
     };
@@ -59,7 +60,7 @@ private:
     static Thread * _enemyGroupPurpleThread;
     static Thread * _enemyGroupWhiteThread;
     static Thread * _collisionThread;
-    static Thread * _MinesControlThread;
+    static Thread * _creepBombLauncherThread;
 
     static Window * _window;
     static Ship * _ship;
@@ -67,7 +68,7 @@ private:
     static CollisionHandler * _collision;
     static PurpleCreepLauncher * _enemyGroupPurple;
     static WhiteCreepLauncher * _enemyGroupWhite;
-    static MinesControl * _MinesControl;
+    static CreepBombLauncher * _creepBombLauncher;
 
     /* WINDOW */
     static void windowRun() {
@@ -129,13 +130,13 @@ private:
         //_collisionThread->thread_exit(7);
     };
 
-    static void minesRun() {
-        _MinesControl = new MinesControl();
-        _MinesControl->setCollisionHandlerReference(_collision);
-        _MinesControl->setWindowReference(_window);
-        _MinesControl->run();
-        delete _MinesControl;
-        //_MinesControlThread->thread_exit(8);
+    static void creepBombRun() {
+        _creepBombLauncher = new CreepBombLauncher();
+        _creepBombLauncher->setCollisionHandlerReference(_collision);
+        _creepBombLauncher->setWindowReference(_window);
+        _creepBombLauncher->runCreepBombLauncher();
+        delete _creepBombLauncher;
+        //__creepBombLauncherThread->thread_exit(8);
     }
 };
 

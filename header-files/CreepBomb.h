@@ -1,5 +1,5 @@
-#ifndef MINE_H
-#define MINE_H
+#ifndef CreepBomb_H
+#define CreepBomb_H
 
 #include <memory>
 #include "thread.h"
@@ -9,21 +9,21 @@
 #include "Enemy.h"
 #include "Timer.h"
 #include "configs.h"
-#include "MinesLauncher.h"
+#include "CreepBombLauncher.h"
 
 __BEGIN_API
-class MinesControl; // Forward declaration, avoid compilation error
+class CreepBombLauncher;
 
-class Mine : public Enemy
+class CreepBomb : public Enemy
 {
 public:
-    Mine(Point point, Vector vector, std::shared_ptr<Sprite> mineSprite, std::shared_ptr<Sprite> deathSprite, MinesControl *control);
-    ~Mine();
+    CreepBomb(Point point, Vector vector, std::shared_ptr<Sprite> CreepBombSprite, std::shared_ptr<Sprite> deathSprite, CreepBombLauncher * launcher);
+    ~CreepBomb();
 
     bool getFire();
     void draw();
     void attack();
-    void update(double diffTime);
+    void update(double dt);
     bool isOutOfBounds();
     void hit(int damage);
     ALLEGRO_COLOR getColor() { return this->color; }
@@ -32,14 +32,14 @@ public:
 private:
     // Logic
     std::shared_ptr<Timer> explodeTimer;
-    static int MINE_EXPLOSION_DELAY;
-    static int MINE_LIFE;
+    static int _CREEP_BOMB_EXPLOSION_DELAY;
+    static int _CREEP_BOMB_LIFE;
     bool wasExploded;
 
-    MinesControl *_control;
+    CreepBombLauncher * _launcher;
 
     // Sprites
-    std::shared_ptr<Sprite> _mineSprite;
+    std::shared_ptr<Sprite> _CreepBombSprite;
     std::shared_ptr<Sprite> _deathSprite;
     ALLEGRO_COLOR color;
     int deathSpriteTimer;

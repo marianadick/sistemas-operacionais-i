@@ -8,7 +8,7 @@ Thread * Game::_kbThread;
 Thread * Game::_collisionThread;
 Thread * Game::_enemyGroupPurpleThread;
 Thread * Game::_enemyGroupWhiteThread;
-Thread * Game::_MinesControlThread;
+Thread * Game::_creepBombLauncherThread;
 
 
 Ship * Game::_ship;
@@ -17,7 +17,7 @@ Input * Game::_kb;
 CollisionHandler * Game::_collision;
 PurpleCreepLauncher * Game::_enemyGroupPurple;
 WhiteCreepLauncher * Game::_enemyGroupWhite;
-MinesControl * Game::_MinesControl;
+CreepBombLauncher * Game::_creepBombLauncher;
 
 
 __END_API
