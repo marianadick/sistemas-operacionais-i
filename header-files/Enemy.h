@@ -28,7 +28,7 @@ public:
     Point getPosition() { return _point; }
     Vector getVector() { return _speed; }
     void hit(int damage) { _life -= damage; }
-    bool getDead() { return _life <= 0 && _dead; }
+    bool getDead() { return _life <= 0; }
     int getLife() { return _life; }
 
 protected:
