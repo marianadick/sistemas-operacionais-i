@@ -43,6 +43,8 @@ class Window {
   void attachShip(Ship *ship); // Link ship to window
   void attachKb(Input *kb); // Link keyboard to window (QUIT game)
 
+  Ship *_ship;
+
  protected:
  private:
   /* Lists of variable elements to draw */
@@ -83,7 +85,6 @@ class Window {
   float _prevTime;
 
   /* Reference to game state and obj*/
-  Ship *_ship;
   Input *_kb;
 };
 

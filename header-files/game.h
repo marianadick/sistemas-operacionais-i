@@ -12,6 +12,7 @@
 #include "ship.h"
 #include "CollisionHandler.h"
 #include "PurpleCreepLauncher.h"
+#include "WhiteCreepLauncher.h"
 
 __BEGIN_API
 
@@ -29,18 +30,21 @@ public:
         _shipThread = new Thread(shipRun);
         _collisionThread = new Thread(collisionRun);
         _enemyGroupPurpleThread = new Thread(enemyGroupPurpleRun);
+        _enemyGroupWhiteThread = new Thread(enemyGroupWhiteRun);
         
         _kbThread->join();
         _shipThread->join();
         _windowThread->join();
         _collisionThread->join();
         _enemyGroupPurpleThread->join();
+        _enemyGroupWhiteThread->join();
 
         delete _shipThread;
         delete _windowThread;
         delete _kbThread;
         delete _collisionThread;
         delete _enemyGroupPurpleThread;
+        delete _enemyGroupWhiteThread;
 
         db<System>(TRC) << ">> Game is ending...\n";
     };
@@ -50,6 +54,7 @@ private:
     static Thread * _shipThread;
     static Thread * _kbThread;
     static Thread * _enemyGroupPurpleThread;
+    static Thread * _enemyGroupWhiteThread;
     static Thread * _collisionThread;
 
     static Window * _window;
@@ -57,6 +62,7 @@ private:
     static Input * _kb;
     static CollisionHandler * _collision;
     static PurpleCreepLauncher * _enemyGroupPurple;
+    static WhiteCreepLauncher * _enemyGroupWhite;
 
     /* WINDOW */
     static void windowRun() {
@@ -96,6 +102,17 @@ private:
 
     };
 
+    /* ENEMY GROUP WHITE */
+    static void enemyGroupWhiteRun() {
+        _enemyGroupWhite = new WhiteCreepLauncher();
+	    _enemyGroupWhite->attachCollision(_collision);
+	    _enemyGroupWhite->attachWindow(_window);
+        _enemyGroupWhite->runLauncher();
+        delete _enemyGroupWhite;
+        _enemyGroupWhiteThread->thread_exit(6);
+
+    };
+
     /* COLLISION */
     static void collisionRun() {
         _collision = new CollisionHandler();
@@ -104,7 +121,7 @@ private:
         _ship->attachCollision(_collision);
         _collision->runCollision();
         delete _collision;
-        //_collisionThread->thread_exit(6);
+        //_collisionThread->thread_exit(7);
     };
 };
 
