@@ -106,7 +106,7 @@ void MinesLauncher::createMine()
     // Adiciona referência dela nas listas
     _mines.push_back(mine);
     _collision->newMine(mine);
-    _window->removeEnemy(mine);
+    _window->addEnemy(mine);
 
     // Reset o timer
     _minesSpawnTimer->srsTimer();
