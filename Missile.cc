@@ -1,51 +1,41 @@
-#include <allegro5/allegro_primitives.h>
 #include "header-files/Missile.h"
 
 __BEGIN_API
-
-int Missile::SPRITES_VECTOR_MAX_INDEX = 7;
-int Missile::DAMAGE = 2;
 
 Missile::Missile(Point point, ALLEGRO_COLOR color, Vector speed, bool isPlayerShot) : Projectile(point,
 																								 color,
 																								 speed,
 																								 isPlayerShot) {
+	angle = atan(speed.y / speed.x) + 4.71 * -1;
+  _point = _point + _speed * 0.1; 
   loadSprites();
-
-  if (isPlayerShot) // Corrige o sprite de míssil
-	angle = (atan(speed.y / speed.x) + 4.71) * -1;
-  else
-	angle = atan(speed.y / speed.x) + 4.71;
-
-  // Move um pouco para frente da nave
-  _point = _point + _speed * 0.1;
 }
 
-Missile::~Missile() {}
+Missile::~Missile() {
+  sprite.clear();
+}
 
 void Missile::draw() {
-  Missile::sprites[currentSpriteIndex]->draw_rotated(_point, angle, 0);
-  currentSpriteIndex++;
-  if (currentSpriteIndex > Missile::SPRITES_VECTOR_MAX_INDEX)
-	currentSpriteIndex = 0; // Reset o index para acessar o vetor de sprites
+  Missile::sprite[idx]->draw_rotated(_point, angle, 0);
+  idx++;
+  if (idx > 7)
+	idx = 0;
 }
 
 void Missile::update(double dt) {
   _point = _point + _speed * dt;
 }
 
-void Missile::ackHitSomething() {}
-
 bool Missile::wasDestroyed() {
    return false; 
 }
 
 int Missile::getDamage() {
-   return Missile::DAMAGE; 
+   return 3; 
 }
 
 int Missile::getSize() {
-   return 3; 
+   return 4; 
 }
 
 void Missile::loadSprites() {
@@ -53,14 +43,14 @@ void Missile::loadSprites() {
   al_append_path_component(path, "resources");
   al_change_directory(al_path_cstr(path, '/'));
 
-  Missile::sprites.push_back(std::make_shared<Sprite>("m1.png"));
-  Missile::sprites.push_back(std::make_shared<Sprite>("m2.png"));
-  Missile::sprites.push_back(std::make_shared<Sprite>("m3.png"));
-  Missile::sprites.push_back(std::make_shared<Sprite>("m4.png"));
-  Missile::sprites.push_back(std::make_shared<Sprite>("m5.png"));
-  Missile::sprites.push_back(std::make_shared<Sprite>("m6.png"));
-  Missile::sprites.push_back(std::make_shared<Sprite>("m7.png"));
-  Missile::sprites.push_back(std::make_shared<Sprite>("m8.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m1.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m2.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m3.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m4.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m5.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m6.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m7.png"));
+  Missile::sprite.push_back(std::make_shared<Sprite>("m8.png"));
 
   al_destroy_path(path);
 }
