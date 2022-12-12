@@ -4,7 +4,7 @@ __BEGIN_API
 
 PurpleCreepLauncher::PurpleCreepLauncher() {
   loadSprites();
-  NEW_GROUP_DELAY = 60 * 5; // 5seg
+  NEW_GROUP_DELAY = 60 * 60; // 5seg
   newGroupTimer = std::make_shared<Timer>(60);
   newGroupTimer->create();
   newGroupTimer->startTimer();

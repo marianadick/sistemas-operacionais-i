@@ -5,6 +5,7 @@
 #include <memory>
 #include "thread.h"
 #include "traits.h"
+#include <cmath>
 
 #include "Sprite.h"
 #include "window.h"
@@ -27,7 +28,6 @@ public:
     void removeCreep(Creep * creep);
 
     void runLauncher();
-
 private:
     int NEW_GROUP_DELAY;
 

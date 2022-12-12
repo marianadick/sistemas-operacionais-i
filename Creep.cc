@@ -7,6 +7,7 @@ int Creep::_ATTACK_DELAY = 50;
 Creep::Creep(Point point, Vector vector, std::shared_ptr<Sprite> creepSprite, ALLEGRO_COLOR color,
 						 Launcher * launcher) : Enemy(point, vector, 1) {
 
+  _position = point;
   _creepSprite = creepSprite;
   _launcher = launcher;
   _color = color;
@@ -36,6 +37,11 @@ void Creep::update(double dt) {
 	_fire = true;
 	_attackDelayTimer->srsTimer();
   }
+}
+
+void Creep::rotateSprite()
+{
+ //_creepSprite->draw_rotated(_position, _angle, 0); 
 }
 
 void Creep::attack() 

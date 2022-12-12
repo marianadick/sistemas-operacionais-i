@@ -25,14 +25,9 @@ class Creep : public Enemy {
 
   bool init = false;
   bool at1 = false;
-  bool at2 =false;
+  bool at2 = false;
   bool at3 = false;
   bool at4 = false;
-
-  Point stop1 = Point(0,0);
-  Point stop2 = Point(0,0);
-  Point stop3 = Point(0,0);
-  Point stop4 = Point(0,0);
 
   /* Getters */
   ALLEGRO_COLOR getColor();
@@ -55,6 +50,7 @@ class Creep : public Enemy {
   Point getStop3() { return _stop3; }
   Point getStop4() { return _stop4; }
 
+  void rotateSprite();
 
  protected:
  private:
@@ -76,12 +72,15 @@ class Creep : public Enemy {
   /* Color and timer of sprite */
   ALLEGRO_COLOR _color;
 
-  Point _stop1;
-  Point _stop2;
-  Point _stop3;
-  Point _stop4;
+  /* Display limits (where to stop) */
+  Point _stop1 = Point(725,50);
+  Point _stop2 = Point(25,50);
+  Point _stop3 = Point(25,550);
+  Point _stop4 = Point(725,550);
 
   double _angle;
+
+  Point _position;
 
   Vector _projSpeed = Vector(-400, 0);
 };
