@@ -24,7 +24,7 @@ class Missile : public Projectile {
   bool wasDestroyed();
 
   void draw();
-  void update(double diffTime);
+  void update(double dt);
   int getSize();
 
  private:
@@ -33,7 +33,7 @@ class Missile : public Projectile {
   // Sprites
   void loadSprites();
   int currentSpriteIndex = 0;
-  static std::vector<std::shared_ptr<Sprite>> sprites;
+  std::vector<std::shared_ptr<Sprite>> sprites;
   static int SPRITES_VECTOR_MAX_INDEX;
   static int DAMAGE;
 };
