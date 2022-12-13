@@ -24,15 +24,20 @@ class Missile : public Projectile {
   void draw();
   void update(double dt);
 
+  /* Getters*/
   int getDamage();
   bool wasDestroyed();
   int getSize();
 
-  void ackHitSomething() {}; // virtual method
+  /* Projectile virtual method */
+  void ackHitSomething() {};
+
+ protected:
  private:
+
   double angle;
 
-  // Sprites
+  /* Sprites */
   void loadSprites();
   int idx = 0;
   std::vector<std::shared_ptr<Sprite>> sprite;

@@ -54,6 +54,7 @@ public:
     };
 
 private:
+    /* THREADS */
     static Thread * _windowThread;
     static Thread * _shipThread;
     static Thread * _kbThread;
@@ -62,6 +63,7 @@ private:
     static Thread * _collisionThread;
     static Thread * _creepBombLauncherThread;
 
+    /* GAME OBJECTS */
     static Window * _window;
     static Ship * _ship;
     static Input * _kb;
@@ -81,8 +83,8 @@ private:
     /* SHIP */
     static void shipRun() {
         _ship = new Ship(_kb);
-        // Window gets the Ship reference and the same ocurres for the Ship
-        _window->attachShip(_ship); _ship->attachWindow(_window);
+        _window->attachShip(_ship); 
+        _ship->attachWindow(_window);
         _ship->runShip();
         delete _ship;
         _shipThread->thread_exit(3);
@@ -127,16 +129,16 @@ private:
         _ship->attachCollision(_collision);
         _collision->runCollision();
         delete _collision;
-        //_collisionThread->thread_exit(7);
     };
 
+    /* CREEP BOMB RUN */
     static void creepBombRun() {
         _creepBombLauncher = new CreepBombLauncher();
         _creepBombLauncher->setCollisionHandlerReference(_collision);
         _creepBombLauncher->setWindowReference(_window);
         _creepBombLauncher->runCreepBombLauncher();
         delete _creepBombLauncher;
-        //__creepBombLauncherThread->thread_exit(8);
+        _creepBombLauncherThread->thread_exit(7);
     }
 };
 

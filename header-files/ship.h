@@ -30,11 +30,11 @@ class Ship : public Drawable {
   void runShip();
   void getInputKb();
   int getShipLives();
-  void hit(int damage);
   int getSize();
   Point getPosition();
   bool getDead();
 
+  void hit(int damage);
   void draw();
   void update(double dt);
 
@@ -48,8 +48,8 @@ class Ship : public Drawable {
   void checkBoundary();
   void shootLaser();
   void shootMissile();
-  void loadSprites();
   void drawHealthBar();
+  void loadSprites();
 
   static int SHIP_SPEED;
   static int SHIP_SIZE;
@@ -59,20 +59,24 @@ class Ship : public Drawable {
   static ALLEGRO_COLOR SHIP_COLOR;
 
   /* Ship position */
+  int _row;
+  int _col;
+  Point _position;
+  Vector _speed;
+
+  /* Ship state and health */
   float _life = 5;
   float _health = 3;
   bool _dead = false;
-  int _row;            /**<row of animation to be played */
-  int _col;            /**< column of animation to be played */
-  Point _position;
-  Vector _speed;
+
   std::shared_ptr<Sprite> _sprite;
 
-  /* Reference to game state and obj*/
+  /* Reference to input, window and collisionHandler */
   Input *_kb;
   Window *_window;
   CollisionHandler *_collisionHandler;
 
+  /* Delays */
   std::shared_ptr<Timer> laserDelayTimer;
   std::shared_ptr<Timer> missileDelayTimer;
 };

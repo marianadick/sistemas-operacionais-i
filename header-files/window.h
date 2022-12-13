@@ -81,10 +81,10 @@ class Window {
   ALLEGRO_TIMER *_timer;
   ALLEGRO_EVENT_QUEUE *_eventQueue;
 
-  /* Timer */
+  /* Time */
   float _prevTime;
 
-  /* Reference to game state and obj*/
+  /* Reference to the keyboard */
   Input *_kb;
 };
 

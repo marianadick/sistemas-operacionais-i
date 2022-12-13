@@ -22,6 +22,7 @@ public:
     void draw();
     void update(double dt);
 
+    /* Getters */
     int getSize();
     int getDamage();
     bool wasDestroyed();

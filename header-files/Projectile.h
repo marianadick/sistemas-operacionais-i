@@ -17,14 +17,16 @@ public:
 
 	virtual void draw() = 0;
 	virtual void update(double dt) = 0;
+
+	/* Getters */
 	virtual int getSize() = 0;
-
 	virtual int getDamage() = 0;
-	virtual void ackHitSomething() = 0;
 	virtual bool wasDestroyed() = 0;
-
 	Point getPosition() { return _point; }
 	bool getIsPlayerProjectile() { return _isPlayerShot; }
+
+	virtual void ackHitSomething() = 0;
+
 	bool isOutOfBounds()
 	{
 		if ((_point.x > Configs::_widthDisplay) ||

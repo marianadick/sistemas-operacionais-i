@@ -22,7 +22,6 @@ class Input
 
         void runInput();
         bool checkPressedKey(act::action key);
-
     protected:
     private:    
         ALLEGRO_KEYBOARD_STATE _kb;
