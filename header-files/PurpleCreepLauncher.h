@@ -1,5 +1,5 @@
-#ifndef ENEMY_GROUP_PURPLE_H
-#define ENEMY_GROUP_PURPLE_H
+#ifndef purpleCreepLauncher_h
+#define purpleCreepLauncher_h
 
 #include <list>
 #include <memory>

@@ -21,30 +21,33 @@ class WhiteCreepLauncher : public Launcher
 {
 public:
     WhiteCreepLauncher();
-    ~WhiteCreepLauncher();
-
-    void attachWindow(Window * window);
-    void attachCollision(CollisionHandler * collisionHandler);
-    void removeCreep(Creep * creep);
+    ~WhiteCreepLauncher() {};
 
     void runLauncher();
+    void removeCreep(Creep * creep);
+
+    /* Set references to the window and collisionHandler */
+    void attachWindow(Window * window);
+    void attachCollision(CollisionHandler * collisionHandler);
 private:
-    int NEW_GROUP_DELAY;
+    static int _NEW_GROUP_DELAY;
 
     void loadSprites();
     void createCreepGroup();
     void createCreepBehavior();
-    void updateAngle(Creep * creep);
-    void updateVector(Creep * creep);
 
-    /* Reference to game state and obj*/
+    void updateAngle(Creep * creep); // Update the angle to where it is shooting
+    void updateVector(Creep * creep); // Update the vector to where the shot should go
+
+    /* Reference to thee window and collisionHandler */
     Window *_window;
     CollisionHandler *_collisionHandler;
 
-    std::list<Creep *> creeps;
+    /* Stores the white creeps */
+    std::list<Creep *> _creeps;
 
-    std::shared_ptr<Timer> newGroupTimer;
-    std::shared_ptr<Sprite> purpleCreepSprite;
+    std::shared_ptr<Timer> _newGroupTimer;
+    std::shared_ptr<Sprite> _whiteCreepSprite;
 };
 
 __END_API

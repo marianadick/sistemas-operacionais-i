@@ -2,11 +2,11 @@
 
 __BEGIN_API
 
-int PurpleCreepLauncher::_NEW_GROUP_DELAY = Configs::_fps * 7;
+int PurpleCreepLauncher::_NEW_GROUP_DELAY = Configs::_fps * 8;
 
 PurpleCreepLauncher::PurpleCreepLauncher()
 {
-  _newGroupTimer = std::make_shared<Timer>(60);
+  _newGroupTimer = std::make_shared<Timer>(Configs::_fps);
   _newGroupTimer->create();
   _newGroupTimer->startTimer();
   loadSprites();
@@ -16,8 +16,7 @@ void PurpleCreepLauncher::runLauncher()
 {
   while (Configs::_isGameRunning)
   {
-    if (_window == nullptr || _collisionHandler == nullptr)
-    {
+    if (_window == nullptr || _collisionHandler == nullptr) {
       Thread::yield();
       continue;
     }
@@ -66,36 +65,35 @@ void PurpleCreepLauncher::createCreepBehavior()
 
 void PurpleCreepLauncher::createCreepGroup()
 {
-  Creep *creep1 = new Creep(Point(800, 300), Vector(-180, 0), _purpleCreepSprite, al_map_rgb(246, 64, 234), this);
-  Creep *creep2 = new Creep(Point(900, 350), Vector(-180, 0), _purpleCreepSprite, al_map_rgb(246, 64, 234), this);
-  Creep *creep3 = new Creep(Point(900, 250), Vector(-180, 0), _purpleCreepSprite, al_map_rgb(246, 64, 234), this);
-  Creep *creep4 = new Creep(Point(1000, 400), Vector(-180, 0), _purpleCreepSprite, al_map_rgb(246, 64, 234), this);
-  Creep *creep5 = new Creep(Point(1000, 200), Vector(-180, 0), _purpleCreepSprite, al_map_rgb(246, 64, 234), this);
-  Creep *creep6 = new Creep(Point(1100, 100), Vector(-180, 0), _purpleCreepSprite, al_map_rgb(246, 64, 234), this);
-  Creep *creep7 = new Creep(Point(1100, 500), Vector(-180, 0), _purpleCreepSprite, al_map_rgb(246, 64, 234), this);
+  Point p1 = Point( 800, 300); Point p2 = Point( 900, 250);
+  Point p3 = Point( 900, 350); Point p4 = Point(1000, 200);
+  Point p5 = Point(1000, 400); Point p6 = Point(1100, 100);
+  Point p7 = Point(1100, 500);
 
-  _collisionHandler->newEnemyShip(creep1);
-  _collisionHandler->newEnemyShip(creep2);
-  _collisionHandler->newEnemyShip(creep3);
-  _collisionHandler->newEnemyShip(creep4);
-  _collisionHandler->newEnemyShip(creep5);
-  _collisionHandler->newEnemyShip(creep6);
-  _collisionHandler->newEnemyShip(creep7);
+  Vector vetor = Vector(-180, 0);
+  ALLEGRO_COLOR color = al_map_rgb(246, 64, 234);
 
-  _window->addEnemy(creep1);
-  _window->addEnemy(creep2);
-  _window->addEnemy(creep3);
-  _window->addEnemy(creep4);
-  _window->addEnemy(creep5);
-  _window->addEnemy(creep6);
+  Creep *creep1 = new Creep(p1, vetor, _purpleCreepSprite, color, this);
+  Creep *creep2 = new Creep(p2, vetor, _purpleCreepSprite, color, this);
+  Creep *creep3 = new Creep(p3, vetor, _purpleCreepSprite, color, this);
+  Creep *creep4 = new Creep(p4, vetor, _purpleCreepSprite, color, this);
+  Creep *creep5 = new Creep(p5, vetor, _purpleCreepSprite, color, this);
+  Creep *creep6 = new Creep(p6, vetor, _purpleCreepSprite, color, this);
+  Creep *creep7 = new Creep(p7, vetor, _purpleCreepSprite, color, this);
+
+  _window->addEnemy(creep1); _window->addEnemy(creep2);
+  _window->addEnemy(creep3); _window->addEnemy(creep4);
+  _window->addEnemy(creep5); _window->addEnemy(creep6);
   _window->addEnemy(creep7);
 
-  _creeps.push_front(creep1);
-  _creeps.push_front(creep2);
-  _creeps.push_front(creep3);
-  _creeps.push_front(creep4);
-  _creeps.push_front(creep5);
-  _creeps.push_front(creep6);
+  _collisionHandler->newEnemyShip(creep1); _collisionHandler->newEnemyShip(creep2);
+  _collisionHandler->newEnemyShip(creep3); _collisionHandler->newEnemyShip(creep4);
+  _collisionHandler->newEnemyShip(creep5); _collisionHandler->newEnemyShip(creep6);
+  _collisionHandler->newEnemyShip(creep7);
+
+  _creeps.push_front(creep1); _creeps.push_front(creep2);
+  _creeps.push_front(creep3); _creeps.push_front(creep4);
+  _creeps.push_front(creep5); _creeps.push_front(creep6);
   _creeps.push_front(creep7);
 
   _newGroupTimer->srsTimer();
